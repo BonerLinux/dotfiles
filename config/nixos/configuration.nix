@@ -69,7 +69,9 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    gcc
     firefox
+    neovim
     brave
     kitty
     starship
@@ -85,19 +87,6 @@
     python3 #needed for pywalfox
   ];
   
-  programs.neovim = {
-    enable = true;
-    configure = {
-    cusomRC = ''
-      set number
-      set nowrap
-    '';
-    };
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-
   # -- services --
   services.printing.enable = true; #CUPS printing
 
