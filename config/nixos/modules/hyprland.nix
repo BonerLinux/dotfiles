@@ -12,4 +12,8 @@
     pywalfox-native
     hyprshot
   ];
+
+  environment.shellInit = ''
+    (cat ~/.cache/wal/sequences &)
+  '';
 }
