@@ -21,10 +21,12 @@ echo "Regenerating NixOS configuration..."
 sudo nixos-generate-config
 
 # Step 3: Move hardware-configuration.nix to .dotfiles
-echo "Moving $CONFIG_DIR/$HARDWARE_CONFIG to $DOTFILES_DIR/$HARDWARE_CONFIG..."
-mv "/etc/nixos/$HARDWARE_CONFIG" "$DOTFILES_DIR/$HARDWARE_CONFIG"
+echo "Moving $CONFIG_DIR/$HARDWARE_CONFIG to $USER_HOME/.$HARDWARE_CONFIG..."
+mv "/etc/nixos/$HARDWARE_CONFIG" "$USER_HOME/.$HARDWARE_CONFIG"
 
-echo "Hardware configuration has been updated and moved to $DOTFILES_DIR/$HARDWARE_CONFIG."
+echo "Hardware configuration has been updated and moved to $USER_HOME/.$HARDWARE_CONFIG."
 
 ./set-symlinks
+
+echo "now that you have your hardware config move it inside of hardware and name it HOSTNAME.nix then include that in your flake.nix youll figure out the right way to do this in the future!"
 
