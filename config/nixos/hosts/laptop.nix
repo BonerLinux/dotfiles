@@ -6,7 +6,6 @@
 
   # -- packages --
   environment.systemPackages = with pkgs; [
-    upower
     asusctl
   ];
   

@@ -60,6 +60,7 @@
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
     shellAliases = {
+      battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       n = "nvim";
       link = "~/.dotfiles/scripts/set-symlinks";
     };

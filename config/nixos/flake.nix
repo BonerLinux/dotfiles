@@ -18,6 +18,7 @@
 	./hosts/thinkpad.nix
 
 	./modules/hyprland.nix
+	./modules/battery.nix
 	./modules/fun.nix
       ];
     };
@@ -39,6 +40,7 @@
 
 	./modules/nvidia.nix
 	./modules/hyprland.nix
+	./modules/battery.nix
 	./modules/quickemu.nix
       ];
     };
