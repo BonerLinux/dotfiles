@@ -2,9 +2,18 @@
 
 # Reset symlinks for directories in ~/.config
 
+# Determine the user's home directory, whether run with sudo or not
+if [ -n "$SUDO_USER" ]; then
+    USER_HOME=$(eval echo "~$SUDO_USER")
+else
+    USER_HOME="$HOME"
+fi
+
 # -- hypr --
-SOURCE="$HOME/.dotfiles/config/hypr"
-DEST="$HOME/.config/hypr"
+SOURCE="$USER_HOME/.dotfiles/config/hypr"
+DEST="$USER_HOME/.config/hypr"
+
+# -- hypr --
 if [ -d "$DEST" ]; then
     echo "Removing existing hypr directory: $DEST"
     rm -rf "$DEST"
@@ -12,8 +21,8 @@ fi
 ln -s "$SOURCE" "$DEST"
 
 # -- kitty --
-SOURCE="$HOME/.dotfiles/config/kitty"
-DEST="$HOME/.config/kitty"
+SOURCE="$USER_HOME/.dotfiles/config/kitty"
+DEST="$USER_HOME/.config/kitty"
 if [ -d "$DEST" ]; then
     echo "Removing existing kitty directory: $DEST"
     rm -rf "$DEST"
@@ -21,7 +30,7 @@ fi
 ln -s "$SOURCE" "$DEST"
 
 # -- nixos --
-SOURCE="$HOME/.dotfiles/config/nixos"
+SOURCE="$USER_HOME/.dotfiles/config/nixos"
 DEST="/etc/nixos"
 if [ -d "$DEST" ]; then
     echo "Removing existing nixos directory: $DEST"
@@ -30,8 +39,8 @@ fi
 sudo ln -s "$SOURCE" "$DEST"
 
 # -- wal --
-SOURCE="$HOME/.dotfiles/config/wal"
-DEST="$HOME/.config/wal"
+SOURCE="$USER_HOME/.dotfiles/config/wal"
+DEST="$USER_HOME/.config/wal"
 if [ -d "$DEST" ]; then
     echo "Removing existing wal directory: $DEST"
     rm -rf "$DEST"
@@ -39,8 +48,8 @@ fi
 ln -s "$SOURCE" "$DEST"
 
 # -- wofi --
-SOURCE="$HOME/.dotfiles/config/wofi"
-DEST="$HOME/.config/wofi"
+SOURCE="$USER_HOME/.dotfiles/config/wofi"
+DEST="$USER_HOME/.config/wofi"
 if [ -d "$DEST" ]; then
     echo "Removing existing wofi directory: $DEST"
     rm -rf "$DEST"
@@ -48,8 +57,8 @@ fi
 ln -s "$SOURCE" "$DEST"
 
 # -- zshrc --
-SOURCE="$HOME/.dotfiles/config/zsh/zshrc"
-DEST="$HOME/.zshrc"
+SOURCE="$USER_HOME/.dotfiles/config/zsh/zshrc"
+DEST="$USER_HOME/.zshrc"
 if [ -f "$DEST" ]; then
     echo "Removing existing zshrc: $DEST"
     rm -r "$DEST"

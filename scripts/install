@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Ensure script is run as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root. Use sudo." 
+   exit 1
+fi
+
+# Variables
+USER_HOME=$(eval echo "~$SUDO_USER")
+CONFIG_DIR="/etc/nixos"
+DOTFILES_DIR="$USER_HOME/.dotfiles/config/nixos"
+HARDWARE_CONFIG="hardware-configuration.nix"
+
+# Step 1: Delete /etc/nixos
+echo "Deleting $CONFIG_DIR..."
+rm -rf "$CONFIG_DIR"
+
+# Step 2: Regenerate NixOS configuration
+echo "Regenerating NixOS configuration..."
+sudo nixos-generate-config
+
+# Step 3: Move hardware-configuration.nix to .dotfiles
+echo "Moving $CONFIG_DIR/$HARDWARE_CONFIG to $DOTFILES_DIR/$HARDWARE_CONFIG..."
+mv "/etc/nixos/$HARDWARE_CONFIG" "$DOTFILES_DIR/$HARDWARE_CONFIG"
+
+echo "Hardware configuration has been updated and moved to $DOTFILES_DIR/$HARDWARE_CONFIG."
+
+./set-symlinks
+
