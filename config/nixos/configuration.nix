@@ -61,6 +61,10 @@
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       n = "nvim";
       link = "~/.dotfiles/scripts/set-symlinks";
+      
+      fart = "systemctl suspend";
+      shart = "reboot";
+      shit = "shutdown -h now";
     };
   };
 
