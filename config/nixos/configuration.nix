@@ -89,6 +89,7 @@
     newsboat
     git
     python3 #needed for pywalfox
+    bluetuith
   ];
   
   # -- services --

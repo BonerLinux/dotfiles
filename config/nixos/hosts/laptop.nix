@@ -6,10 +6,17 @@
 
   # -- packages --
   environment.systemPackages = with pkgs; [
-    asusctl
   ];
   
-  # -- custom --
+  # -- services --
+  services = {
+    asusd = {
+      enable = true;
+      enableUserService = true;
+    };
+  };
+
+# -- services --
   services.logind.lidSwitch = "suspend";
 
 }
