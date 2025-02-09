@@ -46,6 +46,13 @@
         ./modules/hyprland.nix
         ./modules/battery.nix
         ./modules/quickemu.nix
+
+        ./server-modules/caddy.nix
+        ./server-modules/ssh.nix
+        ./server-modules/vaultwarden.nix
+        ./server-modules/immich.nix
+        ./server-modules/homeassistant.nix
+        ./server-modules/syncthing.nix
       ];
     };
   };
