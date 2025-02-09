@@ -39,7 +39,6 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
-
   };
 
   # -- users --
@@ -92,9 +91,6 @@
     bluetuith
   ];
   
-  # -- services --
-  services.printing.enable = true; #CUPS printing
-
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {
