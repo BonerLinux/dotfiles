@@ -58,6 +58,7 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
+      fetch = "clear && fastfetch";
       n = "nvim";
       link = "~/.dotfiles/scripts/set-symlinks";
       
@@ -87,8 +88,10 @@
     fastfetch
     newsboat
     git
+    libreoffice
     python3 #needed for pywalfox
     bluetuith
+    efibootmgr
   ];
   
   # -- system stuff --

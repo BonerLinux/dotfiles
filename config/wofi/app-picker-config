@@ -1,9 +1,9 @@
 [config]
 allow_images=true
-width=500
+height=600
+width=750
 show=drun
 prompt=Search
-height=400
 always_parse_args=true
 show_all=true
 term=kitty
