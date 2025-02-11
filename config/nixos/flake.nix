@@ -47,7 +47,6 @@
         ./modules/hyprland.nix
         ./modules/battery.nix
         ./modules/quickemu.nix
-
       ];
     };
   };

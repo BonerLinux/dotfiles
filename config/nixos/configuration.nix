@@ -58,8 +58,9 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
-      fetch = "clear && fastfetch";
+      fetch = "clear && ~/.myfetch/myfetch -d -c 8 -C ' NixOS '";
       n = "nvim";
+      rebuild = "sudo nixos-rebuild switch --flake .#";
       link = "~/.dotfiles/scripts/set-symlinks";
       
       fart = "systemctl suspend";
@@ -73,6 +74,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    libnotify
     gcc
     firefox
     neovim
