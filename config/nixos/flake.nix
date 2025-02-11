@@ -36,6 +36,7 @@
 
         ./modules/nvidia.nix
         ./modules/hyprland.nix
+        ./modules/syncthing.nix
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
@@ -46,6 +47,7 @@
         ./configuration.nix
         ./hosts/laptop.nix
 
+        ./modules/syncthing.nix
         ./modules/work.nix
         ./modules/nvidia.nix
         ./modules/hyprland.nix
