@@ -35,6 +35,7 @@
         ./hosts/desktop.nix
 
         ./modules/nvidia.nix
+        ./modules/ssh.nix
         ./modules/hyprland.nix
         ./modules/syncthing.nix
       ];
@@ -49,6 +50,7 @@
 
         ./modules/syncthing.nix
         ./modules/work.nix
+        ./modules/ssh.nix
         ./modules/nvidia.nix
         ./modules/hyprland.nix
         ./modules/battery.nix
