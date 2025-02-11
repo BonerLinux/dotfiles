@@ -27,6 +27,7 @@
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
       modules = [
+        ./hardware/desktop.nix
         ./configuration.nix
         ./hosts/desktop.nix
 
