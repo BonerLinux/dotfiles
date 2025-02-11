@@ -15,7 +15,9 @@
   {
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
+      specialArgs = { inherit inputs; };
       modules = [
+        ./hardware/thinkpad.nix
         ./configuration.nix
         ./hosts/thinkpad.nix
 
@@ -26,6 +28,7 @@
     };
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
+      specialArgs = { inherit inputs; };
       modules = [
         ./hardware/desktop.nix
         ./configuration.nix
