@@ -63,6 +63,9 @@
       rebuild = "sudo nixos-rebuild switch --flake .#";
       link = "~/.dotfiles/scripts/set-symlinks";
       
+      vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
+      vpn-down = "sudo wg-quick down ~/.vpns/clownweb.conf";
+      
       fart = "systemctl suspend";
       shart = "reboot";
       shit = "shutdown -h now";
@@ -74,6 +77,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    wireguard-tools
     waypipe
     libnotify
     gcc
