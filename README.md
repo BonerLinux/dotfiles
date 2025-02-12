@@ -1,3 +1,5 @@
+![Project Screenshot](images/screenshot.png)
+
 # Welcome!
 
 ### These are my updated dotfiles
