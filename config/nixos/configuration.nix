@@ -103,6 +103,9 @@
     efibootmgr
   ];
   
+  # -- virtualisation --
+  virtualisation.docker.enable = true;
+
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {
