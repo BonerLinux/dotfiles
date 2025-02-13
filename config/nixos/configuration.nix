@@ -96,7 +96,6 @@
     pavucontrol
     fastfetch
     newsboat
-    git
     libreoffice
     python3 #needed for pywalfox
     bluetuith
