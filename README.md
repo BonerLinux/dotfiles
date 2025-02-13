@@ -10,9 +10,10 @@
 
 ### TODO
 
-- [x] add script for setting up symlinks -> link
+- [ ] create a "default profile for dotfiles"
 - [ ] find better way of saveing firefox config
-- [x] get hyprcursor working
+- [ ] update the install script to move the hardware file into hardare and then assist the user in renameing and rebuilding from scratch
+- [ ] prompt the user to install wallpapers from github dude
 
 ### Stuff to know
 wallpapers are stored in ~/.wallpapers and the last chosen wallpaper is stored in ~/.wallpaper
