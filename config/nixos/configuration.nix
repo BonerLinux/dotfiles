@@ -9,6 +9,8 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.allowedUDPPorts = [ 51820 ];
+
 
   # -- locale -- 
   time.timeZone = "America/New_York";
