@@ -50,12 +50,11 @@
         ./hosts/laptop.nix
 
         ./modules/syncthing.nix
-        ./modules/work.nix
         ./modules/ssh.nix
+        ./modules/work.nix
         ./modules/nvidia.nix
         ./modules/hyprland.nix
         ./modules/battery.nix
-        ./modules/quickemu.nix
       ];
     };
   };
