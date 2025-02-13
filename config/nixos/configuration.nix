@@ -83,6 +83,7 @@
     waypipe
     libnotify
     gcc
+    git
     firefox
     neovim
     brave
@@ -96,13 +97,15 @@
     pavucontrol
     fastfetch
     newsboat
-    git
     libreoffice
     python3 #needed for pywalfox
     bluetuith
     efibootmgr
   ];
   
+  # -- virtualisation --
+  virtualisation.docker.enable = true;
+
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {
