@@ -34,10 +34,11 @@
         ./configuration.nix
         ./hosts/desktop.nix
 
+        ./server-modules/vaultwarden.nix
+        ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
         ./modules/hyprland.nix
-        ./modules/syncthing.nix
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
