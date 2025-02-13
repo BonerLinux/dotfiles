@@ -21,7 +21,6 @@
         ./configuration.nix
         ./hosts/thinkpad.nix
 
-        ./modules/git.nix
         ./modules/hyprland.nix
         ./modules/battery.nix
         ./modules/fun.nix
@@ -35,7 +34,6 @@
         ./configuration.nix
         ./hosts/desktop.nix
 
-        ./modules/git.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
         ./modules/hyprland.nix
@@ -50,7 +48,6 @@
         ./configuration.nix
         ./hosts/laptop.nix
 
-        ./modules/git.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
         ./modules/work.nix

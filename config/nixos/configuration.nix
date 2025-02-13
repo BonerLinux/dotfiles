@@ -83,6 +83,7 @@
     waypipe
     libnotify
     gcc
+    git
     firefox
     neovim
     brave
