@@ -84,6 +84,9 @@
     libnotify
     gcc
     git
+    cmatrix
+    bottles
+    ardour
     firefox
     neovim
     brave
