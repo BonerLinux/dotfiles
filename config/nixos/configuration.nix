@@ -43,14 +43,6 @@
     jack.enable = true;
   };
 
-  # -- users --
-  users.users.rileyboughner = {
-    isNormalUser = true;
-    description = "Riley Boughner";
-    extraGroups = [ "networkmanager" "wheel" "rileyboughner" "audio" ];
-    packages = with pkgs; [];
-  };
-
   # -- shell --
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = {
