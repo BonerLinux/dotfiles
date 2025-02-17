@@ -85,7 +85,6 @@
     fastfetch
     newsboat
     libreoffice
-    python3 #needed for pywalfox
     bluetuith
   ];
   

@@ -4,6 +4,8 @@
   programs.hyprland.enable = true;
 
   environment.systemPackages = with pkgs; [
+
+    waybar
     wl-clipboard
     pyprland
     pywal16
@@ -12,6 +14,7 @@
     imagemagick
     pywalfox-native
     hyprshot
+    nerdfonts
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
   ];
 
