@@ -1,7 +1,9 @@
 { config, pkgs, lib, ... }: 
 
 {
+ 
+services.caddy.enable = true;
 
-  services.caddy.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+networking.firewall.allowedTCPPorts = [ 80 443];
+
 }

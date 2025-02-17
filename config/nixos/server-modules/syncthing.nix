@@ -4,21 +4,19 @@
  
   services.syncthing.enable = true;
   services.syncthing = {
+    user = "admin";
     group = "users";
-    user = "rileyboughner";
-    dataDir = "/home/rileyboughner/syncdata";
-    configDir = "/home/rileyboughner/sync-config";
-
+    dataDir = "/home/admin";    #set this to the mount point
+    configDir = "/home/rileyboughner/.config/syncthing";   # Folder for Syncthing's settings and keys
+    guiAddress = "0.0.0.0:8384";
+    overrideDevices = true;
+    settings = {
+      devices = {
+      };
+    };
   };
-
-  services.syncthing.settings.gui = {
-      user = "admin";
-      password = "!JoJo1225!";
-  };
-
-  services.caddy.virtualHosts."pictures.clownweb.net".extraConfig = ''
-    reverse_proxy localhost:8384
-  '';
 
    networking.firewall.allowedTCPPorts = [ 8384 22000 ];
-   networking.firewall.allowedUDPPorts = [ 22000 21027 ];}
+   networking.firewall.allowedUDPPorts = [ 22000 21027 ];
+
+}

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [];
+  imports = [  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -9,8 +9,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.allowedUDPPorts = [ 51820 ];
-
 
   # -- locale -- 
   time.timeZone = "America/New_York";
@@ -43,14 +41,6 @@
     jack.enable = true;
   };
 
-  # -- users --
-  users.users.rileyboughner = {
-    isNormalUser = true;
-    description = "Riley Boughner";
-    extraGroups = [ "networkmanager" "wheel" "rileyboughner" ];
-    packages = with pkgs; [];
-  };
-
   # -- shell --
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = {
@@ -80,15 +70,12 @@
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
-    waypipe
-    libnotify
-    gcc
     git
+    anki
     firefox
     neovim
     brave
     kitty
-    starship
     tldr
     ripgrep
     bat
@@ -98,14 +85,9 @@
     fastfetch
     newsboat
     libreoffice
-    python3 #needed for pywalfox
     bluetuith
-    efibootmgr
   ];
   
-  # -- virtualisation --
-  virtualisation.docker.enable = true;
-
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {

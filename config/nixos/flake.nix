@@ -32,6 +32,7 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/thinkpad.nix
+        ./users/rileyboughner.nix
         ./configuration.nix
         ./hosts/thinkpad.nix
 
@@ -46,6 +47,7 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/desktop.nix
+        ./users/rileyboughner.nix
         ./configuration.nix
         ./hosts/desktop.nix
 
@@ -61,6 +63,7 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/laptop.nix
+        ./users/rileyboughner.nix
         ./configuration.nix
         ./hosts/laptop.nix
 
@@ -70,6 +73,17 @@
         ./modules/nvidia.nix
         ./modules/hyprland.nix
         ./modules/battery.nix
+      ];
+    };
+    nixosConfigurations.server = nixpkgs.lib.nixosSystem{
+      inherit system;
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./hardware/server.nix
+        ./users/admin.nix
+        ./configuration.nix
+        ./hosts/server.nix
+
       ];
     };
   };
