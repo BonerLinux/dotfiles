@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ../hardware-configuration.nix ];
+  imports = [  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -9,8 +9,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.allowedUDPPorts = [ 51820 ];
-
 
   # -- locale -- 
   time.timeZone = "America/New_York";
@@ -74,7 +72,6 @@
     wireguard-tools
     git
     anki
-    camtrix
     firefox
     neovim
     brave
@@ -92,9 +89,6 @@
     bluetuith
   ];
   
-  # -- virtualisation --
-  virtualisation.docker.enable = true;
-
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {
