@@ -45,7 +45,7 @@
       inherit system;
       specialArgs = { inherit inputs; };
       modules = [
-        ./hardware/laptop.nix
+        #./hardware/laptop.nix
         ./configuration.nix
         ./hosts/laptop.nix
 

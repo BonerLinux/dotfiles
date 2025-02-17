@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [];
+  imports = [ ../hardware-configuration.nix ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -47,7 +47,7 @@
   users.users.rileyboughner = {
     isNormalUser = true;
     description = "Riley Boughner";
-    extraGroups = [ "networkmanager" "wheel" "rileyboughner" ];
+    extraGroups = [ "networkmanager" "wheel" "rileyboughner" "audio" ];
     packages = with pkgs; [];
   };
 
@@ -80,18 +80,12 @@
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
-    waypipe
-    libnotify
-    gcc
     git
-    cmatrix
-    bottles
-    ardour
+    anki
     firefox
     neovim
     brave
     kitty
-    starship
     tldr
     ripgrep
     bat
@@ -103,7 +97,6 @@
     libreoffice
     python3 #needed for pywalfox
     bluetuith
-    efibootmgr
   ];
   
   # -- virtualisation --
