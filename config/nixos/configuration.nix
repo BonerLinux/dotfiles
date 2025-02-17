@@ -82,6 +82,7 @@
     wireguard-tools
     git
     anki
+    camtrix
     firefox
     neovim
     brave
