@@ -72,6 +72,7 @@
     wireguard-tools
     git
     anki
+    discord
     firefox
     neovim
     brave

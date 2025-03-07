@@ -52,6 +52,7 @@
         ./hosts/desktop.nix
 
         ./server-modules/vaultwarden.nix
+        ./modules/music.nix
         ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
