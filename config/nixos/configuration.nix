@@ -25,11 +25,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # -- desktop -- 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   # -- sound -- 
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -64,11 +59,16 @@
     };
   };
 
+  # for software engineering
+  virtualisation.docker.enable = true;
+
   # -- packages --
   documentation.nixos.enable = false;
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    nodejs
+    vite
     wireguard-tools
     git
     anki

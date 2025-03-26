@@ -52,6 +52,7 @@
         ./configuration.nix
         ./hosts/laptop.nix
 
+        ./modules/gnome.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
         ./modules/work.nix
