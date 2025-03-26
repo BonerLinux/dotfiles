@@ -53,6 +53,7 @@
 
         ./server-modules/vaultwarden.nix
         ./modules/music.nix
+        ./modules/gaming.nix
         ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
