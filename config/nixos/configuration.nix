@@ -45,7 +45,7 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
-      fetch = "clear && ~/.myfetch/myfetch -d -c 8 -C ' NixOS '";
+      fetch = "clear && fastfetch";
       n = "nvim";
       rebuild = "sudo nixos-rebuild switch --flake .#";
       link = "~/.dotfiles/scripts/set-symlinks";
@@ -67,8 +67,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    nodejs
-    vite
     wireguard-tools
     git
     anki
@@ -95,5 +93,6 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
   system.stateVersion = "24.11";
 }
