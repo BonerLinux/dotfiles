@@ -72,6 +72,8 @@
         ./configuration.nix
         ./hosts/laptop.nix
 
+        inputs.musnix.nixosModules.musnix
+        ./modules/music.nix
         ./modules/gnome.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
