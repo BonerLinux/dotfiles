@@ -25,11 +25,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # -- desktop -- 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   # -- sound -- 
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -50,7 +45,7 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
-      fetch = "clear && ~/.myfetch/myfetch -d -c 8 -C ' NixOS '";
+      fetch = "clear && fastfetch";
       n = "nvim";
       rebuild = "sudo nixos-rebuild switch --flake .#";
       link = "~/.dotfiles/scripts/set-symlinks";
@@ -63,6 +58,9 @@
       shit = "shutdown -h now";
     };
   };
+
+  # for software engineering
+  virtualisation.docker.enable = true;
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -98,5 +96,6 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
   system.stateVersion = "24.11";
 }

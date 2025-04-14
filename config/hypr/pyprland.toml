@@ -55,10 +55,12 @@ position = "5% 5%"
 size = "90% 90%"
 process_tracking = false
 
-[scratchpads.windows]
+[scratchpads.calendar]
 animation = ""
-command = "quickemu --vm ~/.vms/windows-10.conf"
+command = "brave --app=https://calendar.google.com/calendar/u/0/r?pli=1"
 match_by = "initialTitle"
-initialTitle = "QEMU (windows-10-0)"
-size = "95% 95%"
+initialTitle = "calendar.google.com_/calendar/u/0/r"
+position = "5% 5%"
+size = "90% 90%"
 process_tracking = false
+
