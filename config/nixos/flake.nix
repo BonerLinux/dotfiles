@@ -13,6 +13,20 @@
     system = "x86_64-linux";
   in
   {
+    nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
+      inherit system;
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./hardware/hp.nix
+        ./configuration.nix
+        ./hosts/hp.nix
+
+        ./modules/hyprland.nix
+        ./modules/syncthing.nix
+        ./modules/battery.nix
+        ./modules/fun.nix
+      ];
+    };
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
       specialArgs = { inherit inputs; };
@@ -23,6 +37,7 @@
         ./hosts/thinkpad.nix
 
         ./modules/hyprland.nix
+        ./modules/syncthing.nix
         ./modules/battery.nix
         ./modules/fun.nix
       ];
@@ -37,6 +52,8 @@
         ./hosts/desktop.nix
 
         ./server-modules/vaultwarden.nix
+        ./modules/music.nix
+        ./modules/gaming.nix
         ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix

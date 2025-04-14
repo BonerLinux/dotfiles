@@ -70,6 +70,9 @@
     wireguard-tools
     git
     anki
+    discord
+    gcc
+    vscode
     firefox
     neovim
     brave
