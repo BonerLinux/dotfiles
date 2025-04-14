@@ -6,6 +6,7 @@
     unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
+    musnix.url = "github:musnix/musnix";
   };
 
   outputs = { self, nixpkgs, unstable, ... } @inputs: 
@@ -54,6 +55,8 @@
         ./server-modules/vaultwarden.nix
         ./modules/music.nix
         ./modules/gaming.nix
+        inputs.musnix.nixosModules.musnix
+        ./modules/music.nix
         ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
