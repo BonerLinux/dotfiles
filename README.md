@@ -10,10 +10,11 @@
 
 ### TODO
 
-- [ ] create a "default profile for dotfiles"
-- [ ] find better way of saveing firefox config
+- [ ] find a good way of creating just a dotfiles repo without the nix stuff
+- [ ] find better way of saving firefox config
 - [ ] update the install script to move the hardware file into hardare and then assist the user in renameing and rebuilding from scratch
-- [ ] prompt the user to install wallpapers from github dude
+- [ ] prompt the user to install wallpapers from a git repo
+- [ ] learn more about nix
 
 ### Stuff to know
 wallpapers are stored in ~/.wallpapers and the last chosen wallpaper is stored in ~/.wallpaper
