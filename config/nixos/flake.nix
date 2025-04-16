@@ -39,7 +39,7 @@
         ./configuration.nix
 
         ./modules/hyprland.nix
-        ./modules/syncthing.nix
+        ./modules/gnome.nix
         ./modules/battery.nix
         ./modules/fun.nix
       ];

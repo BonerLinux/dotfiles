@@ -54,7 +54,9 @@
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
       n = "nvim";
-      rebuild = "sudo nixos-rebuild switch --flake '.dotfiles/config/nixos#'";
+      sync = "~/.dotfiles/scripts/sync";
+      rebuild = "~/.dotfiles/scripts/rebuild";
+      # rebuild = "sudo nixos-rebuild switch --flake '.dotfiles/config/nixos#'";
       link = "~/.dotfiles/scripts/set-symlinks";
       
       vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
@@ -77,6 +79,7 @@
     git
     discord
     vscode
+    gcc
     pass
     tree
     firefox
