@@ -52,7 +52,6 @@
         ./configuration.nix
         ./hosts/desktop.nix
 
-        ./server-modules/vaultwarden.nix
         ./modules/music.nix
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
@@ -60,6 +59,7 @@
         ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
+        ./modules/gnome.nix
         ./modules/hyprland.nix
       ];
     };

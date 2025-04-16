@@ -7,8 +7,9 @@
     guitarix
     qpwgraph
 
+    hydrogen
+    sfizz
     x42-avldrums
-    tunefish
     helm
     vital
     surge-XT

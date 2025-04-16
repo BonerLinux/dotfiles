@@ -34,6 +34,12 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+    extraConfig.pipewire."context.properties" = {
+      "default.clock.rate" = 44100;
+      "default.clock.quantum" = 1024;     # buffer size in frames
+      "default.clock.min-quantum" = 1024;
+      "default.clock.max-quantum" = 1024;
+    };
   };
 
   # -- shell --
