@@ -1,66 +1,19 @@
 #!/bin/sh
 
-# Reset symlinks for directories in ~/.config
+# Source and destination directories
+SOURCE_DIR="$HOME/.dotfiles/config"
+DEST_DIR="$HOME/config"
+# DEST_DIR="$HOME/.config"
 
-# Determine the user's home directory, whether run with sudo or not
-if [ -n "$SUDO_USER" ]; then
-    USER_HOME=$(eval echo "~$SUDO_USER")
-else
-    USER_HOME="$HOME"
-fi
+# Create the destination directory if it doesn't exist
+mkdir -p "$DEST_DIR"
 
-# -- hypr --
-SOURCE="$USER_HOME/.dotfiles/config/hypr"
-DEST="$USER_HOME/.config/hypr"
+# Loop through each file in the source directory
+for file in "$SOURCE_DIR"/*; do
+  # Get the base filename
+  filename=$(basename "$file")
+  # Create a symlink in the destination directory
+  ln -sfn "$file" "$DEST_DIR/$filename"
+done
 
-# -- hypr --
-if [ -d "$DEST" ]; then
-    echo "Removing existing hypr directory: $DEST"
-    rm -rf "$DEST"
-fi
-ln -s "$SOURCE" "$DEST"
-
-# -- kitty --
-SOURCE="$USER_HOME/.dotfiles/config/kitty"
-DEST="$USER_HOME/.config/kitty"
-if [ -d "$DEST" ]; then
-    echo "Removing existing kitty directory: $DEST"
-    rm -rf "$DEST"
-fi
-ln -s "$SOURCE" "$DEST"
-
-# -- nixos --
-SOURCE="$USER_HOME/.dotfiles/config/nixos"
-DEST="/etc/nixos"
-if [ -d "$DEST" ]; then
-    echo "Removing existing nixos directory: $DEST"
-    sudo rm -rf "$DEST"
-fi
-sudo ln -s "$SOURCE" "$DEST"
-
-# -- wal --
-SOURCE="$USER_HOME/.dotfiles/config/wal"
-DEST="$USER_HOME/.config/wal"
-if [ -d "$DEST" ]; then
-    echo "Removing existing wal directory: $DEST"
-    rm -rf "$DEST"
-fi
-ln -s "$SOURCE" "$DEST"
-
-# -- wofi --
-SOURCE="$USER_HOME/.dotfiles/config/wofi"
-DEST="$USER_HOME/.config/wofi"
-if [ -d "$DEST" ]; then
-    echo "Removing existing wofi directory: $DEST"
-    rm -rf "$DEST"
-fi
-ln -s "$SOURCE" "$DEST"
-
-# -- zshrc --
-SOURCE="$USER_HOME/.dotfiles/config/zsh/zshrc"
-DEST="$USER_HOME/.zshrc"
-if [ -f "$DEST" ]; then
-    echo "Removing existing zshrc: $DEST"
-    rm -r "$DEST"
-fi
-ln -s "$SOURCE" "$DEST"
+echo "Symlinks created in $DEST_DIR"
