@@ -1,4 +1,0 @@
-#!/bin/sh
-query="$1"
-file=$(rg --files --hidden --follow --no-ignore-vcs | fzf --preview 'bat --style=numbers --color=always --line-range=:100 {}' --query "$query")
-[ -n "$file" ] && nvim "$file"
