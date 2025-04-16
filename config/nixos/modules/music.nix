@@ -8,7 +8,6 @@
     qpwgraph
 
     x42-avldrums
-    tunefish
     helm
     vital
     surge-XT

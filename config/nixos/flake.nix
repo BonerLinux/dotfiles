@@ -52,12 +52,7 @@
         ./configuration.nix
         ./hosts/desktop.nix
 
-        ./server-modules/vaultwarden.nix
-<<<<<<< HEAD
-        ./modules/music.nix
         ./modules/gaming.nix
-=======
->>>>>>> 080e856 (updated music module and desktop flake for proper music production -> musnix)
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/syncthing.nix

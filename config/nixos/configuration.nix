@@ -73,6 +73,8 @@
     discord
     gcc
     vscode
+    pass
+    tree
     firefox
     neovim
     brave
