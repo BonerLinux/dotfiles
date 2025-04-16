@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  imports = [  ];
+  imports = [  
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -53,7 +54,7 @@
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
       n = "nvim";
-      rebuild = "sudo nixos-rebuild switch --flake .#";
+      rebuild = "sudo nixos-rebuild switch --flake '.dotfiles/config/nixos#'";
       link = "~/.dotfiles/scripts/set-symlinks";
       
       vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
@@ -65,8 +66,7 @@
     };
   };
 
-  # for software engineering
-  virtualisation.docker.enable = true;
+  # -- services --
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -75,10 +75,10 @@
   environment.systemPackages = with pkgs; [
     wireguard-tools
     git
-    anki
     discord
-    gcc
     vscode
+    pass
+    tree
     firefox
     neovim
     brave
@@ -90,11 +90,17 @@
     fzf
     pavucontrol
     fastfetch
-    newsboat
     libreoffice
     bluetuith
   ];
   
+  # -- gnupg --
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-tty;
+  };
+
+
   # -- system stuff --
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.gc = {
