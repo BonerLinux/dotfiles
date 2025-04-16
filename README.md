@@ -14,7 +14,7 @@
 - [ ] find better way of saving firefox config
 - [ ] update the install script to move the hardware file into hardare and then assist the user in renameing and rebuilding from scratch
 - [ ] prompt the user to install wallpapers from a git repo
-- [ ] learn more about nix
+- [x] learn more about nix
 
 ### Stuff to know
 wallpapers are stored in ~/.wallpapers and the last chosen wallpaper is stored in ~/.wallpaper
