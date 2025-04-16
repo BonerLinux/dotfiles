@@ -1,0 +1,6 @@
+#!/bin/sh
+
+git -C ~/.dotfiles pull
+git -C ~/.config/nvim pull
+git -C ~/.password-store pull
+git -C ~/.wallpapers/walls pull
