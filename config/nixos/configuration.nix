@@ -69,9 +69,7 @@
   environment.systemPackages = with pkgs; [
     wireguard-tools
     git
-    anki
     discord
-    gcc
     vscode
     pass
     tree
@@ -86,7 +84,6 @@
     fzf
     pavucontrol
     fastfetch
-    newsboat
     libreoffice
     bluetuith
   ];

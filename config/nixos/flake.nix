@@ -19,8 +19,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/hp.nix
-        ./configuration.nix
         ./hosts/hp.nix
+        ./users/rileyboughner.nix
+        ./configuration.nix
 
         ./modules/hyprland.nix
         ./modules/syncthing.nix
@@ -33,9 +34,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/thinkpad.nix
+        ./hosts/thinkpad.nix
         ./users/rileyboughner.nix
         ./configuration.nix
-        ./hosts/thinkpad.nix
 
         ./modules/hyprland.nix
         ./modules/syncthing.nix
@@ -48,9 +49,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/desktop.nix
+        ./hosts/desktop.nix
         ./users/rileyboughner.nix
         ./configuration.nix
-        ./hosts/desktop.nix
 
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
@@ -66,9 +67,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/laptop.nix
+        ./hosts/laptop.nix
         ./users/rileyboughner.nix
         ./configuration.nix
-        ./hosts/laptop.nix
 
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
@@ -86,9 +87,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware/server.nix
+        ./hosts/server.nix
         ./users/admin.nix
         ./configuration.nix
-        ./hosts/server.nix
 
       ];
     };
