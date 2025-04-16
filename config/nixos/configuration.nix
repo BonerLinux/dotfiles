@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  imports = [  ];
+  imports = [  
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -47,7 +48,7 @@
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
       n = "nvim";
-      rebuild = "sudo nixos-rebuild switch --flake .#";
+      rebuild = "sudo nixos-rebuild switch --flake '.dotfiles/config/nixos#'";
       link = "~/.dotfiles/scripts/set-symlinks";
       
       vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
@@ -59,8 +60,7 @@
     };
   };
 
-  # for software engineering
-  virtualisation.docker.enable = true;
+  # -- services --
 
   # -- packages --
   documentation.nixos.enable = false;
