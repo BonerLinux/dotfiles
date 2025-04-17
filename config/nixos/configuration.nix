@@ -56,7 +56,6 @@
       n = "nvim";
       sync = "~/.dotfiles/scripts/sync";
       rebuild = "~/.dotfiles/scripts/rebuild";
-      # rebuild = "sudo nixos-rebuild switch --flake '.dotfiles/config/nixos#'";
       link = "~/.dotfiles/scripts/set-symlinks";
       
       vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
