@@ -5,7 +5,7 @@
 users.users.admin = {
     isNormalUser = true;
     description = "admin";
-    extraGroups = [ "networkmanager" "wheel" "admin" "audio" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [];
   };
 
