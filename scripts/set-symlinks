@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Source and destination directories
-SOURCE_DIR="$HOME/.dotfiles/config"
-DEST_DIR="$HOME/config"
+SOURCE_DIR="$(eval echo "~$SUDO_USER")/.dotfiles/config"
+DEST_DIR="$(eval echo "~$SUDO_USER")/.config"
 # DEST_DIR="$HOME/.config"
 
 # Create the destination directory if it doesn't exist
