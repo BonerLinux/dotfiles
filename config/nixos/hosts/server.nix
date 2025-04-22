@@ -8,7 +8,7 @@
   environment.systemPackages = with pkgs; [];
   
  # -- services --
- virtualization.docker.enable = true;
+ virtualisation.docker.enable = true;
  
  services.openssh = {
    enable = true;
