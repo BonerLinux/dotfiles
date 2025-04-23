@@ -82,6 +82,7 @@
     pass
     tree
     firefox
+    nodejs
     neovim
     brave
     kitty
