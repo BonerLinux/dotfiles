@@ -88,6 +88,8 @@
     kitty
     tldr
     ripgrep
+    create-react-app
+    nodejs
     bat
     fd
     fzf
