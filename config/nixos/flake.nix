@@ -90,6 +90,8 @@
         ./hosts/server.nix
         ./users/admin.nix
         ./configuration.nix
+
+        ./modules/nvidia.nix
       ];
     };
   };
