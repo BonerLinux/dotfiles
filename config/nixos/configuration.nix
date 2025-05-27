@@ -83,6 +83,7 @@
     tree
     firefox
     nodejs
+    create-react-app
     neovim
     brave
     kitty
