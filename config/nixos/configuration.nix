@@ -68,7 +68,8 @@
   };
 
   # -- services --
-
+  virtualisation.docker.enable = true;
+  
   # -- packages --
   documentation.nixos.enable = false;
   nixpkgs.config.allowUnfree = true;

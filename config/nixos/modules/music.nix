@@ -6,6 +6,7 @@
     ardour
     guitarix
     qpwgraph
+    qjackctl
 
     hydrogen
     sfizz
