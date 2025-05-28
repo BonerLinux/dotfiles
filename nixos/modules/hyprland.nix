@@ -6,6 +6,7 @@
   environment.systemPackages = with pkgs; [
 
     waybar
+    swaybg
     wl-clipboard
     pyprland
     pywal16
