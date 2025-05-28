@@ -53,6 +53,7 @@
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
+      dots = "cd ~/.dotfiles/config";
       r = "ranger";
       n = "nvim";
       sync = "~/.dotfiles/scripts/sync";
@@ -80,6 +81,7 @@
   environment.systemPackages = with pkgs; [
     wireguard-tools
     git
+    oh-my-posh
     ranger
     ueberzugpp #for image previews in ranger
     discord

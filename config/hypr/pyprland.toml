@@ -5,7 +5,7 @@ plugins = [
 
 [scratchpads.term]
 animation = "fromTop"
-command = "kitty --class kitty-dropterm"
+command = "kitty --class kitty-dropterm -e sh -c 'fastfetch; exec $SHELL'"
 class = "kitty-dropterm"
 position = "7% 10%"
 size = "85% 80%"
@@ -13,7 +13,7 @@ offset = "120%"
 
 [scratchpads.term2]
 animation = "fromTop"
-command = "kitty --class kitty-dropterm2"
+command = "kitty --class kitty-dropterm2 -e sh -c 'fastfetch; exec $SHELL'"
 class = "kitty-dropterm2"
 position = "7% 10%"
 size = "85% 80%"
