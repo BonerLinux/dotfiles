@@ -14,7 +14,7 @@
     system = "x86_64-linux";
 
     #read the settings file
-    user = builtins.exec "yq" ["eval", ".user", "../../settings.yaml"];
+    user = "rileyboughner";
   in
   {
     nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
