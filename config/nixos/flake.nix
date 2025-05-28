@@ -14,12 +14,12 @@
     system = "x86_64-linux";
 
     #read the settings file
-    user = "rileyboughner";
+    settings = import ../../settings.nix;
   in
   {
     nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit settings; };
       modules = [
         ./hardware/hp.nix
         ./hosts/hp.nix
@@ -34,7 +34,7 @@
     };
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit settings; };
       modules = [
         ./hardware/thinkpad.nix
         ./hosts/thinkpad.nix
@@ -49,7 +49,7 @@
     };
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit settings; };
       modules = [
         ./hardware/desktop.nix
         ./hosts/desktop.nix
@@ -67,7 +67,7 @@
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit settings; };
       modules = [
         ./hardware/laptop.nix
         ./hosts/laptop.nix
@@ -85,7 +85,7 @@
     };
     nixosConfigurations.server = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit settings; };
       modules = [
         ./hardware/server.nix
         ./hosts/server.nix
