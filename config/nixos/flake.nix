@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "My nix flake for managing my computers";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
@@ -11,16 +11,17 @@
 
   outputs = { self, nixpkgs, unstable, ... } @inputs: 
   let
+    user = "rileyboughner";
     system = "x86_64-linux";
   in
   {
     nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; inherit user; };
       modules = [
         ./hardware/hp.nix
         ./hosts/hp.nix
-        ./users/rileyboughner.nix
+        ./users/standard.nix
         ./configuration.nix
 
         ./modules/hyprland.nix
@@ -31,11 +32,11 @@
     };
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; inherit user; };
       modules = [
         ./hardware/thinkpad.nix
         ./hosts/thinkpad.nix
-        ./users/rileyboughner.nix
+        ./users/standard.nix
         ./configuration.nix
 
         ./modules/hyprland.nix
@@ -46,11 +47,11 @@
     };
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; inherit user; };
       modules = [
         ./hardware/desktop.nix
         ./hosts/desktop.nix
-        ./users/rileyboughner.nix
+        ./users/standard.nix
         ./configuration.nix
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
@@ -64,15 +65,13 @@
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; inherit user; };
       modules = [
         ./hardware/laptop.nix
         ./hosts/laptop.nix
-        ./users/rileyboughner.nix
+        ./users/standard.nix
         ./configuration.nix
 
-        inputs.musnix.nixosModules.musnix
-        ./modules/music.nix
         ./modules/gnome.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
@@ -84,7 +83,7 @@
     };
     nixosConfigurations.server = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; inherit user; };
       modules = [
         ./hardware/server.nix
         ./hosts/server.nix
