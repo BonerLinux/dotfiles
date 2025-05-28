@@ -82,6 +82,8 @@
     wireguard-tools
     git
     oh-my-posh
+    stow
+    yq
     ranger
     ueberzugpp #for image previews in ranger
     discord
