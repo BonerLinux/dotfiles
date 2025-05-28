@@ -53,6 +53,7 @@
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
+      r = "ranger";
       n = "nvim";
       sync = "~/.dotfiles/scripts/sync";
       rebuild = "~/.dotfiles/scripts/rebuild";
@@ -69,14 +70,18 @@
 
   # -- services --
   virtualisation.docker.enable = true;
-  
+
   # -- packages --
   documentation.nixos.enable = false;
   nixpkgs.config.allowUnfree = true;
 
+  environment.variables.EDITOR = "nvim";
+
   environment.systemPackages = with pkgs; [
     wireguard-tools
     git
+    ranger
+    ueberzugpp #for image previews in ranger
     discord
     vscode
     gcc
