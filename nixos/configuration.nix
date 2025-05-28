@@ -53,12 +53,12 @@
     shellAliases = {
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
-      dots = "cd ~/.dotfiles/config";
+      dots = "cd ~/.system/config";
       r = "ranger";
       n = "nvim";
-      sync = "~/.dotfiles/scripts/sync";
-      rebuild = "~/.dotfiles/scripts/rebuild";
-      link = "~/.dotfiles/scripts/set-symlinks";
+      sync = "~/.system/scripts/sync";
+      rebuild = "~/.system/scripts/rebuild";
+      link = "~/.system/scripts/set-symlinks";
       
       vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
       vpn-down = "sudo wg-quick down ~/.vpns/clownweb.conf";

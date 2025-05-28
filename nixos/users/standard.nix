@@ -1,6 +1,6 @@
 { config, specialArgs, pkgs, lib, ... }: 
 let
-  user = specialArgs.settings.user;
+  user = specialArgs.user;
 in 
 {
 
