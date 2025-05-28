@@ -11,8 +11,10 @@
 
   outputs = { self, nixpkgs, unstable, ... } @inputs: 
   let
-    user = "rileyboughner";
     system = "x86_64-linux";
+
+    #read the settings file
+    user = builtins.exec "yq" ["eval", ".user", "../../settings.yaml"];
   in
   {
     nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
