@@ -1,2 +1,0 @@
-kitty @ set-colors --all ~/.config/kitty/themes/rose-pine.conf
-eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/focus.prompt)"

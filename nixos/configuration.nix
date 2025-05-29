@@ -95,6 +95,7 @@
     nodejs
     create-react-app
     neovim
+    unzip
     brave
     kitty
     tldr

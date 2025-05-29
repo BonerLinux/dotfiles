@@ -1,1 +1,1 @@
-dotfiles/normal/.zshrc
+dotfiles/focused/.zshrc
