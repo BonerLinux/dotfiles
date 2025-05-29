@@ -54,6 +54,9 @@
       battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
       dots = "cd ~/.system/config";
+      en = "sudo nvim ~/.system/nixos/configuration.nix";
+      ef = "sudo nvim ~/.system/nixos/flake.nix";
+      ev = "sudo nvim ~/.system/dotfiles/normal/.config/nvim/";
       r = "ranger";
       n = "nvim";
       sync = "~/.system/scripts/sync";
@@ -84,6 +87,7 @@
     oh-my-posh
     stow
     yq
+    direnv
     ranger
     ueberzugpp #for image previews in ranger
     discord
@@ -92,8 +96,8 @@
     pass
     tree
     firefox
-    nodejs
     create-react-app
+    gnumake
     neovim
     unzip
     brave
@@ -101,7 +105,6 @@
     tldr
     ripgrep
     create-react-app
-    nodejs
     bat
     fd
     fzf
