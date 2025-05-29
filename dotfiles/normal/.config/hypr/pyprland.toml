@@ -1,0 +1,66 @@
+[pyprland]
+plugins = [
+  "scratchpads"
+]
+
+[scratchpads.term]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm -e sh -c 'fastfetch; exec $SHELL'"
+class = "kitty-dropterm"
+position = "7% 10%"
+size = "85% 80%"
+offset = "120%"
+
+[scratchpads.term2]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm2 -e sh -c 'fastfetch; exec $SHELL'"
+class = "kitty-dropterm2"
+position = "7% 10%"
+size = "85% 80%"
+offset = "120%"
+
+[scratchpads.gpt]
+animation = ""
+command = "brave --app=https://chat.openai.com"
+match_by = "initialTitle"
+initialTitle = "chat.openai.com_/"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+
+[scratchpads.habitica]
+animation = ""
+command = "brave --app=https://habitica.com"
+match_by = "initialTitle"
+initialTitle = "habitica.com_/"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+
+[scratchpads.gmail]
+animation = ""
+command = "brave --app=https://gmail.com"
+match_by = "initialTitle"
+initialTitle = "gmail.com_/"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+
+[scratchpads.outlook]
+animation = ""
+command = "brave --app=https://outlook.office365.com"
+match_by = "initialTitle"
+initialTitle = "outlook.office365.com_/"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+
+[scratchpads.calendar]
+animation = ""
+command = "brave --app=https://calendar.google.com/calendar/u/0/r?pli=1"
+match_by = "initialTitle"
+initialTitle = "calendar.google.com_/calendar/u/0/r"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+

@@ -1,0 +1,13 @@
+[config]
+allow_images=true
+show=drun
+width=1800
+height=1200
+always_parse_args=true
+show_all=true
+term=kitty
+hide_scroll=true
+print_command=true
+insensitive=true
+columns=5
+image_size=300
