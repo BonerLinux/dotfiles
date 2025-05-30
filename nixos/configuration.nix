@@ -74,6 +74,7 @@
 
   # -- services --
   virtualisation.docker.enable = true;
+  virtualisation.docker.enableNvidia = true;
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -88,6 +89,7 @@
     stow
     yq
     direnv
+    cider
     ranger
     ueberzugpp #for image previews in ranger
     discord
