@@ -74,7 +74,7 @@
 
   # -- services --
   virtualisation.docker.enable = true;
-  virtualisation.docker.enableNvidia = true;
+  #virtualisation.docker.enableNvidia = true;
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -98,7 +98,6 @@
     pass
     tree
     firefox
-    create-react-app
     gnumake
     neovim
     unzip
@@ -106,7 +105,6 @@
     kitty
     tldr
     ripgrep
-    create-react-app
     bat
     fd
     fzf
@@ -131,5 +129,5 @@
     options = "--delete-older-than 7d";
   };
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 }

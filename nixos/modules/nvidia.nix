@@ -11,4 +11,5 @@
   };
   
   services.xserver.videoDrivers = [ "nvidia" ];
+	
 }

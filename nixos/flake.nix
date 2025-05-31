@@ -2,7 +2,7 @@
   description = "My nix flake for managing my computers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";

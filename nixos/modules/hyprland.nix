@@ -3,6 +3,10 @@
 {
   programs.hyprland.enable = true;
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.noto
+  ];
+
   environment.systemPackages = with pkgs; [
 
     waybar
@@ -15,7 +19,6 @@
     imagemagick
     pywalfox-native
     hyprshot
-    nerdfonts
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
   ];
 
