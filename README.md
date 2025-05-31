@@ -1,12 +1,8 @@
 ![Project Screenshot](.images/screenshot.png)
 
-# Welcome!
+### My OS!
 
-### These are my updated dotfiles
-
- - now including **nixflakes!**
- - better wallpaper support
- - modular design
+ - These dotfiles use stow and nix to configure all of my computers (including my server)
 
 ### TODO
 
