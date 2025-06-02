@@ -55,6 +55,8 @@
         ./hosts/desktop.nix
         ./users/standard.nix
         ./configuration.nix
+
+        ./modules/docker.nix
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix

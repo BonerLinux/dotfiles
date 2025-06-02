@@ -73,8 +73,6 @@
   };
 
   # -- services --
-  virtualisation.docker.enable = true;
-  #virtualisation.docker.enableNvidia = true;
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -84,12 +82,14 @@
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
+    bluez
     git
     oh-my-posh
     stow
     yq
     direnv
     cider
+    playerctl
     ranger
     ueberzugpp #for image previews in ranger
     discord

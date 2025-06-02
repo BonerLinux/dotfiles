@@ -23,6 +23,8 @@
     </device>
     <gui enabled="true" tls="false" debugging="false" sendBasicAuthPrompt="false">
         <address>127.0.0.1:8384</address>
+        <user>admin</user>
+        <password>$2a$10$FjLnRZhiy4HRJjhVG62dzu4bqw9.G1tB4T6WBG3Yppatr1mMK0X46</password>
         <apikey>bVu59krvMr93xNwEGRrLNRvNtHgpmixw</apikey>
         <theme>default</theme>
     </gui>
@@ -44,8 +46,8 @@
         <natLeaseMinutes>60</natLeaseMinutes>
         <natRenewalMinutes>30</natRenewalMinutes>
         <natTimeoutSeconds>10</natTimeoutSeconds>
-        <urAccepted>0</urAccepted>
-        <urSeen>0</urSeen>
+        <urAccepted>-1</urAccepted>
+        <urSeen>3</urSeen>
         <urUniqueID></urUniqueID>
         <urURL>https://data.syncthing.net/newdata</urURL>
         <urPostInsecurely>false</urPostInsecurely>
@@ -60,7 +62,6 @@
         <releasesURL>https://upgrades.syncthing.net/meta.json</releasesURL>
         <overwriteRemoteDeviceNamesOnConnect>false</overwriteRemoteDeviceNamesOnConnect>
         <tempIndexMinBlocks>10</tempIndexMinBlocks>
-        <unackedNotificationID>authenticationUserAndPassword</unackedNotificationID>
         <trafficClass>0</trafficClass>
         <setLowPriority>true</setLowPriority>
         <maxFolderConcurrency>0</maxFolderConcurrency>
