@@ -4,7 +4,7 @@
     "family": "ipv4",
     "height": 35,
     "modules-left": [ "clock", "hyprland/window" ],
-    "modules-center": [],
+    "modules-center": [ "mpris" ],
     "modules-right": [ "network", "cpu", "memory", "pulseaudio" , "battery" ],
     "network": {
       "format-ethernet": "ethernet",
@@ -14,6 +14,11 @@
     "hyprland/workspaces": {
       "sort-by-number": true
     },
+
+  "mpris": {
+    "format": "{title}",
+    },
+
     "clock": {
         "format": "{:%I:%M %p}",
         "format-alt": "{:%a %b %d %I:%M %p}"

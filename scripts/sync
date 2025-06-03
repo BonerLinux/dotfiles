@@ -1,6 +1,4 @@
 #!/bin/sh
 
-git -C ~/.dotfiles pull
-git -C ~/.config/nvim pull
-git -C ~/.password-store pull
-git -C ~/.wallpapers/walls pull
+cd /home/rileyboughner/.system/dotfiles/normal/
+sudo stow -t ~/.config .config
