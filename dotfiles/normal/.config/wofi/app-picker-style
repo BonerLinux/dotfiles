@@ -25,7 +25,7 @@ window {
     margin: 10px; /* Increased margin for spacing */
     padding: 10px; /* Increased padding for better touch targets */
     border: none;
-    background-color: alpha(@background, 0.5); /* Semi-transparent background */
+    background-color: alpha(@background, 0); /* Semi-transparent background */
     border-radius: 8px; /* Rounded corners */
 }
 

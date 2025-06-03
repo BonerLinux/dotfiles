@@ -213,3 +213,16 @@
 12:08:51.103242 table@remove removed @40
 12:08:51.103287 table@remove removed @37
 12:08:51.103343 table@remove removed @36
+13:00:05.116435 db@close closing
+13:00:05.116536 db@close done T·101.478µs
+=============== Jun 3, 2025 (EDT) ===============
+14:03:05.583005 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:03:05.583420 version@stat F·[0 1] S·2KiB[0B 2KiB] Sc·[0.00 0.00]
+14:03:05.583434 db@open opening
+14:03:05.583470 journal@recovery F·1
+14:03:05.583671 journal@recovery recovering @47
+14:03:05.585541 memdb@flush created L0@50 N·55 S·771B "\x11t\xe3..\r\x10[,v108086":"\x11t\xe3..\r\x10[,v108032"
+14:03:05.585669 version@stat F·[1 1] S·3KiB[771B 2KiB] Sc·[0.25 0.00]
+14:03:05.588875 db@janitor F·5 G·1
+14:03:05.588887 db@janitor removing table-46
+14:03:05.588917 db@open done T·5.478729ms
