@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# ── Customize your messages here ───────────────────────────────────────────────
+MESSAGES=(
+  "Remember: breathe."
+  "You’ve got this!"
+  "Stay curious."
+  "Time to stretch."
+  "One step at a time."
+  "Keep smiling."
+  "Believe in yourself."
+  "Coffee break soon?"
+  "Make today count."
+  "Pause. Reflect."
+)
+# ────────────────────────────────────────────────────────────────────────────────
+
+# Count how many messages there are
+COUNT=${#MESSAGES[@]}
+
+# Generate a random index 0…COUNT-1
+INDEX=$(( RANDOM % COUNT ))
+
+# Echo the chosen message
+echo "${MESSAGES[$INDEX]}"

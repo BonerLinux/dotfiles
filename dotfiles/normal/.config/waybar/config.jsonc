@@ -1,19 +1,22 @@
 {
     "layer": " top", // Waybar at top layer
     "position": "bottom", // Waybar position (top|bottom|left|right)
+    "family": "ipv4",
     "height": 35,
     "modules-left": [ "clock", "hyprland/window" ],
     "modules-center": [],
     "modules-right": [ "network", "cpu", "memory", "pulseaudio" , "battery" ],
     "network": {
-      "format-ethernet": "ethernet"
+      "format-ethernet": "ethernet",
+      "format-wifi": "{essid}",
+      "format-alt": "{ipaddr}"
     },
     "hyprland/workspaces": {
       "sort-by-number": true
     },
     "clock": {
-        "format": "{:%H:%M %p}",
-        "format-alt": "{:%a %b %d %H:%M %p}"
+        "format": "{:%I:%M %p}",
+        "format-alt": "{:%a %b %d %I:%M %p}"
     },
     "battery": {
       "format": "{capacity}%",

@@ -9,6 +9,7 @@
 
   environment.systemPackages = with pkgs; [
 
+    hyprlock
     waybar
     swaybg
     wl-clipboard
@@ -20,6 +21,7 @@
     pywalfox-native
     hyprshot
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+
   ];
 
   environment.shellInit = ''

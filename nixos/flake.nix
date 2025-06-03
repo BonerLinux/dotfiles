@@ -61,10 +61,8 @@
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
-        ./modules/syncthing.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
-        ./modules/gnome.nix
         ./modules/hyprland.nix
       ];
     };

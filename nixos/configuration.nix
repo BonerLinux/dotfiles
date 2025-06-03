@@ -43,6 +43,9 @@
     };
   };
 
+  # -- bluetooth --
+  hardware.bluetooth.enable = true;
+
   # -- shell --
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = {
@@ -74,7 +77,6 @@
   environment.systemPackages = with pkgs; [
     alsa-utils
     wireguard-tools
-    bluez
     git
     oh-my-posh
     stow
@@ -86,6 +88,7 @@
     cava
     libnotify
     mako
+    bluez
     ranger
     ueberzugpp #for image previews in ranger
     discord
