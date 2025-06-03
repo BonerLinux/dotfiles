@@ -1,0 +1,5 @@
+{
+  "players": [ "org.mpris.MediaPlayer2.Valent.Player0" ],
+  "fps": 10,
+  "use_active_player": true
+}

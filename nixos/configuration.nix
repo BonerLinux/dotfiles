@@ -90,6 +90,10 @@
     direnv
     cider
     playerctl
+    fum
+    cava
+    libnotify
+    mako
     ranger
     ueberzugpp #for image previews in ranger
     discord

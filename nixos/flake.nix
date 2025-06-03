@@ -56,6 +56,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/kdeconnect.nix
         ./modules/docker.nix
         ./modules/gaming.nix
         inputs.musnix.nixosModules.musnix
