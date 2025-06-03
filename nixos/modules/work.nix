@@ -3,7 +3,6 @@
 {
   environment.systemPackages = with pkgs; [
     sshfs
-    beekeeper-studio
   ];
 
   programs.zsh = {

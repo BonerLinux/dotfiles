@@ -181,3 +181,35 @@
 08:17:21.992324 version@stat F·[2 1] S·268KiB[5KiB 262KiB] Sc·[0.50 0.00]
 08:17:21.995243 db@janitor F·5 G·0
 08:17:21.995257 db@open done T·4.553512ms
+11:35:16.309085 db@close closing
+11:35:16.309682 db@close done T·586.104µs
+=============== Jun 3, 2025 (EDT) ===============
+11:35:53.572854 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:35:53.573367 version@stat F·[2 1] S·268KiB[5KiB 262KiB] Sc·[0.50 0.00]
+11:35:53.573406 db@open opening
+11:35:53.573458 journal@recovery F·1
+11:35:53.573667 journal@recovery recovering @41
+11:35:53.575477 memdb@flush created L0@43 N·228 S·4KiB "\nla..ime,v107805":"\x11t\xe3..\r\x10[,v107806"
+11:35:53.575606 version@stat F·[3 1] S·272KiB[9KiB 262KiB] Sc·[0.75 0.00]
+11:35:53.579188 db@janitor F·6 G·0
+11:35:53.579206 db@open done T·5.790262ms
+12:08:14.842291 db@close closing
+12:08:14.842585 db@close done T·300.383µs
+=============== Jun 3, 2025 (EDT) ===============
+12:08:51.090557 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:08:51.091175 version@stat F·[3 1] S·272KiB[9KiB 262KiB] Sc·[0.75 0.00]
+12:08:51.091215 db@open opening
+12:08:51.091284 journal@recovery F·1
+12:08:51.091558 journal@recovery recovering @44
+12:08:51.093799 memdb@flush created L0@46 N·41 S·635B "\x11t\xe3..\r\x10[,v108030":"\x11t\xe3..\r\x10[,v107990"
+12:08:51.093958 version@stat F·[4 1] S·273KiB[10KiB 262KiB] Sc·[1.00 0.00]
+12:08:51.097771 db@janitor F·7 G·0
+12:08:51.097791 db@open done T·6.563823ms
+12:08:51.097893 table@compaction L0·4 -> L1·1 S·273KiB Q·108031
+12:08:51.102318 table@build created L1@49 N·20 S·2KiB "\x03OT..ion,v54104":"\x11t\xe3..\r\x10[,v108030"
+12:08:51.102353 version@stat F·[0 1] S·2KiB[0B 2KiB] Sc·[0.00 0.00]
+12:08:51.103116 table@compaction committed F-4 S-270KiB Ke·0 D·794 T·5.174609ms
+12:08:51.103205 table@remove removed @43
+12:08:51.103242 table@remove removed @40
+12:08:51.103287 table@remove removed @37
+12:08:51.103343 table@remove removed @36

@@ -1,0 +1,26 @@
+{
+    "layer": " top", // Waybar at top layer
+    "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 35,
+    "modules-left": [ "clock", "hyprland/window" ],
+    "modules-center": [],
+    "modules-right": [ "network", "cpu", "memory", "pulseaudio" , "battery" ],
+    "network": {
+      "format-ethernet": "ethernet"
+    },
+    "hyprland/workspaces": {
+      "sort-by-number": true
+    },
+    "clock": {
+        "format": "{:%H:%M %p}",
+        "format-alt": "{:%a %b %d %H:%M %p}"
+    },
+    "battery": {
+      "format": "{capacity}%",
+      "states": {
+        "fullyCharged": 100,
+        "normal": 95 ,
+        "low": 20
+      },
+    }
+}
