@@ -51,20 +51,11 @@
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
     shellAliases = {
-      battery = "upower -i $(upower -e | grep 'BAT') | grep -E 'percentage'";
       fetch = "clear && fastfetch";
-      dots = "cd ~/.system/config";
-      en = "sudo nvim ~/.system/nixos/configuration.nix";
-      ef = "sudo nvim ~/.system/nixos/flake.nix";
-      ev = "sudo nvim ~/.system/dotfiles/normal/.config/nvim/";
       r = "ranger";
       n = "nvim";
       sync = "~/.system/scripts/sync";
       rebuild = "~/.system/scripts/rebuild";
-      link = "~/.system/scripts/set-symlinks";
-      
-      vpn-up = "sudo wg-quick up ~/.vpns/clownweb.conf";
-      vpn-down = "sudo wg-quick down ~/.vpns/clownweb.conf";
       
       fart = "systemctl suspend";
       shart = "reboot";
@@ -81,6 +72,7 @@
   environment.variables.EDITOR = "nvim";
 
   environment.systemPackages = with pkgs; [
+    alsa-utils
     wireguard-tools
     bluez
     git

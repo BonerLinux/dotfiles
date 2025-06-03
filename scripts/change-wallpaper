@@ -8,8 +8,8 @@ menu() {
 }
 
 # Show Wofi with a custom config and style
-choice=$(menu | wofi -c ~/.dotfiles/config/wofi/wallpaper-picker-config \
-		-s ~/.dotfiles/config/wofi/wallpaper-picker-style \
+choice=$(menu | wofi -c ~/.config/wofi/wallpaper-picker-config \
+		-s ~/.config/wofi/wallpaper-picker-style \
 		--show dmenu --prompt "Select Wallpaper:" -n)
 
 # Remove "img:" prefix if present
