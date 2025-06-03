@@ -1,5 +1,5 @@
 <configuration version="37">
-    <device id="J5VVNVZ-XCI3VLZ-552HIWL-LIUGBU5-3QEMUV3-FHSHTFF-MJDDUXI-HKK3EQP" name="desktop" compression="metadata" introducer="false" skipIntroductionRemovals="false" introducedBy="">
+    <device id="J5VVNVZ-XCI3VLZ-552HIWL-LIUGBU5-3QEMUV3-FHSHTFF-MJDDUXI-HKK3EQP" name="laptop" compression="metadata" introducer="false" skipIntroductionRemovals="false" introducedBy="">
         <address>dynamic</address>
         <paused>false</paused>
         <autoAcceptFolders>false</autoAcceptFolders>

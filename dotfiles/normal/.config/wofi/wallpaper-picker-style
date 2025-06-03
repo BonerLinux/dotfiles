@@ -1,89 +1,104 @@
 @import url("/home/rileyboughner/.cache/wal/colors-waybar.css");
-@define-color mauve  @color9;
-@define-color red  @color9;
-@define-color lavender  @color7;
+@define-color primary  @color10; /* New primary color */
+@define-color secondary  @color11; /* New secondary color */
+@define-color accent  @color12; /* New accent color */
 @define-color text  @color7;
+
 * {
-    all:unset;
-    font-family: 'CodeNewRoman Nerd Font Mono', monospace;
-    font-size: 18px;
+    all: unset;
+    font-family: 'Fira Code', monospace; /* Changed font for a modern look */
+    font-size: 16px; /* Slightly smaller font size */
     outline: none;
     border: none;
-    text-shadow:none;
-    background-color:transparent;
+    background-color: transparent;
 }
 
 window {
-    all:unset;
+    all: unset;
     padding: 20px;
-    border-radius: 0px;
-    background-color: alpha(@background,0.8);
+    border-radius: 10px; /* Rounded corners for a softer look */
+    background-color: alpha(@background, 0.9); /* Slightly more opaque background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
 }
-#inner-box {
-    margin: 2px;
-    padding: 5px;
-    border: none;
 
+#inner-box {
+    margin: 10px; /* Increased margin for spacing */
+    padding: 10px; /* Increased padding for better touch targets */
+    border: none;
+    background-color: alpha(@background, 0.5); /* Semi-transparent background */
+    border-radius: 8px; /* Rounded corners */
 }
-#outer-box {    
+
+#outer-box {
     border: none;
 }
+
 #scroll {
-    margin: 0px;
-    padding: 30px;
+    margin: 0;
+    padding: 20px; /* Reduced padding for a tighter layout */
     border: none;
 }
+
 #input {
-    all:unset;
-    margin-left:20px;
-    margin-right:20px;
-    margin-top:20px;
-    padding: 20px;
+    all: unset;
+    margin: 15px; /* Adjusted margins */
+    padding: 15px; /* Adjusted padding */
     border: none;
-    outline: none;
     color: @text;
-    box-shadow: 1px 1px 5px rgba(0,0,0, .5);
-    border-radius:10;
-    background-color: alpha(@background,.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    border-radius: 12px; /* More rounded corners */
+    background-color: alpha(@background, 0.3); /* Lighter background */
 }
+
 #input image {
     border: none;
-    color: @red;
-    padding-right:10px;
+    color: @secondary; /* Changed color for images */
+    padding-right: 10px;
 }
+
 #input * {
     border: none;
     outline: none;
 }
+
 #input:focus {
     outline: none;
     border: none;
-
-    border-radius:10;
+    border-radius: 12px; /* Consistent rounded corners */
 }
+
 #text {
     margin: 5px;
     border: none;
     color: @text;
     outline: none;
 }
-#entry {
-    all:unset;
-    padding-left:35px;
-    padding-top: 35px;
 
+#entry {
+    all: unset;
+    padding: 20px; /* Increased padding for better spacing */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover effects */
 }
+
+#entry:hover {
+    background-color: @accent; /* Highlight on hover */
+}
+
 #entry arrow {
     border: none;
-    color: @lavender;
+    color: @secondary; /* Changed arrow color */
+}
 
-}
 #entry:selected {
-    border: 2px;
-    color: @mauve;
+    border: 2px solid @primary; /* Solid border for selected entry */
+    color: @primary; /* Change text color on selection */
 }
+
 #entry:selected #text {
-    color: @mauve;
+    color: @primary; /* Change text color on selection */
 }
+
 #entry:drop(active) {
-    background-color: @lavender !important;
+    background-color: @secondary !important; /* Change background on drop */
+}
