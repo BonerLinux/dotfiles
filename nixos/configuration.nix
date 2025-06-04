@@ -59,14 +59,13 @@
       n = "nvim";
       sync = "~/.system/scripts/sync";
       rebuild = "~/.system/scripts/rebuild";
+      cloud = "sshfs admin@192.168.1.201:/mnt/tank/cloud ~/Cloud";
       
       fart = "systemctl suspend";
       shart = "reboot";
       shit = "shutdown -h now";
     };
   };
-
-  # -- services --
 
   # -- packages --
   documentation.nixos.enable = false;
@@ -96,6 +95,7 @@
     vscode
     gcc
     pass
+    sshfs
     tree
     firefox
     gnumake
@@ -113,6 +113,7 @@
     libreoffice
     bluetuith
   ];
+
   
   # -- gnupg --
   programs.gnupg.agent = {

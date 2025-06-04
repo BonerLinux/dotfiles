@@ -76,12 +76,11 @@
         ./users/standard.nix
         ./configuration.nix
 
-        ./modules/gnome.nix
+        ./modules/hyprland.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
         ./modules/work.nix
         ./modules/nvidia.nix
-        ./modules/hyprland.nix
         ./modules/battery.nix
       ];
     };
