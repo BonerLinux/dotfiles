@@ -34,8 +34,7 @@
       inherit system;
       specialArgs = { inherit inputs; inherit username; };
       modules = [
-        ./hardware/thinkpad.nix
-        ./hosts/thinkpad.nix
+        ./hosts/thinkpad/configuration.nix
         ./users/standard.nix
         ./configuration.nix
 

@@ -22,7 +22,7 @@
   };
 
   networking = {
-    hostName = "iso";
+    hostName = "Boner-OS-Installer";
   };
 
   systemd = {
@@ -35,7 +35,7 @@
     };
   };
 
-  users.extraUsers.root.password = "nixos";
+  users.extraUsers.root.password = "root";
 
   environment.systemPackages = with pkgs; [
     git
@@ -77,9 +77,9 @@
         --no-write-lock-file \
         -- \
         --mode zap_create_mount \
-        "$HOME/dotfiles/hosts/$TARGET_HOST/disks.nix"
+        "$HOME/.system/nixos/hosts/$TARGET_HOST/disks.nix"
 
-        sudo nixos-install --flake "$HOME/dotfiles#$TARGET_HOST"
+        sudo nixos-install --flake "$HOME/.system/nixos#$TARGET_HOST"
       ''
     )
   ];
