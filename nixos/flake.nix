@@ -23,14 +23,9 @@
       specialArgs = { inherit inputs; inherit username; };
       modules = [ ( { pkgs, modulesPath, ... }: {
           imports = [
-            (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-            ./users/standard.nix
-            ./modules/shell.nix
-            ./modules/fun.nix
+            (modulesPath + "/installer/cd-dvd/installation-cd-graphical-gnome.nix")
+            ./hosts/iso/configuration.nix
           ];
-          environment.systemPackages = [ pkgs.cmatrix ];
-          networking.hostName = "NixISO";
-
         } )
       ];
     };
@@ -54,13 +49,12 @@
       inherit system;
       specialArgs = { inherit inputs; inherit username; };
       modules = [
-        ./hardware/desktop.nix
-        ./hosts/desktop.nix
-        #./hosts/desktop/configuration.nix
+        ./hosts/desktop/configuration.nix
         ./users/standard.nix
         ./configuration.nix
 
         ./modules/wireless-networking.nix
+        ./modules/hyprland.nix
         ./modules/shell.nix
         ./modules/kdeconnect.nix
         ./modules/docker.nix
@@ -70,7 +64,6 @@
         ./modules/music.nix
         ./modules/nvidia.nix
         ./modules/ssh.nix
-        ./modules/hyprland.nix
       ];
     };
 
