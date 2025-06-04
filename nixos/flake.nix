@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     musnix.url = "github:musnix/musnix";
@@ -12,29 +13,31 @@
   outputs = { self, nixpkgs, unstable, ... } @inputs: 
   let
     system = "x86_64-linux";
-
-    user = "rileyboughner";
+    username = "rileyboughner";
 
   in
   {
-    nixosConfigurations.hp = nixpkgs.lib.nixosSystem{
+      
+    nixosConfigurations.ISO = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
-      modules = [
-        ./hardware/hp.nix
-        ./hosts/hp.nix
-        ./users/standard.nix
-        ./configuration.nix
+      specialArgs = { inherit inputs; inherit username; };
+      modules = [ ( { pkgs, modulesPath, ... }: {
+          imports = [
+            (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+            ./users/standard.nix
+            ./modules/shell.nix
+            ./modules/fun.nix
+          ];
+          environment.systemPackages = [ pkgs.cmatrix ];
+          networking.hostName = "NixISO";
 
-        ./modules/hyprland.nix
-        ./modules/syncthing.nix
-        ./modules/battery.nix
-        ./modules/fun.nix
+        } )
       ];
     };
+
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hardware/thinkpad.nix
         ./hosts/thinkpad.nix
@@ -43,19 +46,22 @@
 
         ./modules/hyprland.nix
         ./modules/gnome.nix
-        ./modules/battery.nix
         ./modules/fun.nix
       ];
     };
+        
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hardware/desktop.nix
         ./hosts/desktop.nix
+        #./hosts/desktop/configuration.nix
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/wireless-networking.nix
+        ./modules/shell.nix
         ./modules/kdeconnect.nix
         ./modules/docker.nix
         ./modules/gaming.nix
@@ -67,26 +73,27 @@
         ./modules/hyprland.nix
       ];
     };
+
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit username; };
       modules = [
-        ./hardware/laptop.nix
-        ./hosts/laptop.nix
+        ./hosts/laptop/configuration.nix
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/wireless-networking.nix
+        ./modules/shell.nix
         ./modules/hyprland.nix
         ./modules/syncthing.nix
         ./modules/ssh.nix
         ./modules/work.nix
-        ./modules/nvidia.nix
-        ./modules/battery.nix
       ];
     };
+
     nixosConfigurations.server = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit user; };
+      specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hardware/server.nix
         ./hosts/server.nix

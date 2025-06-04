@@ -9,6 +9,8 @@
 
   environment.systemPackages = with pkgs; [
 
+    brave
+    kitty
     hyprlock
     waybar
     swaybg
