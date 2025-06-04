@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Get the list of Gowall themes
+themes=$(gowall list)
+
+# Pipe the theme list into Wofi using your existing config and CSS
+CHOICE=$(
+  printf '%s\n' "$themes" \
+    | wofi --dmenu \
+           --prompt "Choose theme:" \
+           --config "$HOME/.config/wofi/theme-picker/theme-picker.conf" \
+           --style  "$HOME/.config/wofi/theme-picker/theme-picker.css"
+)
+
+cp "$HOME/.wallpaper" "$HOME/.wallpaper.png"
+gowall convert "$HOME/.wallpaper.png" "$CHOICE" 
+
+mv "$HOME/.wallpapers/wotd/.wallpaper.png" "$HOME/.wallpaper"
+
+# If the user pressed Esc or closed Wofi, exit
+if [ -z "$CHOICE" ]; then
+  exit 0
+fi
+
+hyprctl hyprpaper reload "$HOME/.wallpaper"
+hyprctl hyprpaper preload "$HOME/.wallpaper"
+hyprctl hyprpaper wallpaper ",$HOME/.wallpaper"
+
+#~/.system/scripts/set-theme-from-wallpaper
+

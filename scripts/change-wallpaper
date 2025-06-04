@@ -8,8 +8,8 @@ menu() {
 }
 
 # Show Wofi with a custom config and style
-choice=$(menu | wofi -c ~/.config/wofi/wallpaper-picker-config \
-		-s ~/.config/wofi/wallpaper-picker-style \
+choice=$(menu | wofi -c ~/.config/wofi/wallpaper-picker/wallpaper-picker.conf \
+		-s ~/.config/wofi/wallpaper-picker/wallpaper-picker.css \
 		--show dmenu --prompt "Select Wallpaper:" -n)
 
 # Remove "img:" prefix if present
@@ -30,28 +30,4 @@ hyprctl hyprpaper wallpaper ",$selected_wallpaper"
 # Copy the selected wallpaper to ~/.wallpaper
 cp "$selected_wallpaper" "$WALLPAPER_DEST"
 
-# Apply colors using wal
-wal -i "$selected_wallpaper" -n --cols16
-cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
-
-# Update pywalfox
-pywalfox update
-
-# Reload swaync-client (optional)
-# swaync-client --reload-css
-
-# Update Cava config (optional)
-# color1=$(awk 'match($0, /color2=\47(.*)\47/,a) { print a[1] }' ~/.cache/wal/colors.sh)
-# color2=$(awk 'match($0, /color3=\47(.*)\47/,a) { print a[1] }' ~/.cache/wal/colors.sh)
-# cava_config="$HOME/.config/cava/config"
-# sed -i "s/^gradient_color_1 = .*/gradient_color_1 = '$color1'/" $cava_config
-# sed -i "s/^gradient_color_2 = .*/gradient_color_2 = '$color2'/" $cava_config
-# pkill -USR2 cava || cava -p $cava_config
-
-# Source colors from pywal
-source ~/.cache/wal/colors.sh
-
-# Check if asusctl is available and update LED mode (optional)
-if command -v asusctl &> /dev/null; then
-    asusctl led-mode static -c ${color0:1}  # Remove '#' from hex code
-fi
+~/.system/scripts/set-theme-from-wallpaper

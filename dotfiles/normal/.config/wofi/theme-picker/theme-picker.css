@@ -1,0 +1,105 @@
+@import url('/home/rileyboughner/.cache/wal/colors-waybar.css');
+
+@define-color inner-box-border-color @color9;
+@define-color text  @color15;
+
+@define-color highlight  @color15;
+
+* {
+    font-family: 'Fira Code', monospace; /* Changed font for a modern look */
+    font-size: 18px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+window {
+    all: unset;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    background-color: alpha(@background, 0.8); /* Slightly more opaque background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+}
+
+#inner-box {
+    margin: 10px; /* Increased margin for spacing */
+    padding: 10px; /* Increased padding for better touch targets */
+    border: none;
+    background-color: alpha(@background, 0); /* Semi-transparent background */
+    border-radius: 8px; /* Rounded corners */
+}
+
+#outer-box {
+    border: none;
+}
+
+#scroll {
+    margin: 0;
+    padding: 20px; /* Adjusted padding for a tighter layout */
+    border: none;
+}
+
+#input {
+    all: unset;
+    margin: 15px; /* Adjusted margins */
+    padding: 15px; /* Adjusted padding */
+    border: none;
+    outline: none;
+    color: @text; /* Text color */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    border-radius: 12px; /* More rounded corners */
+    background-color: alpha(@background, 0.3); /* Lighter background */
+}
+
+#input image {
+    border: none;
+    color: @text;
+}
+
+#input * {
+    border: none;
+    outline: none;
+}
+
+#input:focus {
+    outline: none;
+    border: none;
+    border-radius: 12px; /* Consistent rounded corners */
+}
+
+#text {
+    margin: 5px;
+    border: none;
+    color: @text; /* Text color */
+    outline: none;
+}
+
+#entry {
+    border: none;
+    margin: 5px;
+    padding: 10px; /* Increased padding for better spacing */
+    border-radius: 8px; /* Rounded corners */
+    transition: border 0.3s; /* Smooth transition for border effects */
+}
+
+#entry:hover {
+    background-color: alpha(@highlight, 0.2); /* Highlight on hover */
+}
+
+#entry arrow {
+    border: none;
+    color: @text;
+}
+
+#entry:selected {
+    border: 2px solid @inner-box-border-color;
+    background-color: transparent;
+}
+
+#entry:selected #text {
+    color: @text;
+}
+
+#entry:drop(active) {
+    background-color: @highlight !important;
+}

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# 1) Download the wallpaper of the day (answers “y” automatically)
+printf "y\n" | gowall -w
+
+# 2) Find the most recent “wall-*.jpeg” in ~/.wallpapers/wotd/
+latest_file="$(ls -1t "$HOME/.wallpapers/wotd"/wall-*.jpeg 2>/dev/null | head -n1)"
+[ -z "$latest_file" ] && exit 1   # exit if no file found
+
+# 3) Extract “YYYYMMDD” from its basename (e.g. wall-20250603-184816.jpeg)
+basename="$(basename "$latest_file")"
+datepart="${basename#wall-}"       # → "20250603-184816.jpeg"
+datepart="${datepart%%-*}"         # → "20250603"
+
+# 4) Compute the date-only target path
+target_dir="$HOME/.wallpapers/wotd"
+target="$target_dir/${datepart}.jpeg"
+
+# 5) Move (or overwrite) the newest file into its date‐named place
+#    Always replace the existing file named YYYYMMDD.jpeg with the new one.
+mv -f -- "$latest_file" "$target"
+echo "Moved $basename → ${datepart}.jpeg"
+
+# 6) Copy that date‐named file to ~/.wallpaper (overwrite any previous)
+cp -- "$target" "$HOME/.wallpaper"
+
+echo "target: $target"
+echo "destination: $HOME/.wallpaper"
+
+hyprctl hyprpaper reload "$HOME/.wallpaper"
+hyprctl hyprpaper preload "$HOME/.wallpaper"
+hyprctl hyprpaper wallpaper ",$HOME/.wallpaper"
+
+~/.system/scripts/set-theme-from-wallpaper

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+selected_wallpaper="$HOME/.wallpaper"
+
+# Apply colors using wal
+wal -i "$selected_wallpaper" -n --cols16
+cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
+
+# Source colors from pywal
+source ~/.cache/wal/colors.sh
+
+# Update pywalfox
+pywalfox update
+
+# Check if asusctl is available and update LED mode (optional)
+if command -v asusctl &> /dev/null; then
+    asusctl led-mode static -c ${color0:1}  # Remove '#' from hex code
+fi
