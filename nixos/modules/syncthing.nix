@@ -11,9 +11,6 @@
     guiAddress = "0.0.0.0:8384";
     overrideDevices = true;
     settings = {
-      devices = {
-        "server" = { id = "O5BULKR-3DBJZTS-7I3BPO5-HYTOWVP-VVEVPPR-R6A52HZ-SQ4B4WY-W2CC6AE"; };
-      };
     };
   };
 

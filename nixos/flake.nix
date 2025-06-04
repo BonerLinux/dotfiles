@@ -59,6 +59,7 @@
         ./modules/kdeconnect.nix
         ./modules/docker.nix
         ./modules/gaming.nix
+        ./modules/syncthing.nix
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/nvidia.nix
