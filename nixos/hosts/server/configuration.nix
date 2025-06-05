@@ -14,7 +14,17 @@
   networking.hostName = "clownweb";
 
   # -- ports --
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80 # HTTP
+    443 # HTTPS
+  ];
+
+  networking.firewall.allowedUDPPorts = [
+    51820 # wireguard
+  ];
+
+ # networking.firewall.masquerade = true;
+ # networking.firewall.externalInterfaces = [ "eth0" ];
 
   # -- mounts --
     fileSystems."/mnt/tank" = {
