@@ -87,11 +87,11 @@
       inherit system;
       specialArgs = { inherit inputs; inherit username; };
       modules = [
-        ./hardware/server.nix
-        ./hosts/server.nix
+        ./hosts/server/configuration.nix
         ./users/admin.nix
         ./configuration.nix
 
+        ./modules/docker.nix
         ./modules/nvidia.nix
       ];
     };
