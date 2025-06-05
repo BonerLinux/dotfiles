@@ -35,6 +35,12 @@
     };
   };
 
+  users.users."rileyboughner" = {
+    isNormalUser = true;
+    home = "/home/rileyboughner";
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
+
   users.extraUsers.root.password = "root";
 
   environment.systemPackages = with pkgs; [
@@ -55,16 +61,16 @@
         fi
 
         # clone dotfiles
-        if [ ! -d "$HOME/.system" ]; then
-            git clone https://github.com/rileyboughner/dotfiles.git "$HOME/.system"
+        if [ ! -d "/home/rileyboughner/.system" ]; then
+            git clone https://github.com/rileyboughner/dotfiles.git "/home/rileyboughner/.system"
         fi
 
         # choose host to install
-        TARGET_HOST=$(ls -1 ~/.system/nixos/hosts/*/configuration.nix | cut -d'/' -f7 | grep -v iso | gum choose)
+        TARGET_HOST=$(ls -1 /home/rileyboughner/.system/nixos/hosts/*/configuration.nix | cut -d'/' -f7 | grep -v iso | gum choose)
 
         # 
-        if [ ! -e "$HOME/.system/nixos/hosts/$TARGET_HOST/disks.nix" ]; then
-        	echo "ERROR! $(basename "$0") could not find the required $HOME/dotfiles/hosts/$TARGET_HOST/disks.nix"
+        if [ ! -e "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix" ]; then
+        	echo "ERROR! $(basename "$0") could not find the required /home/rileyboughner/dotfiles/hosts/$TARGET_HOST/disks.nix"
         	exit 1
         fi
 
@@ -77,9 +83,9 @@
         --no-write-lock-file \
         -- \
         --mode zap_create_mount \
-        "$HOME/.system/nixos/hosts/$TARGET_HOST/disks.nix"
+        "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix"
 
-        sudo nixos-install --flake "$HOME/.system/nixos#$TARGET_HOST"
+        sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
       ''
     )
   ];

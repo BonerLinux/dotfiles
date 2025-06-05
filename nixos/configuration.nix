@@ -44,6 +44,7 @@
     fzf
     fastfetch
 
+    gum
     qemu
 
     firefox
