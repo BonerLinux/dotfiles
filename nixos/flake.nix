@@ -4,16 +4,19 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     musnix.url = "github:musnix/musnix";
   };
 
-  outputs = { self, nixpkgs, unstable, ... } @inputs: 
+  outputs = { self, nixpkgs, unstable, home-manager, ... } @inputs: 
   let
     system = "x86_64-linux";
     username = "rileyboughner";
+    pkgs = nixpkgs.legacyPackages.${system};
 
   in
   {
@@ -95,5 +98,12 @@
         ./modules/nvidia.nix
       ];
     };
+
+    homeConfigurations = {
+        rileyboughner = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [ ./home.nix ];
+        };
+      };
   };
 }
