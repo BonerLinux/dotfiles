@@ -28,11 +28,11 @@ position = "5% 5%"
 size = "90% 90%"
 process_tracking = false
 
-[scratchpads.habitica]
+[scratchpads.todo]
 animation = ""
-command = "brave --app=https://habitica.com"
+command = "brave --app=https://todoist.com"
 match_by = "initialTitle"
-initialTitle = "habitica.com_/"
+initialTitle = "todoist.com_/"
 position = "5% 5%"
 size = "90% 90%"
 process_tracking = false
