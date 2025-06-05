@@ -62,7 +62,7 @@
 
         # clone dotfiles
         if [ ! -d "/home/rileyboughner/.system" ]; then
-            git clone https://github.com/rileyboughner/dotfiles.git "/home/rileyboughner/.system"
+            sudo git clone https://github.com/rileyboughner/dotfiles.git "/home/rileyboughner/.system"
         fi
 
         # choose host to install
