@@ -1,13 +1,19 @@
-{ config, pkgs, ...}: {
+{ config, pkgs, username, ...}: {
 
-  programgs.git = {
+  home.stateVersion = "25.05";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
+
+
+  programs.git = {
     enable = true;
     userName = "Riley Boughner";
     userEmail = "riley@clownweb.net";
-
-    configExtra = ''
-      credential.helper = store
-    '';
+    extraConfig = {
+      credential.helper = "store";
+    };
   };
 
+  programs.home-manager.enable = true;
 }
+

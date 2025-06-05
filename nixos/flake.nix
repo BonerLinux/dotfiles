@@ -12,7 +12,7 @@
     musnix.url = "github:musnix/musnix";
   };
 
-  outputs = { self, nixpkgs, unstable, home-manager, ... } @inputs: 
+  outputs = { self, nixpkgs, home-manager, ... } @inputs: 
   let
     system = "x86_64-linux";
     username = "rileyboughner";
@@ -102,6 +102,7 @@
     homeConfigurations = {
         rileyboughner = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
+          extraSpecialArgs = { inherit username; };
           modules = [ ./home.nix ];
         };
       };

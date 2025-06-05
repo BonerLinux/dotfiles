@@ -16,6 +16,8 @@
       sync = "~/.system/scripts/sync";
       rebuild = "~/.system/scripts/rebuild";
       cloud = "sshfs admin@192.168.1.201:/mnt/tank/cloud ~/Cloud";
+
+      build-installer = "~/.system/scripts/build-installer";
       
       fart = "systemctl suspend";
       shart = "reboot";

@@ -50,6 +50,8 @@
     firefox
     libreoffice
 
+    home-manager
+
   ];
 
   # -- gnupg --

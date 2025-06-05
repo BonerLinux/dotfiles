@@ -1,0 +1,26 @@
+#!/bin/sh
+
+mkdir vm
+
+cd vm
+
+sudo nix build ~/.system/nixos#nixosConfigurations.ISO.config.system.build.isoImage
+
+sudo cp result/iso/*.iso ./installer.iso
+
+sudo rm -r result
+
+qemu-img create -f qcow2 nixos-disk.qcow2 20G
+
+qemu-system-x86_64 \
+  -m 4096 \
+  -smp 2 \
+  -boot d \
+  -cdrom installer.iso \
+  -drive file=nixos-disk.qcow2,format=qcow2 \
+  -nic user,model=virtio \
+  -enable-kvm
+
+cd ../
+
+sudo rm -r vm
