@@ -89,6 +89,8 @@
         --mode zap_create_mount \
         "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix"
 
+        sudo nixos-generate-config --dir "$HOME/.system/nixos/hosts/$TARGET"
+        
         sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
 
         cd ~/.system/dotfiles/normal
