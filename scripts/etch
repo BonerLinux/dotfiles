@@ -1,0 +1,32 @@
+#!/bin/sh
+set -euo pipefail
+
+ISO="$1"
+
+# Make sure the ISO file exists
+if [ ! -f "$ISO" ]; then
+  echo "❌ ISO file not found: $ISO"
+  exit 1
+fi
+
+# List and choose a USB device
+DEVICE=$(lsblk -dpno NAME,SIZE,MODEL,TRAN | grep -i usb | gum choose)
+
+if [ -z "$DEVICE" ]; then
+  echo "❌ No device selected. Aborting."
+  exit 1
+fi
+
+# Confirm before destroying the device
+echo "🔥 WARNING: This will completely erase $DEVICE"
+gum confirm "Are you sure you want to write $ISO to $DEVICE?" || exit 1
+
+echo "🧼 Wiping $DEVICE..."
+sudo wipefs -a "$DEVICE" --force
+sudo dd if=/dev/zero of="$DEVICE" bs=1M count=100
+
+echo "📝 Writing $ISO to $DEVICE..."
+sudo dd if="$ISO" of="$DEVICE" bs=4M status=progress conv=fsync
+
+sync
+echo "✅ Done writing to $DEVICE"

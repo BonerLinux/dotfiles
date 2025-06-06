@@ -13,8 +13,11 @@
       fetch = "clear && fastfetch";
       r = "ranger";
       n = "nvim";
-      sync = "~/.system/scripts/sync";
       rebuild = "~/.system/scripts/rebuild";
+
+      sync = "~/.system/scripts/sync";
+      etch = "~/.system/scripts/etch";
+
       cloud = "sshfs admin@192.168.1.201:/mnt/tank/cloud ~/Cloud";
 
       build-installer = "~/.system/scripts/build-installer";

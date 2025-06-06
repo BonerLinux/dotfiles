@@ -10,7 +10,7 @@ sudo cp result/iso/*.iso ./installer.iso
 
 sudo rm -r result
 
-qemu-img create -f qcow2 nixos-disk.qcow2 20G
+qemu-img create -f qcow2 nixos-disk.qcow2 50G
 
 qemu-system-x86_64 \
   -m 4096 \

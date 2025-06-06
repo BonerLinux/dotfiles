@@ -21,9 +21,7 @@
     supportedFilesystems = lib.mkForce ["btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs"];
   };
 
-  networking = {
-    hostName = "Boner-OS-Installer";
-  };
+  networking.hostName = "BonerOS";
 
   systemd = {
     services.sshd.wantedBy = pkgs.lib.mkForce ["multi-user.target"];
@@ -35,15 +33,18 @@
     };
   };
 
-  users.users."rileyboughner" = {
-    isNormalUser = true;
-    home = "/home/rileyboughner";
-    extraGroups = [ "wheel" "networkmanager" ];
+  users.users = {
+    rileyboughner = {
+      isNormalUser = true;
+      password = "!!JoJo1225!!";
+      extraGroups = [ "wheel" ];
+    };
   };
 
   users.extraUsers.root.password = "root";
 
   environment.systemPackages = with pkgs; [
+    cmatrix
     git
     stow
     gum
@@ -52,8 +53,11 @@
       ''
         #!/usr/bin/env bash
         set -euo pipefail
-        gsettings set org.gnome.desktop.session idle-delay 0
-        gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+
+        if [ "$(whoami)" != "rileyboughner" ]; then
+          echo "Re-running script as rileyboughner..."
+          exec sudo -u rileyboughner bash "$0"
+        fi
 
         if [ "$(id -u)" -eq 0 ]; then
         	echo "ERROR! $(basename "$0") should be run as a regular user"
@@ -86,6 +90,10 @@
         "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix"
 
         sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
+
+        cd ~/.system/dotfiles/normal
+        mkdir ~/.config
+        stow -t ~/.config dot_config
       ''
     )
   ];
