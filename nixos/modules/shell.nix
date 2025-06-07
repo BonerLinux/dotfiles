@@ -11,8 +11,10 @@
     # Set up shell aliases
     shellAliases = {
       fetch = "clear && fastfetch";
+      rm = "rm -r";
       r = "ranger";
       n = "nvim";
+
       rebuild = "~/.system/scripts/rebuild";
 
       sync = "~/.system/scripts/sync";
