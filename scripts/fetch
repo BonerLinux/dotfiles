@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Capture nerdfetch output using a pseudo-terminal
+output=$(script -qfc nix run nixpkgs#nerdfetch /dev/stdout | sed '1d;$d')
+
+# Read lines into an array
+mapfile -t lines <<< "$output"
+
+# Get terminal dimensions
+rows=$(tput lines)
+cols=$(tput cols)
+
+# Calculate content height and max visible width (strip ANSI for measuring)
+content_height=${#lines[@]}
+content_width=0
+
+for line in "${lines[@]}"; do
+  stripped=$(echo -e "$line" | sed 's/\x1B\[[0-9;]*[a-zA-Z]//g')
+  len=${#stripped}
+  (( len > content_width )) && content_width=$len
+done
+
+# Calculate padding
+pad_top=$(( (rows - content_height) / 2 ))
+pad_left=$(( (cols - content_width) / 2 ))
+
+# Clear screen
+clear
+
+# Vertical padding
+for ((i = 0; i < pad_top; i++)); do echo ""; done
+
+# Print each line with horizontal padding
+for line in "${lines[@]}"; do
+  printf "%*s" "$pad_left" ""
+  printf "%s\n" "$line"
+done

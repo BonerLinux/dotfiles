@@ -55,6 +55,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/cloud.nix
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
         ./modules/shell.nix

@@ -20,8 +20,6 @@
       sync = "~/.system/scripts/sync";
       etch = "~/.system/scripts/etch";
 
-      cloud = "sshfs admin@192.168.1.201:/mnt/tank/cloud ~/Cloud";
-
       build-installer = "~/.system/scripts/build-installer";
       
       fart = "systemctl suspend";
