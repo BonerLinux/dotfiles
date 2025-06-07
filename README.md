@@ -2,7 +2,6 @@
 ![Project Screenshot](.images/wallpaper.png)
 ![Project Screenshot](.images/picker.png)
 ![Project Screenshot](.images/screenshot.png)
-![Project Screenshot](.images/cool.png)
 
 ### My OS!
 
