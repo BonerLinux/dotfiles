@@ -1,4 +1,0 @@
-#!/bin/sh
-
-cd /home/rileyboughner/.system/dotfiles/normal/
-sudo stow -t ~/.config .config

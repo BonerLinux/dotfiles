@@ -47,6 +47,8 @@
     gum
     qemu
 
+    obsidian 
+
     firefox
     libreoffice
 

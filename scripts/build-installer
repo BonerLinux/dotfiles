@@ -1,26 +1,70 @@
 #!/bin/sh
 
-mkdir vm
+fail() {
+  cd ..
+  sudo rm -r vm
+  exit 1
+}
 
+mkdir vm
 cd vm
 
-sudo nix build ~/.system/nixos#nixosConfigurations.ISO.config.system.build.isoImage
+if ! sudo nix build ~/.system/nixos#nixosConfigurations.ISO.config.system.build.isoImage; then
+  fail
+fi
 
 sudo cp result/iso/*.iso ./installer.iso
-
 sudo rm -r result
 
-qemu-img create -f qcow2 nixos-disk.qcow2 50G
+CHOICE=$(gum choose "Build to VM" "Etch ISO") && echo "You chose: $CHOICE"
 
-qemu-system-x86_64 \
-  -m 4096 \
-  -smp 2 \
-  -boot d \
-  -cdrom installer.iso \
-  -drive file=nixos-disk.qcow2,format=qcow2 \
-  -nic user,model=virtio \
-  -enable-kvm
 
-cd ../
+if [[ "$CHOICE" == "Build to VM" ]]; then
+  echo "🚀 Building to VM..."
 
-sudo rm -r vm
+
+  qemu-img create -f qcow2 nixos-disk.qcow2 50G
+  qemu-system-x86_64 \
+    -m 4096 \
+    -smp 2 \
+    -boot d \
+    -cdrom installer.iso \
+    -drive file=nixos-disk.qcow2,format=qcow2 \
+    -nic user,model=virtio \
+    -enable-kvm
+
+  fail
+  
+elif [[ "$CHOICE" == "Etch ISO" ]]; then
+  echo "🧪 Etching ISO..."
+
+   
+    # 📦 Select removable USB media
+    CHOICE=$(lsblk -dpno NAME,SIZE,MODEL,TRAN | grep -i usb | gum choose) || {
+      echo "❌ No device selected."
+      exit 1
+    }
+
+    # 🎯 Extract device path (e.g., /dev/sdX)
+    DEVICE=$(echo "$CHOICE" | awk '{print $1}')
+
+    # ⚠️ Confirm overwrite
+    echo "🚨 This will completely erase $DEVICE"
+    gum confirm "Are you sure you want to write installer.iso to $DEVICE?" || exit 1
+
+    # 💾 Write the ISO
+    echo "📝 Writing installer.iso to $DEVICE..."
+    sudo dd if=installer.iso of="$DEVICE" bs=4M status=progress conv=fsync
+
+    echo "✅ Done writing to $DEVICE"
+
+   fail
+else
+  echo "❌ Unknown choice: $CHOICE"
+  exit 1
+
+fi
+
+
+
+

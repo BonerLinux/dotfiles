@@ -3,6 +3,12 @@
 {
   programs.hyprland.enable = true;
 
+  environment.sessionVariables = {
+    HYPRSHOT_DIR  = "$HOME/Pictures/Screenshots";
+  };
+
+
+
   fonts.packages = with pkgs; [
     nerd-fonts.noto
   ];

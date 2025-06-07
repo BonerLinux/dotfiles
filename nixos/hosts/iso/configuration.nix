@@ -43,6 +43,19 @@
 
   users.extraUsers.root.password = "root";
 
+  environment.etc."xdg/autostart/welcome-terminal.desktop".text = ''
+    [Desktop Entry]
+    Name=Welcome Terminal
+    Exec=gnome-terminal -- bash -c 'echo -e "\n🎉 Welcome to your custom NixOS ISO!\n"; exec bash'
+    Type=Application
+    X-GNOME-Autostart-enabled=true
+  '';
+
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    gnome-initial-setup
+  ];
+
   environment.systemPackages = with pkgs; [
     cmatrix
     git
@@ -51,51 +64,82 @@
     (
       writeShellScriptBin "nix-install"
       ''
-        #!/usr/bin/env bash
-        set -euo pipefail
+      #!/usr/bin/env bash
+      set -euo pipefail
 
-        if [ "$(whoami)" != "rileyboughner" ]; then
-          echo "Re-running script as rileyboughner..."
-          exec sudo -u rileyboughner bash "$0"
-        fi
+      # 💡 Ensure script is not run as root
+      if [ "$(id -u)" -eq 0 ]; then
+        echo "❌ Do not run this script as root."
+        exit 1
+      fi
 
-        if [ "$(id -u)" -eq 0 ]; then
-        	echo "ERROR! $(basename "$0") should be run as a regular user"
-        	exit 1
-        fi
+      # 🔄 Re-run script as user 'rileyboughner' if not already
+      if [ "$(whoami)" != "rileyboughner" ]; then
+        echo "⏩ Re-running script as rileyboughner..."
+        exec sudo -u rileyboughner -E bash "$0"
+      fi
 
-        # clone dotfiles
-        if [ ! -d "/home/rileyboughner/.system" ]; then
-            sudo git clone https://github.com/rileyboughner/dotfiles.git "/home/rileyboughner/.system"
-        fi
+      # 🌐 Check for internet connectivity
+      if ! ping -q -c 1 -W 2 1.1.1.1 >/dev/null; then
+        echo "❌ No internet connection detected. Please check your network and try again."
+        exit 1
+      fi
 
-        # choose host to install
-        TARGET_HOST=$(ls -1 /home/rileyboughner/.system/nixos/hosts/*/configuration.nix | cut -d'/' -f7 | grep -v iso | gum choose)
+      # 🛠 Clone dotfiles repo if needed
+      if [ ! -d "/home/rileyboughner/.system" ]; then
+        echo "📥 Cloning dotfiles..."
+        git clone https://github.com/rileyboughner/dotfiles.git "/home/rileyboughner/.system"
+      fi
 
-        # 
-        if [ ! -e "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix" ]; then
-        	echo "ERROR! $(basename "$0") could not find the required /home/rileyboughner/dotfiles/hosts/$TARGET_HOST/disks.nix"
-        	exit 1
-        fi
+      # 🎯 Choose target host
+      TARGET_HOST=$(ls -1 /home/rileyboughner/.system/nixos/hosts/*/configuration.nix \
+        | cut -d'/' -f7 \
+        | grep -v iso \
+        | gum choose)
 
-        gum confirm  --default=false \
-        "🔥 🔥 🔥 WARNING!!!! This will ERASE ALL DATA on the disk $TARGET_HOST. Are you sure you want to continue?"
+      # 🔍 Validate required disk layout file exists
+      DISK_FILE="/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix"
+      if [ ! -e "$DISK_FILE" ]; then
+        echo "❌ ERROR! Could not find required: $DISK_FILE"
+        exit 1
+      fi
 
-        echo "Partitioning Disks"
-        sudo nix run github:nix-community/disko \
+      # ⚠️ Confirm destructive operation
+      gum confirm --default=false \
+        "🔥🔥🔥 WARNING: This will ERASE ALL DATA for host $TARGET_HOST. Continue?" || {
+        echo "❌ Installation aborted by user."
+        exit 1
+      }
+
+      # 🧨 Remove all existing EFI boot entries
+      echo "🧨 Removing all existing EFI boot entries..."
+      for entry in $(efibootmgr | awk '/^Boot[0-9A-Fa-f]{4}/ {print substr($1,5,4)}'); do
+        echo "Deleting Boot$entry"
+        sudo efibootmgr -b "$entry" -B
+      done
+
+      # 💽 Partition disks with disko
+      echo "💿 Partitioning disks for $TARGET_HOST..."
+      sudo nix run github:nix-community/disko \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
-        -- \
-        --mode zap_create_mount \
-        "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST/disks.nix"
+        -- --mode zap_create_mount "$DISK_FILE"
 
-        sudo nixos-generate-config --dir "$HOME/.system/nixos/hosts/$TARGET"
-        
-        sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
+      # 🏗 Generate hardware config in flake host directory
+      echo "🧱 Generating hardware-configuration.nix..."
+      sudo nixos-generate-config --dir "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST"
 
-        cd ~/.system/dotfiles/normal
-        mkdir ~/.config
-        stow -t ~/.config dot_config
+      # 🚀 Install NixOS from flake
+      echo "🚀 Installing NixOS for host $TARGET_HOST..."
+      sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
+
+      # 🎁 Apply dotfiles with stow
+      echo "🎯 Applying dotfiles..."
+      mkdir -p /home/rileyboughner/.config
+      cd /home/rileyboughner/.system/dotfiles/normal
+      stow -t /home/rileyboughner/.config dot_config
+
+      echo "✅ Installation complete! You may now reboot."      
       ''
     )
   ];
