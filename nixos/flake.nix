@@ -55,6 +55,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/nvim.nix
         ./modules/cloud.nix
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
@@ -78,6 +79,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/nvim.nix
         ./modules/wireless-networking.nix
         ./modules/shell.nix
         ./modules/hyprland.nix

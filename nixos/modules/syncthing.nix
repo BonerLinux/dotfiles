@@ -35,6 +35,10 @@
           path = "/home/rileyboughner/Vault";    # Which folder to add to Syncthing
           devices = [ "server" ];      # Which devices to share the folder with
         };
+        "Camera" = {         # Name of folder in Syncthing, also the folder ID
+          path = "/home/rileyboughner/Pictures/Camera";    # Which folder to add to Syncthing
+          devices = [ "server" ];      # Which devices to share the folder with
+        };
       };
 
     };

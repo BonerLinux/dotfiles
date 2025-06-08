@@ -38,10 +38,8 @@
     ranger
     ueberzugpp
     tree
-    neovim
     unzip
     tldr
-    fzf
     fastfetch
 
     gum

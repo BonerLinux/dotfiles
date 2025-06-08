@@ -7,7 +7,7 @@
 
   programs.zsh = {
     shellAliases = {
-      cloud = "sshfs admin@74.126.84.249:/mnt/tank/cloud ~/Cloud";
+      cloud = "sshfs admin@192.168.1.201:/mnt/tank/cloud ~/Cloud";
     };
   };
 
