@@ -30,6 +30,7 @@
   environment.systemPackages = with pkgs; [
 
     nautilus
+    brightnessctl
 
     wireguard-tools
     rclone #for backups
