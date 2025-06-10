@@ -29,6 +29,8 @@
 
   environment.systemPackages = with pkgs; [
 
+    nautilus
+
     wireguard-tools
     rclone #for backups
     git

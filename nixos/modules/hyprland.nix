@@ -15,6 +15,8 @@
 
   environment.systemPackages = with pkgs; [
 
+    gtk3
+    everforest-gtk-theme
     brave
     kitty
     hyprlock

@@ -13,7 +13,6 @@
       fetch = "clear && fastfetch";
       rm = "rm -r";
       r = "ranger";
-      n = "nvim";
 
       rebuild = "~/.system/scripts/rebuild";
 
