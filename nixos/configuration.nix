@@ -30,6 +30,7 @@
   environment.systemPackages = with pkgs; [
 
     wireguard-tools
+    rclone #for backups
     git
     oh-my-posh
     stow
@@ -41,6 +42,7 @@
     unzip
     tldr
     fastfetch
+    htop-vim
 
     gum
     qemu

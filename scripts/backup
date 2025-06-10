@@ -1,0 +1,6 @@
+#!/bin/sh
+
+password="!!JoJo1225!!"
+rclone sync ":sftp,host=192.168.1.201:/home/admin/config" /mnt/Backup/config
+rclone sync ":sftp,host=192.168.1.201:/home/admin/services" /mnt/Backup/services
+

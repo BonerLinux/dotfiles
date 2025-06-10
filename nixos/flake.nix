@@ -61,7 +61,8 @@
         ./modules/hyprland.nix
         ./modules/shell.nix
         ./modules/kdeconnect.nix
-        ./modules/docker.nix
+        ./modules/podman.nix
+        #./modules/docker.nix
         ./modules/gaming.nix
         ./modules/syncthing.nix
         inputs.musnix.nixosModules.musnix
