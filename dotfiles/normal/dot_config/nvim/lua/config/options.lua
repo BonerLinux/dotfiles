@@ -1,3 +1,4 @@
+vim.cmd("colorscheme lushwal")
 vim.cmd("set nowrap")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")

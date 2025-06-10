@@ -19,6 +19,7 @@ environment.systemPackages = with pkgs; [
     gnumake
     gcc
     ueberzugpp
+    fd
     fzf
     ripgrep
 ];

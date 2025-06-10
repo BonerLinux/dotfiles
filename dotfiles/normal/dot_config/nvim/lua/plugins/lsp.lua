@@ -15,6 +15,7 @@ return {
         vim.keymap.set("n", "<leader>gd", require('telescope.builtin').lsp_definitions, { buffer = bufnr })
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>bf", vim.lsp.buf.format, opts)
 
         vim.keymap.set("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
