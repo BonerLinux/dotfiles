@@ -32,6 +32,8 @@
     nautilus
     brightnessctl
 
+    mpv
+    newsboat
     wireguard-tools
     rclone #for backups
     git
