@@ -1,6 +1,0 @@
-#!/bin/sh
-
-cd ~/.system/nixos
-git pull
-
-sudo nixos-rebuild switch --flake .#$(hostname)
