@@ -8,6 +8,7 @@ if [ "${1-}" = "push" ]; then
     git add .
     git commit -m "Manual update on $(hostname)"
     git push
+    cd nixos
 else
     git pull
     nix flake update
