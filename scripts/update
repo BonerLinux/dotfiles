@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -euo pipefail
+
+# Navigate to your flake repo
+cd ~/.system/nixos
+
+# Update your repo and flake inputs
+git pull
+nix flake update
+
+# Rebuild using the flake
+sudo nixos-rebuild switch --flake .#$(hostname)
+
+git add flake.lock
+git commit -m "$HOSTNAME system update"
+git push
