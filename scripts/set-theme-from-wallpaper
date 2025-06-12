@@ -2,9 +2,21 @@
 
 selected_wallpaper="$HOME/.wallpaper"
 
+# Set file paths
+WAL_COLORS="$HOME/.cache/wal/colors.css"
+BASE_CSS="$HOME/.config/homepage/base.css"
+
+# Find the default Firefox profile path
+PROFILE=$(awk -F= '/^\[Profile[0-9]+\]/{p=0} /Default=1/{p=1} p && /Path=/{print $2}' ~/.mozilla/firefox/profiles.ini)
+CHROME_DIR="$HOME/.mozilla/firefox/$PROFILE/chrome"
+
+
 # Apply colors using wal
 wal -i "$selected_wallpaper" -n --cols16
-cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
+cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/current-theme.conf
+cp ~/.cache/wal/colors.css ~/.config/homepage/colors.css 
+cp ~/.cache/wal/colors.css ~/.mozilla/firefox
+cat "$WAL_COLORS" "$BASE_CSS" > "$CHROME_DIR/userChrome.css"
 
 # Source colors from pywal
 source ~/.cache/wal/colors.sh

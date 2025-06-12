@@ -20,20 +20,6 @@ cp "$WALLPAPER" "$WALLPAPER_DEST"
 # Set the wallpaper with hyprpaper
 hyprctl hyprpaper preload $WALLPAPER
 hyprctl hyprpaper wallpaper $WALLPAPER
-hyprctl hyprpaper reload ,"$HOME/.wallpaper"
+#hyprctl hyprpaper reload ,"$HOME/.wallpaper"
 
-# Apply colors using wal
-wal -i "$WALLPAPER" -n --cols16
-cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
-
-# Update pywalfox
-pywalfox update
-
-# Source pywal colors
-source ~/.cache/wal/colors.sh
-
-# Update Asus LED color (if asusctl is available)
-if command -v asusctl &> /dev/null; then
-    asusctl led-mode static -c ${color0:1}
-fi
-
+~/.system/scripts/set-theme-from-wallpaper

@@ -21,13 +21,11 @@ if [[ -z "$selected_wallpaper" ]]; then
     exit 1
 fi
 
-echo $selected_wallpaper
+# Copy the selected wallpaper to ~/.wallpaper
+cp "$selected_wallpaper" "$WALLPAPER_DEST"
 
 # Set the wallpaper with hyprpaper
 hyprctl hyprpaper preload "$selected_wallpaper"
 hyprctl hyprpaper wallpaper ",$selected_wallpaper"
-
-# Copy the selected wallpaper to ~/.wallpaper
-cp "$selected_wallpaper" "$WALLPAPER_DEST"
 
 ~/.system/scripts/set-theme-from-wallpaper
