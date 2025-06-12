@@ -16,8 +16,6 @@
 
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";
-      push = "~/.system/scripts/push";
-      pull = "~/.system/scripts/pull";
 
       sync = "~/.system/scripts/sync";
       etch = "~/.system/scripts/etch";
