@@ -1,6 +1,7 @@
 #!/bin/sh
 
-password="!!JoJo1225!!"
-rclone sync ":sftp,host=192.168.1.201:/home/admin/config" /mnt/Backup/config
-rclone sync ":sftp,host=192.168.1.201:/home/admin/services" /mnt/Backup/services
+rclone sync server:/home/admin/config /mnt/Backup/server/config --ignore-size --checksum
+rclone sync server:/home/admin/services /mnt/Backup/server/services --ignore-size --checksum
+rclone sync server:/mnt/tank/immich /mnt/Backup/server/immich --ignore-size --checksum
+rclone sync server:/mnt/tank/syncthing /mnt/Backup/server/syncthing --ignore-size --checksum
 

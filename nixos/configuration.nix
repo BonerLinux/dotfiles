@@ -41,8 +41,8 @@
     stow
     direnv
     gowall
+    (python3.withPackages (ps: with ps; [ pillow ])) # for ranger
     ranger
-    ueberzugpp
     tree
     unzip
     tldr
