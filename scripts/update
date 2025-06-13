@@ -16,5 +16,3 @@ else
     git commit -m "$(hostname) system update"
     git push
 fi
-
-sudo nixos-rebuild switch --flake .#$(hostname)

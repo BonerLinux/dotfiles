@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p git stow pywal16 pywalfox-native asusctl
 
 selected_wallpaper="$HOME/.wallpaper"
 
@@ -10,16 +11,25 @@ BASE_CSS="$HOME/.config/homepage/base.css"
 PROFILE=$(awk -F= '/^\[Profile[0-9]+\]/{p=0} /Default=1/{p=1} p && /Path=/{print $2}' ~/.mozilla/firefox/profiles.ini)
 CHROME_DIR="$HOME/.mozilla/firefox/$PROFILE/chrome"
 
-
 # Apply colors using wal
-wal -i "$selected_wallpaper" -n --cols16
-cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/current-theme.conf
+wal -i "$selected_wallpaper" -n
+#cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/current-theme.conf
 cp ~/.cache/wal/colors.css ~/.config/homepage/colors.css 
 cp ~/.cache/wal/colors.css ~/.mozilla/firefox
 cat "$WAL_COLORS" "$BASE_CSS" > "$CHROME_DIR/userChrome.css"
 
 # Source colors from pywal
 source ~/.cache/wal/colors.sh
+
+#set mako
+sed -i "
+  s/^background-color=.*/background-color=$(sed -n 1p ~/.cache/wal/colors)/;
+  s/^text-color=.*/text-color=$(sed -n 8p ~/.cache/wal/colors)/;
+  s/^border-color=.*/border-color=$(sed -n 2p ~/.cache/wal/colors)/
+" ~/.config/mako/config
+
+# Restart mako to apply
+pkill mako && mako &
 
 # Update pywalfox
 pywalfox update
