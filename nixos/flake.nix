@@ -99,8 +99,8 @@
 
         ./modules/docker.nix
         ./modules/nvidia.nix
-        ./modules/nvim
-        ./modules/shell
+        ./modules/nvim.nix
+        ./modules/shell.nix
       ];
     };
 
