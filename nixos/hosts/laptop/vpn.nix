@@ -17,7 +17,7 @@
       # Note: The private key can also be included inline via the privateKey option,
       # but this makes the private key world-readable; thus, using privateKeyFile is
       # recommended.
-      privateKey = "GHhNOFxOZpDMERUlF6etD9HKxOdioYS8rYg92fYpU1M=";
+      privateKey = "";
 
       peers = [
         # For a client configuration, one peer entry for the server will suffice.
