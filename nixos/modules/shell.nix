@@ -13,6 +13,7 @@
       fetch = "clear && fastfetch";
       rm = "rm -r";
       r = "ranger";
+      b = "nvim ~/.bookmarks";
 
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";

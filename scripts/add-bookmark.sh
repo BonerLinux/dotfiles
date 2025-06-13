@@ -1,22 +1,18 @@
 #!/bin/sh
 
-BOOKMARK_DIR="$HOME/.bookmarks"
-BOOKMARK="$(wl-paste --primary)"
+BOOKMARK_FILE="$HOME/.bookmarks"
+BOOKMARK="$(wl-paste)"
 
-# Check if bookmark folder exists
-if [ ! -d "$BOOKMARK_DIR" ]; then
-  mkdir -p "$BOOKMARK_DIR"
+# Ensure the bookmark file exists
+if [ ! -f "$BOOKMARK_FILE" ]; then
+  touch "$BOOKMARK_FILE"
   if [ $? -ne 0 ]; then
-    notify-send "❌ Error" "Failed to create $BOOKMARK_DIR"
+    notify-send "❌ Error" "Failed to create $BOOKMARK_FILE"
     exit 1
   else
-    notify-send "📂 Created" "Bookmark folder created at $BOOKMARK_DIR"
+    notify-send "📄 Created" "Bookmark file created at $BOOKMARK_FILE"
   fi
 fi
-
-# Bookmark file path
-BOOKMARK_FILE="$BOOKMARK_DIR/bookmarks.txt"
-touch "$BOOKMARK_FILE"
 
 # Check for duplicate and append if new
 if grep -Fxq "$BOOKMARK" "$BOOKMARK_FILE"; then
