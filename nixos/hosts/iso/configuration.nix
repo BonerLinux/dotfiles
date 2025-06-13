@@ -23,33 +23,20 @@
 
   networking.hostName = "BonerOS";
 
-  systemd = {
-    services.sshd.wantedBy = pkgs.lib.mkForce ["multi-user.target"];
-    targets = {
-      sleep.enable = false;
-      suspend.enable = false;
-      hibernate.enable = false;
-      hybrid-sleep.enable = false;
-    };
-  };
-
   users.users = {
     rileyboughner = {
       isNormalUser = true;
-      password = "!!JoJo1225!!";
+      initialPassword = "rileyboughner";
       extraGroups = [ "wheel" ];
     };
   };
 
-  users.extraUsers.root.password = "root";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = lib.mkForce "rileyboughner";
 
-  environment.etc."xdg/autostart/welcome-terminal.desktop".text = ''
-    [Desktop Entry]
-    Name=Welcome Terminal
-    Exec=gnome-terminal -- bash -c 'echo -e "\n🎉 Welcome to your custom NixOS ISO!\n"; exec bash'
-    Type=Application
-    X-GNOME-Autostart-enabled=true
-  '';
+  users.users.nixos.enable = false;
+
+  users.extraUsers.root.password = "root";
 
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
@@ -133,11 +120,9 @@
       echo "🚀 Installing NixOS for host $TARGET_HOST..."
       sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
 
-      # 🎁 Apply dotfiles with stow
-      echo "🎯 Applying dotfiles..."
-      mkdir -p /home/rileyboughner/.config
-      cd /home/rileyboughner/.system/dotfiles/normal
-      stow -t /home/rileyboughner/.config dot_config
+      # 🎁 install
+      echo "🎯 installing config files..."
+      /home/rileyboughner/.system/scripts/install
 
       echo "✅ Installation complete! You may now reboot."      
       ''
