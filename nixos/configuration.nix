@@ -27,6 +27,8 @@
   documentation.nixos.enable = false;
   nixpkgs.config.allowUnfree = true;
 
+  services.fwupd.enable = true;
+
   environment.systemPackages = with pkgs; [
 
     nautilus
@@ -41,7 +43,10 @@
     stow
     direnv
     gowall
+    mako
+    libnotify
     (python3.withPackages (ps: with ps; [ pillow ])) # for ranger
+    zoxide
     ranger
     tree
     unzip

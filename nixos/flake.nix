@@ -55,6 +55,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/kdeconnect.nix
         ./modules/nvim.nix
         ./modules/cloud.nix
         ./modules/wireless-networking.nix
