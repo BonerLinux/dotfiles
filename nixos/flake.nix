@@ -60,7 +60,6 @@
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
         ./modules/shell.nix
-        ./modules/kdeconnect.nix
         ./modules/podman.nix
         #./modules/docker.nix
         ./modules/gaming.nix
@@ -100,6 +99,8 @@
 
         ./modules/docker.nix
         ./modules/nvidia.nix
+        ./modules/nvim
+        ./modules/shell
       ];
     };
 
