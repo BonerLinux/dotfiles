@@ -26,21 +26,6 @@
         "server" = { id = "OTRRRC6-JCESLF3-VNDPFOY-EVUIUYI-EQDSMIK-QAFUIC4-PHJO33C-QNCBNQN"; };
       };
 
-      folders = {
-        "Documents" = {         # Name of folder in Syncthing, also the folder ID
-          path = "/home/rileyboughner/Documents";    # Which folder to add to Syncthing
-          devices = [ "server" ];      # Which devices to share the folder with
-        };
-        "Vault" = {         # Name of folder in Syncthing, also the folder ID
-          path = "/home/rileyboughner/Vault";    # Which folder to add to Syncthing
-          devices = [ "server" ];      # Which devices to share the folder with
-        };
-        "Camera" = {         # Name of folder in Syncthing, also the folder ID
-          path = "/home/rileyboughner/Pictures/Camera";    # Which folder to add to Syncthing
-          devices = [ "server" ];      # Which devices to share the folder with
-        };
-      };
-
     };
   };
 
