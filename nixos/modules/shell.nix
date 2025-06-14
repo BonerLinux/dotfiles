@@ -15,6 +15,9 @@
       r = "ranger";
       b = "nvim ~/.bookmarks";
 
+      mk = "touch";
+
+      install = "~/.system/scripts/install.sh";
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";
 

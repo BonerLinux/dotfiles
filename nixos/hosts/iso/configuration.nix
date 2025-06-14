@@ -36,7 +36,7 @@
 
   users.users.nixos.enable = false;
 
-  users.extraUsers.root.password = "root";
+  #users.extraUsers.root.password = "root";
 
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
@@ -47,6 +47,7 @@
     cmatrix
     git
     stow
+    neovim
     gum
     (
       writeShellScriptBin "nix-install"
@@ -112,18 +113,31 @@
         --no-write-lock-file \
         -- --mode zap_create_mount "$DISK_FILE"
 
-      # 🏗 Generate hardware config in flake host directory
+      # Generate hardware config in flake host directory
       echo "🧱 Generating hardware-configuration.nix..."
-      sudo nixos-generate-config --dir "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST"
+      sudo nixos-generate-config \
+        --root /mnt \
+        --dir "/home/rileyboughner"
+
+      mv "/home/rileyboughner/hardware-configuration.nix" "/home/rileyboughner/.system/nixos/hosts/$TARGET_HOST"
 
       # 🚀 Install NixOS from flake
       echo "🚀 Installing NixOS for host $TARGET_HOST..."
       sudo nixos-install --flake "/home/rileyboughner/.system/nixos#$TARGET_HOST"
 
-      # 🎁 install
+      # 🎁 installing config files
       echo "🎯 installing config files..."
-      /home/rileyboughner/.system/scripts/install
+      mv "/home/rileyboughner/.system" "/mnt/home/rileyboughner/"
+      mkdir "/mnt/home/rileyboughner/.config"
 
+      cd "/mnt/home/rileyboughner/.system/dotfiles/normal"
+      stow -t "/mnt/home/rileyboughner/.config" "dot_config"
+
+      # 🎁 installing wallpapers
+      echo "🎯 installing wallpapers"
+      
+      git clone https://github.com/rileyboughner/wallpapers.git /mnt/home/rileyboughner/.wallpapers
+      
       echo "✅ Installation complete! You may now reboot."      
       ''
     )
