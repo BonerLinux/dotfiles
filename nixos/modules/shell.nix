@@ -21,6 +21,8 @@
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";
 
+      secrets = "~/.system/scripts/secrets.sh";
+
       backup = "~/.system/scripts/backup";
 
       sync = "~/.system/scripts/sync";

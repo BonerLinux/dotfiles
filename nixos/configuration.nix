@@ -27,7 +27,9 @@
   documentation.nixos.enable = false;
   nixpkgs.config.allowUnfree = true;
 
+  # services
   services.fwupd.enable = true;
+  services.udisks2.enable = true;
 
   environment.systemPackages = with pkgs; [
 
@@ -53,6 +55,7 @@
     tldr
     fastfetch
     htop-vim
+    pass
 
     gum
     qemu
@@ -65,6 +68,23 @@
     home-manager
 
   ];
+
+  fileSystems."/mnt/Backup" = {
+    device = "/dev/disk/by-uuid/bf534c30-89e9-4c71-bb9f-b5b6e56e91c6"; # sdb3
+    fsType = "ext4";
+    options = [ "nofail" "x-systemd.device-timeout=5s" "noatime" ];
+  };
+
+  # Optional encrypted device (sdb4)
+  environment.etc."crypttab".text = ''
+    my_encrypted_drive UUID=f7459f96-e757-47a7-8b84-d155e03c83cb none noauto
+  '';
+
+  fileSystems."/mnt/Secrets" = {
+    device = "/dev/mapper/my_encrypted_drive";
+    fsType = "ext4";
+    options = [ "noauto" "nofail" "noatime" ];
+  };
 
   # -- gnupg --
   programs.gnupg.agent = {
