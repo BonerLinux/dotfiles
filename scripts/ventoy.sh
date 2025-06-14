@@ -21,10 +21,14 @@ install_isos() {
 
   curl -Lo "$MOUNT_POINT/ubuntu-desktop.iso" https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso
   curl -Lo "$MOUNT_POINT/ubuntu-server.iso" https://releases.ubuntu.com/24.04/ubuntu-24.04-live-server-amd64.iso
-  curl -Lo "$MOUNT_POINT/fedora.iso" https://download.fedoraproject.org/pub/fedora/linux/releases/40/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-40-1.14.iso
+  curl -Lo "$MOUNT_POINT/fedora.iso" https://getfedora.org/iso/Fedora-Workstation-Live-x86_64.iso
   curl -Lo "$MOUNT_POINT/arch.iso" https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso
-  curl -Lo "$MOUNT_POINT/nixos-minimal.iso" https://channels.nixos.org/nixos-24.05/latest-nixos-minimal-x86_64-linux.iso
   curl -Lo "$MOUNT_POINT/nixos-gnome.iso" https://channels.nixos.org/nixos-24.05/latest-nixos-gnome-x86_64-linux.iso
+  curl -Lo "$MOUNT_POINT/nixos-minimal.iso" https://channels.nixos.org/nixos-24.05/latest-nixos-minimal-x86_64-linux.iso
+  curl -Lo "$MOUNT_POINT/kali.iso" https://cdimage.kali.org/kali-rolling/kali-linux-rolling-installer-amd64.iso
+  curl -Lo "$MOUNT_POINT/android-x86.iso" https://osdn.net/dl/android-x86/android-x86-9.0-r2.iso
+  curl -Lo "$MOUNT_POINT/windows10.iso" "https://software-download.microsoft.com/db/Win10_22H2_English_x64.iso"
+  curl -Lo "$MOUNT_POINT/windows11.iso" "https://software-download.microsoft.com/db/Win11_23H2_English_x64v2.iso"
 
   echo "✅ All ISOs downloaded to $MOUNT_POINT"
 }
