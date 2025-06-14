@@ -21,6 +21,8 @@
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";
 
+      ventoy = "~/.system/scripts/ventoy.sh";
+
       secrets = "~/.system/scripts/secrets.sh";
 
       backup = "~/.system/scripts/backup";
