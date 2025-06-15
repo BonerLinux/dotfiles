@@ -7,7 +7,15 @@
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.systemd.enable = true;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStartSec=5s
+    DefaultTimeoutStopSec=5s
+  '';
+  
   # Local
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
