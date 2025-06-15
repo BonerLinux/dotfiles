@@ -77,7 +77,7 @@
       specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hosts/laptop/configuration.nix
-        ./hosts/laptop/vpn.nix
+        # ./hosts/laptop/vpn.nix
         ./users/standard.nix
         ./configuration.nix
 

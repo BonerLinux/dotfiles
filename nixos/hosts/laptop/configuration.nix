@@ -4,7 +4,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      ../../modules/nvidia.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -14,14 +13,16 @@
   # -- hostname --
   networking.hostName = "laptop";
 
-  # -- services --
-  services = {
-    asusd = {
-      enable = true;
-      enableUserService = true;
-    };
+  # -- fingerprint --
+  systemd.services.fprind = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "simple";
   };
 
+  services.fprintd.enable = true;
+
+  security.pam.services.sudo.fprintAuth = true;
+  
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }
