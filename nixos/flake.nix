@@ -82,6 +82,7 @@
         ./configuration.nix
 
         ./modules/nvim.nix
+        ./modules/docker.nix
         ./modules/wireless-networking.nix
         ./modules/shell.nix
         ./modules/hyprland.nix
