@@ -15,6 +15,7 @@
 
   environment.systemPackages = with pkgs; [
 
+    swayosd
     gtk3
     everforest-gtk-theme
     brave
