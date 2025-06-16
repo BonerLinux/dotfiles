@@ -17,6 +17,14 @@ position = "5% 5%"
 size = "90% 90%"
 offset = "120%"
 
+[scratchpads.homeassistant]
+command = "brave --app=https://homeassistant.clownweb.net"
+match_by = "initialTitle"
+initialTitle = "homeassistant.clownweb.net_/"
+position = "5% 5%"
+size = "90% 90%"
+process_tracking = false
+
 [scratchpads.gpt]
 command = "brave --app=https://chat.openai.com"
 match_by = "initialTitle"
