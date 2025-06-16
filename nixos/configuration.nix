@@ -100,9 +100,7 @@
     pinentryPackage = pkgs.pinentry-tty;
   };
 
-  # -- system stuff --
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.gc = {
+  # -- system stuff -- nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
