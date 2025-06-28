@@ -12,7 +12,6 @@
     shellAliases = {
       fetch = "clear && fastfetch";
       rm = "rm -r";
-      r = "ranger";
       b = "nvim ~/.bookmarks";
 
       mk = "touch";

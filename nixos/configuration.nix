@@ -55,9 +55,9 @@
     gowall
     mako
     libnotify
-    (python3.withPackages (ps: with ps; [ pillow ])) # for ranger
-    zoxide
+    walk
     ranger
+    zoxide
     tree
     unzip
     tldr
@@ -100,7 +100,8 @@
     pinentryPackage = pkgs.pinentry-tty;
   };
 
-  # -- system stuff -- nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
+  # -- system stuff -- 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
