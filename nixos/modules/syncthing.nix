@@ -19,7 +19,7 @@
     guiAddress = "0.0.0.0:8384";
 
     overrideDevices = true;
-    overrideFolders = true;
+    #overrideFolders = true;
     settings = {
 
       devices = {
