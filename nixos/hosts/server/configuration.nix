@@ -14,24 +14,29 @@
   networking.hostName = "clownweb";
 
   # -- ports --
-  networking.firewall.allowedTCPPorts = [
-    80 # HTTP
-    443 # HTTPS
-  ];
+# Enable IP forwarding (already correct)
+boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
-  networking.firewall.allowedUDPPorts = [
-    51820 # wireguard
-  ];
+# Open necessary ports (already correct)
+networking.firewall.allowedTCPPorts = [ 80 443 ];
+networking.firewall.allowedUDPPorts = [ 51820 ];
+
+# Add NAT and forwarding rules for WireGuard
+networking.firewall.extraCommands = ''
+  iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
+  iptables -A FORWARD -i eth0 -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+'';
 
  # networking.firewall.masquerade = true;
  # networking.firewall.externalInterfaces = [ "eth0" ];
 
   # -- mounts --
-    fileSystems."/mnt/tank" = {
-      device = "UUID=76b26a47-20a0-483e-a02d-3154c16779aa";
-      fsType = "btrfs";
-      options = [ "degraded" "nofail" "compress=zstd" ];
-    };
+  fileSystems."/mnt/tank" = {
+    device = "/dev/disk/by-label/tank";
+    fsType = "btrfs";
+    options = [ "compress=zstd" "nofail" "degraded" "autodefrag" ];
+  };
 
   # -- packages --
   environment.systemPackages = with pkgs; [
