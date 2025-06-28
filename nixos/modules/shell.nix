@@ -13,8 +13,11 @@
       fetch = "clear && fastfetch";
       rm = "rm -r";
       b = "nvim ~/.bookmarks";
+      nt = "ping cloudflare.com";
 
       mk = "touch";
+
+      sizeof = "du -sh";
 
       install = "~/.system/scripts/install.sh";
       rebuild = "~/.system/scripts/rebuild";

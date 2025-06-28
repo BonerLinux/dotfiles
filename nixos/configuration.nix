@@ -45,6 +45,7 @@
     brightnessctl
 
     mpv
+    breezy 
     newsboat
     wireguard-tools
     rclone #for backups
@@ -100,12 +101,19 @@
     pinentryPackage = pkgs.pinentry-tty;
   };
 
+<<<<<<< HEAD
   # -- system stuff -- 
   nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
+=======
+  nix = {
+    package = pkgs.nix;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+>>>>>>> 82ce637a69665145c8f0e295fad350e28e9259df
   };
-
   system.stateVersion = "25.05";
 }
