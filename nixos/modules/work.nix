@@ -1,8 +1,11 @@
 { config, pkgs, lib, ... }:
 
 {
+  nixpkgs.config.permittedInsecurePackages = [
+    "beekeeper-studio-5.1.5"
+  ];
   environment.systemPackages = with pkgs; [
-    liquibase
+    beekeeper-studio
     sshfs
     rclone
   ];
