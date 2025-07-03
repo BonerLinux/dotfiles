@@ -55,6 +55,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/sunshine.nix
         ./modules/kdeconnect.nix
         ./modules/nvim.nix
         ./modules/cloud.nix
@@ -81,6 +82,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/sunshine.nix
         ./modules/nvim.nix
         ./modules/docker.nix
         ./modules/wireless-networking.nix

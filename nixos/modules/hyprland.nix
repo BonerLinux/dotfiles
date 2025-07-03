@@ -15,6 +15,9 @@
 
   environment.systemPackages = with pkgs; [
 
+    libnotify
+    mako
+    brightnessctl
     swayosd
     gtk3
     everforest-gtk-theme

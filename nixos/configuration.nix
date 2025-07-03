@@ -42,32 +42,12 @@
   environment.systemPackages = with pkgs; [
 
     nautilus
-    brightnessctl
 
-    mpv
-    breezy 
-    newsboat
     wireguard-tools
     rclone #for backups
-    git
     oh-my-posh
     stow
     direnv
-    gowall
-    mako
-    libnotify
-    walk
-    ranger
-    zoxide
-    tree
-    unzip
-    tldr
-    fastfetch
-    htop-vim
-    pass
-
-    gum
-    qemu
 
     obsidian 
 
@@ -78,13 +58,14 @@
 
   ];
 
+
+  # for mounting stuff for backup and secret solution
   fileSystems."/mnt/Backup" = {
     device = "/dev/disk/by-uuid/bf534c30-89e9-4c71-bb9f-b5b6e56e91c6"; # sdb3
     fsType = "ext4";
     options = [ "nofail" "x-systemd.device-timeout=5s" "noatime" ];
   };
 
-  # Optional encrypted device (sdb4)
   environment.etc."crypttab".text = ''
     my_encrypted_drive UUID=f7459f96-e757-47a7-8b84-d155e03c83cb none noauto
   '';
@@ -95,13 +76,15 @@
     options = [ "noauto" "nofail" "noatime" ];
   };
 
+
+
   # -- gnupg --
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-tty;
   };
 
-  # -- system stuff -- 
+  # -- garbage collection -- 
   nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
     automatic = true;
     dates = "weekly";

@@ -2,6 +2,16 @@
 {
   users.defaultUserShell = pkgs.zsh;
 
+  environment.systemPackages = with pkgs; [
+    git
+    zoxide
+    ranger
+    tldr
+    tree
+    fastfetch
+  ];
+
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -11,10 +21,10 @@
     # Set up shell aliases
     shellAliases = {
       fetch = "clear && fastfetch";
+      cd = "z";
       rm = "rm -r";
       b = "nvim ~/.bookmarks";
       nt = "ping cloudflare.com";
-
       mk = "touch";
 
       sizeof = "du -sh";
