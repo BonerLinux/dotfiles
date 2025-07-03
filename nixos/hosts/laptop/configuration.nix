@@ -14,11 +14,6 @@
   # -- hostname --
   networking.hostName = "laptop";
 
-  # -- features --
-  features.nvidia.enable = true;
-  features.docker.enable = true;
-
-
   # -- fingerprint --
   systemd.services.fprind = {
     wantedBy = [ "multi-user.target" ];
