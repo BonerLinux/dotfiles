@@ -63,11 +63,11 @@
         ./modules/shell.nix
           #./modules/podman.nix
         ./modules/docker.nix
+        ./modules/nvidia.nix
         ./modules/gaming.nix
         ./modules/syncthing.nix
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
-        ./modules/nvidia.nix
         ./modules/ssh.nix
       ];
     };

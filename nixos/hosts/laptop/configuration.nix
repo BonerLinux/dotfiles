@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -12,6 +13,11 @@
 
   # -- hostname --
   networking.hostName = "laptop";
+
+  # -- features --
+  features.nvidia.enable = true;
+  features.docker.enable = true;
+
 
   # -- fingerprint --
   systemd.services.fprind = {
