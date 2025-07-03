@@ -11,7 +11,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # -- hostname --
-  networking.hostName = "clownweb";
+  networking.hostName = "server";
 
   # -- ports --
 # Enable IP forwarding (already correct)

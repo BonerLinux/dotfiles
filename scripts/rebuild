@@ -1,3 +1,8 @@
 #!/bin/sh
 
-sudo nixos-rebuild switch --flake '/home/rileyboughner/.system/nixos#'
+USER_HOME=$(eval echo ~"$USER")
+
+echo $USER_HOME;
+
+sudo nixos-rebuild switch --flake "$USER_HOME/.system/nixos#"
+
