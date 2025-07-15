@@ -8,6 +8,6 @@
     };
 
     # Optional: only enable if NVIDIA is also enabled
-  hardware.nvidia-container-toolkit.enable = lib.mkIf (lib.any (d: d == "nvidia") (config.services.xserver.videoDrivers or [])) true;
+    hardware.nvidia-container-toolkit.enable = lib.mkIf (lib.any (d: d == "nvidia") (config.services.xserver.videoDrivers or [])) true;
 }
 

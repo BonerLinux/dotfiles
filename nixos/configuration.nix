@@ -42,6 +42,7 @@
   environment.systemPackages = with pkgs; [
 
     nautilus
+    immich-cli
 
     wireguard-tools
     rclone #for backups
