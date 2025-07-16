@@ -41,7 +41,6 @@
 
   environment.systemPackages = with pkgs; [
 
-    nautilus
     immich-cli
 
     wireguard-tools
@@ -50,10 +49,13 @@
     stow
     direnv
 
+    mutt
+    newsboat
     obsidian 
 
     firefox
     libreoffice
+    nautilus
 
     home-manager
 
