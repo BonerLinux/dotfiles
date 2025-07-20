@@ -55,6 +55,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/filesystems.nix
         ./modules/sunshine.nix
         ./modules/kdeconnect.nix
         ./modules/nvim.nix
@@ -82,6 +83,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/filesystems.nix
         ./modules/sunshine.nix
         ./modules/nvim.nix
         ./modules/docker.nix
