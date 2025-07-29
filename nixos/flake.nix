@@ -105,6 +105,8 @@
         ./users/admin.nix
         ./configuration.nix
 
+        ./server-modules/nextcloud.nix
+
         ./modules/docker.nix
         ./modules/nvidia.nix
         ./modules/nvim.nix
