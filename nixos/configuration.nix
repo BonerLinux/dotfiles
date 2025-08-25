@@ -42,6 +42,7 @@
   environment.systemPackages = with pkgs; [
 
     immich-cli
+    
 
     wireguard-tools
     rclone #for backups
@@ -58,6 +59,9 @@
     nautilus
 
     home-manager
+
+    # This is for OS Class
+    qemu
 
   ];
 
