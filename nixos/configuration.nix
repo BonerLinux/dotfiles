@@ -60,6 +60,9 @@
 
     home-manager
 
+    # This is for OS Class
+    qemu
+
   ];
 
   # -- gnupg --
