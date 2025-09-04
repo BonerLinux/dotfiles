@@ -22,7 +22,7 @@ services = {
 
 users.users.${standardUser} = {
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "${standardUser}" "audio" "docker" ];
+    extraGroups = [ "wireshark" "networkmanager" "wheel" "${standardUser}" "audio" "docker" ];
   };
 
 }

@@ -14,7 +14,7 @@ RESET="\033[0m"
 OLD_DIR="$HOME/system"
 DOTFILES_DIR="$HOME/.system"
 REPO_URL_DOTFILES="https://github.com/rileyboughner/dotfiles.git"
-DOTFILES_SUBDIR="$DOTFILES_DIR/dotfiles/normal"
+DOTFILES_SUBDIR="$DOTFILES_DIR"
 
 ZSHRC_SOURCE="$DOTFILES_SUBDIR/.zshrc"
 BOOKMARKS_SOURCE="$DOTFILES_SUBDIR/.bookmarks"

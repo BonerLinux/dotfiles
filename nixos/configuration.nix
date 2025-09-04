@@ -39,10 +39,14 @@
   services.fwupd.enable = true;
   services.udisks2.enable = true;
 
+  programs.wireshark.enable = true;
+  services.spice-vdagentd.enable = true;
   environment.systemPackages = with pkgs; [
+    wireshark
 
     immich-cli
-    
+    virt-viewer
+    zoom-us
 
     wireguard-tools
     rclone #for backups
@@ -51,17 +55,12 @@
     direnv
 
     mutt
-    newsboat
-    obsidian 
 
     firefox
     libreoffice
     nautilus
 
     home-manager
-
-    # This is for OS Class
-    qemu
 
   ];
 

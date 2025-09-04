@@ -84,6 +84,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/quickemu.nix
         ./modules/filesystems.nix
         ./modules/sunshine.nix
         ./modules/nvim.nix
