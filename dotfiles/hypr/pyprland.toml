@@ -41,16 +41,6 @@ position = "5% 5%"
 size = "90% 90%"
 process_tracking = false
 
-[scratchpads.obsidian]
-command = "obsidian"
-
-match_by = "initialClass"
-initialClass = "obsidian"
-
-position = "5% 5%"
-size = "90% 90%"
-process_tracking = false
-
 [scratchpads.gmail]
 command = "brave --app=https://gmail.com"
 match_by = "initialTitle"

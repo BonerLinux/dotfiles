@@ -4,25 +4,25 @@
     --wallpaper: url("/home/rileyboughner/.wallpaper");
 
     /* Special */
-    --background: #101515;
-    --foreground: #c3c4c4;
-    --cursor: #c3c4c4;
+    --background: #1d241e;
+    --foreground: #c6c8c6;
+    --cursor: #c6c8c6;
 
     /* Colors */
-    --color0: #101515;
-    --color1: #83807C;
-    --color2: #8F857B;
-    --color3: #9A8E84;
-    --color4: #A7998E;
-    --color5: #B5A59A;
-    --color6: #BDACA2;
-    --color7: #c3c4c4;
-    --color8: #5a6e6e;
-    --color9: #83807C;
-    --color10: #8F857B;
-    --color11: #9A8E84;
-    --color12: #A7998E;
-    --color13: #B5A59A;
-    --color14: #BDACA2;
-    --color15: #c3c4c4;
+    --color0: #1d241e;
+    --color1: #36A0D2;
+    --color2: #56A3D3;
+    --color3: #6FADD5;
+    --color4: #74C3E9;
+    --color5: #C5C1A6;
+    --color6: #8AB8DA;
+    --color7: #c6c8c6;
+    --color8: #637963;
+    --color9: #36A0D2;
+    --color10: #56A3D3;
+    --color11: #6FADD5;
+    --color12: #74C3E9;
+    --color13: #C5C1A6;
+    --color14: #8AB8DA;
+    --color15: #c6c8c6;
 }

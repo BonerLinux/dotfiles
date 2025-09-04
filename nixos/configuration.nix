@@ -46,7 +46,6 @@
 
     immich-cli
     virt-viewer
-    zoom-us
 
     wireguard-tools
     rclone #for backups
