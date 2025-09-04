@@ -17,7 +17,6 @@ REPO_URL_DOTFILES="https://github.com/rileyboughner/dotfiles.git"
 DOTFILES_SUBDIR="$DOTFILES_DIR"
 
 ZSHRC_SOURCE="$DOTFILES_SUBDIR/.zshrc"
-BOOKMARKS_SOURCE="$DOTFILES_SUBDIR/.bookmarks"
 
 WALLPAPERS_DIR="$HOME/.wallpapers"
 REPO_URL_WALLPAPERS="https://github.com/rileyboughner/wallpapers.git"
@@ -69,13 +68,4 @@ if [ -f "$ZSHRC_SOURCE" ]; then
   success "Linked .zshrc"
 else
   warn ".zshrc not found at $ZSHRC_SOURCE"
-fi
-
-# --- Step 5: Symlink .bookmarks ---
-if [ -f "$BOOKMARKS_SOURCE" ]; then
-  log "Linking .bookmarks → ~/.bookmarks"
-  ln -sf "$BOOKMARKS_SOURCE" "$HOME/.bookmarks"
-  success "Linked .bookmarks"
-else
-  warn ".bookmarks not found at $BOOKMARKS_SOURCE"
 fi

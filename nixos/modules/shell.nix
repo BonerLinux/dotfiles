@@ -24,7 +24,6 @@
       fetch = "clear && fastfetch";
       cd = "z";
       rm = "rm -r";
-      b = "nvim ~/.bookmarks";
       nt = "ping cloudflare.com";
       mk = "touch";
 
