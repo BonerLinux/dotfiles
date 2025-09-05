@@ -41,8 +41,8 @@
 
   environment.systemPackages = with pkgs; [
 
-    immich-cli
-    
+    nextcloud-client
+    bottles
 
     wireguard-tools
     rclone #for backups
