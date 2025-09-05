@@ -44,8 +44,9 @@
   environment.systemPackages = with pkgs; [
     wireshark
 
-    immich-cli
     virt-viewer
+    nextcloud-client
+    bottles
 
     wireguard-tools
     rclone #for backups
