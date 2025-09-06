@@ -23,7 +23,6 @@
     everforest-gtk-theme
     brave
     kitty
-    hyprlock
     waybar
     swaybg
     wl-clipboard
