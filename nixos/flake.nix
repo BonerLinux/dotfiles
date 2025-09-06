@@ -58,7 +58,6 @@
 
         ./modules/filesystems.nix
         ./modules/sunshine.nix
-        ./modules/kdeconnect.nix
         ./modules/nvim.nix
         ./modules/cloud.nix
         ./modules/wireless-networking.nix
