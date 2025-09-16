@@ -83,6 +83,9 @@
         ./users/standard.nix
         ./configuration.nix
 
+        inputs.musnix.nixosModules.musnix
+        ./modules/music.nix
+
         ./modules/quickemu.nix
         ./modules/filesystems.nix
         ./modules/sunshine.nix

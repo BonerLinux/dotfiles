@@ -20,8 +20,8 @@
     brightnessctl
     swayosd
     gtk3
-    everforest-gtk-theme
     brave
+    everforest-gtk-theme
     kitty
     waybar
     swaybg

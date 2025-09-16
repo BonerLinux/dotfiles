@@ -10,7 +10,6 @@
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-
   systemd.extraConfig = ''
     DefaultTimeoutStartSec=5s
     DefaultTimeoutStopSec=5s
@@ -45,6 +44,7 @@
     wireshark
 
     virt-viewer
+    bambu-studio
     nextcloud-client
     bottles
 
