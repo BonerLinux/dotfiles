@@ -3,22 +3,14 @@
 ![Project Screenshot](.images/picker.png)
 ![Project Screenshot](.images/screenshot.png)
 
-### My OS!
+# Riley Boughners' Dotfiles
+## About
+### Welcome to my dotfiles! These contain all of my most important configuration settings for all of my machines. I like trying to find the best balance of functionality and aesthetic. 
 
- - These dotfiles use stow and nix to configure all of my computers (including my server)
+## TODO!
 
-### TODO
-
-- [ ] find a good way of creating just a dotfiles repo without the nix stuff
-- [ ] find better way of saving firefox config
-- [ ] update the install script to move the hardware file into hardare and then assist the user in renameing and rebuilding from scratch
-- [ ] prompt the user to install wallpapers from a git repo
-- [ ] learn more about nix
-
-### Stuff to know
-wallpapers are stored in ~/.wallpapers and the last chosen wallpaper is stored in ~/.wallpaper
-choose monitor my copying monitor-setting.sample as monitor-setting and source a monitor file 
-all of this is stored in ~/.dotfiles/config/hypr/monitors
-
-### Cool Commands
-git config --global credential.helper store
+- [ ] Spring cleaning
+- [ ] Determine robust solution for syncing files between all computers (Ive tried syncthing and nextcloud but I dont really like them)
+- [ ] Create Fork of wallpaper repo so that I can include my own custom wallpapers
+- [ ] Complete script for automating the installation of the system on any device
+- [ ] Create a custom installation Media
