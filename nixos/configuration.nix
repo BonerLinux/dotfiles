@@ -38,23 +38,11 @@
   services.fwupd.enable = true;
   services.udisks2.enable = true;
 
-  programs.wireshark.enable = true;
-  services.spice-vdagentd.enable = true;
   environment.systemPackages = with pkgs; [
-    wireshark
-
     virt-viewer
-    bambu-studio
     nextcloud-client
-    bottles
 
-    wireguard-tools
-    rclone #for backups
-    oh-my-posh
     stow
-    direnv
-
-    mutt
 
     firefox
     libreoffice

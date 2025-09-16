@@ -43,8 +43,6 @@
         ./configuration.nix
 
         ./modules/hyprland.nix
-        ./modules/gnome.nix
-        ./modules/fun.nix
       ];
     };
         
@@ -57,7 +55,6 @@
         ./configuration.nix
 
         ./modules/filesystems.nix
-        ./modules/sunshine.nix
         ./modules/nvim.nix
         ./modules/cloud.nix
         ./modules/wireless-networking.nix
@@ -82,21 +79,19 @@
         # ./hosts/laptop/vpn.nix
         ./users/standard.nix
         ./configuration.nix
+        ./modules/wireless-networking.nix
+        ./modules/hyprland.nix
 
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
 
         ./modules/quickemu.nix
         ./modules/filesystems.nix
-        ./modules/sunshine.nix
         ./modules/nvim.nix
         ./modules/docker.nix
-        ./modules/wireless-networking.nix
         ./modules/shell.nix
-        ./modules/hyprland.nix
-        ./modules/syncthing.nix
         ./modules/ssh.nix
-        ./modules/work.nix
+        ./modules/osint.nix
       ];
     };
 
