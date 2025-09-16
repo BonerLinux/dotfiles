@@ -5,7 +5,7 @@
     "height": 35,
     "modules-left": [ "clock", "hyprland/window" ],
     "modules-center": [ "mpris" ],
-    "modules-right": [ "network", "cpu", "memory", "pulseaudio" , "battery" ],
+    "modules-right": [ "network", "pulseaudio" , "battery" ],
     "network": {
       "format-ethernet": "ethernet",
       "format-wifi": "{essid}",
