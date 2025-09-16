@@ -4,14 +4,14 @@ plugins = [
 ]
 
 [scratchpads.term]
-command = "kitty --class kitty-dropterm -e sh -c 'fastfetch; exec $SHELL'"
+command = "kitty --class kitty-dropterm -e sh -c 'exec $SHELL'"
 class = "kitty-dropterm"
 position = "5% 5%"
 size = "90% 90%"
 offset = "120%"
 
 [scratchpads.term2]
-command = "kitty --class kitty-dropterm2 -e sh -c 'curl wttr.in; exec $SHELL'"
+command = "kitty --class kitty-dropterm2 -e sh -c 'exec $SHELL'"
 class = "kitty-dropterm2"
 position = "5% 5%"
 size = "90% 90%"

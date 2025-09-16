@@ -22,18 +22,6 @@
   in
   {
       
-    nixosConfigurations.ISO = nixpkgs.lib.nixosSystem{
-      inherit system;
-      specialArgs = { inherit inputs; inherit username; };
-      modules = [ ( { pkgs, modulesPath, ... }: {
-          imports = [
-            (modulesPath + "/installer/cd-dvd/installation-cd-graphical-gnome.nix")
-            ./hosts/iso/configuration.nix
-          ];
-        } )
-      ];
-    };
-
     nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
       inherit system;
       specialArgs = { inherit inputs; inherit username; };
