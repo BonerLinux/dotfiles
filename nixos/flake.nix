@@ -44,7 +44,6 @@
 
         ./modules/filesystems.nix
         ./modules/nvim.nix
-        ./modules/cloud.nix
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
         ./modules/shell.nix
@@ -52,7 +51,6 @@
         ./modules/docker.nix
         ./modules/nvidia.nix
         ./modules/gaming.nix
-        ./modules/syncthing.nix
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/ssh.nix
