@@ -40,7 +40,6 @@
 
   environment.systemPackages = with pkgs; [
     virt-viewer
-    nextcloud-client
 
     stow
 

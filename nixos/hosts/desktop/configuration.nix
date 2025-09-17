@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
     ];
 
+  services.syncthing.enable = true;
   networking.hostName = "desktop";
 }
 
