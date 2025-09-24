@@ -71,6 +71,7 @@
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
 
+        ./modules/sdr.nix
         ./modules/quickemu.nix
         ./modules/filesystems.nix
         ./modules/nvim.nix

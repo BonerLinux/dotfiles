@@ -43,6 +43,9 @@
 
     stow
 
+    orca-slicer
+    bambu-studio
+
     firefox
     libreoffice
     nautilus
