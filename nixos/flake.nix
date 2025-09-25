@@ -62,7 +62,6 @@
       specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hosts/laptop/configuration.nix
-        # ./hosts/laptop/vpn.nix
         ./users/standard.nix
         ./configuration.nix
         ./modules/wireless-networking.nix
@@ -71,6 +70,7 @@
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
 
+        ./modules/vpn.nix
         ./modules/sdr.nix
         ./modules/quickemu.nix
         ./modules/filesystems.nix
