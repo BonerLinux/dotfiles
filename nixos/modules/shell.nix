@@ -26,6 +26,8 @@
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+    
+    flags = [ " --cmd cd " ];
   };
 
   programs.zsh = {
@@ -38,8 +40,8 @@
     shellAliases = {
       os="qemu-system-x86_64 -m 4G -smp 4 -enable-kvm -cpu host -drive file=$HOME/.vms/ubuntu/ubuntu.img,format=qcow2 -nic user -vga virtio";
       fetch = "clear && fastfetch";
-      cd = "z";
 
+      clownweb = "sudo wg-quick up clownweb";
       cloud = "sshfs admin@192.168.1.2:/mnt/tank/cloud ~/Documents";
 
       install = "~/.system/scripts/install.sh";
