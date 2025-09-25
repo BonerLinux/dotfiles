@@ -39,22 +39,13 @@
       os="qemu-system-x86_64 -m 4G -smp 4 -enable-kvm -cpu host -drive file=$HOME/.vms/ubuntu/ubuntu.img,format=qcow2 -nic user -vga virtio";
       fetch = "clear && fastfetch";
       cd = "z";
-      rm = "rm -r";
+
+      cloud = "sshfs admin@192.168.1.2:/mnt/tank/cloud ~/Documents";
 
       install = "~/.system/scripts/install.sh";
       rebuild = "~/.system/scripts/rebuild";
       update = "~/.system/scripts/update";
 
-      #ventoy = "~/.system/scripts/ventoy.sh";
-      #secrets = "~/.system/scripts/secrets.sh";
-      #backup = "~/.system/scripts/backup";
-      #sync = "~/.system/scripts/sync";
-      #etch = "~/.system/scripts/etch";
-      #build-installer = "~/.system/scripts/build-installer";
-      
-      fart = "systemctl suspend";
-      shart = "reboot";
-      shit = "shutdown -h now";    
     };
   };
 

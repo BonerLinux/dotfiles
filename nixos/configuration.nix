@@ -43,6 +43,7 @@
 
     stow
 
+    sshfs
     orca-slicer
     bambu-studio
 
