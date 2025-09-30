@@ -42,6 +42,7 @@
         ./users/standard.nix
         ./configuration.nix
 
+        ./modules/newsboat.nix
         ./modules/filesystems.nix
         ./modules/nvim.nix
         ./modules/wireless-networking.nix

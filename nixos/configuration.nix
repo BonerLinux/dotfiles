@@ -47,6 +47,9 @@
     orca-slicer
     bambu-studio
 
+    freecad
+    anki
+    obsidian
     firefox
     libreoffice
     nautilus

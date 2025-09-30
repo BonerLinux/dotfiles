@@ -18,7 +18,7 @@ size = "90% 90%"
 offset = "120%"
 
 [scratchpads.homeassistant]
-command = "brave --app=https://homeassistant.clownweb.net"
+command = "brave --app=https://home.clownweb.net"
 match_by = "initialTitle"
 initialTitle = "homeassistant.clownweb.net_/"
 position = "5% 5%"
