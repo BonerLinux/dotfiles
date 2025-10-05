@@ -9,6 +9,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelParams = [ "8250.nr_uarts=0" ];
 
   systemd.extraConfig = ''
     DefaultTimeoutStartSec=5s
@@ -35,8 +36,8 @@
   nixpkgs.config.allowUnfree = true;
 
   # services
-  services.fwupd.enable = true;
-  services.udisks2.enable = true;
+  # services.fwupd.enable = true;
+  # services.udisks2.enable = true;
 
   environment.systemPackages = with pkgs; [
     virt-viewer

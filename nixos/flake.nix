@@ -67,18 +67,13 @@
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
 
-        inputs.musnix.nixosModules.musnix
-        ./modules/music.nix
-
+        ./modules/osint.nix
         ./modules/vpn.nix
-        ./modules/sdr.nix
         ./modules/quickemu.nix
         ./modules/filesystems.nix
         ./modules/nvim.nix
-        ./modules/docker.nix
         ./modules/shell.nix
         ./modules/ssh.nix
-        ./modules/osint.nix
       ];
     };
 

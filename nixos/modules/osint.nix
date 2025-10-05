@@ -6,6 +6,7 @@ in
 
   programs.wireshark.enable = true;
   environment.systemPackages = with pkgs; [
+    bind
     sherlock
     wireshark
   ];
