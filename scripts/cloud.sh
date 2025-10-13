@@ -2,4 +2,3 @@
 #!nix-shell -i bash -p sshfs
 
 sshfs admin@192.168.1.2:/mnt/tank/cloud/Documents ~/Documents
-sshfs admin@192.168.1.2:/mnt/tank/cloud/dot_newsboat ~/.newsboat

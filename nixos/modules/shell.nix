@@ -42,7 +42,7 @@
       fetch = "clear && fastfetch";
 
       clownweb = "sudo wg-quick up clownweb";
-      cloud = "sshfs admin@192.168.1.2:/mnt/tank/cloud ~/Documents";
+      cloud = "~/.system/scripts/cloud.sh";
 
       install = "~/.system/scripts/install.sh";
       rebuild = "~/.system/scripts/rebuild";
