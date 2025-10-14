@@ -16,11 +16,6 @@
     DefaultTimeoutStopSec=5s
   '';
   
-  # fonts
-  fonts.packages = with pkgs; [
-    liberation_ttf
-  ];
-
   # Local
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -44,22 +39,8 @@
   # services.fwupd.enable = true;
   # services.udisks2.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    virt-viewer
-
+  environment.systemPackages = with pkgs; [ # These are essential programs
     stow
-
-    sshfs
-    orca-slicer
-    bambu-studio
-
-    freecad
-    anki
-    obsidian
-    firefox
-    libreoffice
-    nautilus
-
     home-manager
 
   ];

@@ -21,19 +21,6 @@
 
   in
   {
-      
-    nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem{
-      inherit system;
-      specialArgs = { inherit inputs; inherit username; };
-      modules = [
-        ./hosts/thinkpad/configuration.nix
-        ./users/standard.nix
-        ./configuration.nix
-
-        ./modules/hyprland.nix
-      ];
-    };
-        
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
       specialArgs = { inherit inputs; inherit username; };
@@ -48,7 +35,6 @@
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
         ./modules/shell.nix
-          #./modules/podman.nix
         ./modules/docker.nix
         ./modules/nvidia.nix
         ./modules/gaming.nix
@@ -68,6 +54,8 @@
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
 
+        inputs.musnix.nixosModules.musnix
+        ./modules/music.nix
         ./modules/osint.nix
         ./modules/vpn.nix
         ./modules/quickemu.nix
@@ -85,8 +73,6 @@
         ./hosts/server/configuration.nix
         ./users/admin.nix
         ./configuration.nix
-
-        ./server-modules/nextcloud.nix
 
         ./modules/docker.nix
         ./modules/nvidia.nix

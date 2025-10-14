@@ -4,28 +4,10 @@ let
 in 
 {
 
-# services = {
-#     greetd = {
-#       enable = true;
-#       settings = {
-#         initial_session = {
-#           command = "Hyprland";
-#           user = standardUser;
-#         };
-#         default_session = {
-#           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --greeting 'Welcome To NixOS' --asterisks --remember --remember-user-session --time -cmd Hyprland";
-#           user = "greeter";
-#         };
-#       };
-#     };
-#   };
-#
 users.users.${standardUser} = {
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "${standardUser}" "audio" "docker" ];
+    extraGroups = [ "wheel" "${standardUser}" ];
   };
 
-  # services.getty.autoLogin.enable = true;
-  # services.getty.autoLogin.user = "${standardUser}";
 
 }

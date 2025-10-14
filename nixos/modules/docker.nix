@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }:
-
+{ config, username, pkgs, lib, ... }:
+let
+  standarUser = username;
+in
 {
+    users.users.${standardUser}.extraGroups = [ "docker" ];
+
     virtualisation.docker = {
       enable = true;
       enableOnBoot = true;

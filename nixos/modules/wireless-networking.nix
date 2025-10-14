@@ -1,4 +1,7 @@
-{ config, pkgs, ... }: 
+{ config, pkgs, username, ... }: 
+let
+ standardUser = username;
+in
 {
   networking.networkmanager.enable = true;
   hardware.bluetooth.enable = true;
@@ -7,4 +10,6 @@
   environment.systemPackages = with pkgs; [
     bluetuith
   ];
+
+  users.users.${standardUser}.extraGroups = [ "networkManager" ];
 }
