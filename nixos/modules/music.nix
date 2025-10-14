@@ -1,8 +1,12 @@
-{ config, pkgs, username, lib, ... }: 
+{ config, pkgs, username, inputs, lib, ... }: 
 let
   standardUser = username;
 in
 {
+  imports = [
+    inputs.musnix.nixosModules.musnix
+  ];
+
   musnix.enable = true;
   environment.systemPackages = with pkgs; [
     pavucontrol

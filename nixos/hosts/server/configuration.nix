@@ -6,7 +6,6 @@
       ./hardware-configuration.nix
     ];
 
-  # -- hostname --
   networking.hostName = "server";
 
   # Use the systemd-boot EFI boot loader.

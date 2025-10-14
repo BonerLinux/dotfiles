@@ -30,7 +30,12 @@
     serverUsername = "admin";
 
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs {
+      inherit system;
+      config = {
+        allowUnfree = true;
+      };
+    };
   in
   {
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
@@ -39,7 +44,8 @@
       modules = [
         ./hosts/desktop/configuration.nix
 	(userModule { username = username; })
-        ./configuration.nix
+        ./modules/nvidia.nix
+        ./modules/configuration.nix
 
         ./modules/newsboat.nix
         ./modules/filesystems.nix
@@ -48,9 +54,7 @@
         ./modules/hyprland.nix
         ./modules/shell.nix
         ./modules/docker.nix
-        ./modules/nvidia.nix
         ./modules/gaming.nix
-        inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/ssh.nix
       ];
@@ -62,10 +66,10 @@
       modules = [
         ./hosts/laptop/configuration.nix
 	(userModule { username = username; })
-        ./configuration.nix
+	./modules/configuration.nix
+
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
-
         inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/osint.nix
@@ -84,23 +88,13 @@
       modules = [
         ./hosts/server/configuration.nix
 	(userModule { username = serverUsername; extraGroups = [ "admin" ]; })
-        ./configuration.nix
+        ./modules/nvidia.nix
+        ./modules/configuration.nix
 
         ./modules/docker.nix
-        ./modules/nvidia.nix
         ./modules/nvim.nix
         ./modules/shell.nix
       ];
     };
-
-    homeConfigurations = {
-        rileyboughner = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit username; };
-          modules = [ 
-            ./home.nix 
-          ];
-        };
-      };
   };
 }

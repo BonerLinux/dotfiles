@@ -7,7 +7,6 @@
 
     ];
 
-  # -- hostname --
   networking.hostName = "laptop";
 
   # -- fingerprint --
