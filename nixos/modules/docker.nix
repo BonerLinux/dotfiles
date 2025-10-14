@@ -1,6 +1,6 @@
-{ config, username, pkgs, lib, ... }:
+inputs@{ config, pkgs, lib, ... }:
 let
-  standarUser = username;
+  standardUser = inputs.username;
 in
 {
     users.users.${standardUser}.extraGroups = [ "docker" ];

@@ -15,10 +15,22 @@
 
   outputs = { self, nixpkgs, home-manager, ... } @inputs: 
   let
-    system = "x86_64-linux";
-    username = "rileyboughner";
-    pkgs = nixpkgs.legacyPackages.${system};
 
+    userModule = { username, extraGroups ? [ ] }: {
+      users.users.${username} = {
+        isNormalUser = true;
+        group = username;
+        extraGroups = [ "wheel" ] ++ extraGroups;
+      };
+      users.groups.${username} = {}; 
+    };
+
+    #options
+    username = "rileyboughner";
+    serverUsername = "admin";
+
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
   in
   {
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
@@ -26,7 +38,7 @@
       specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hosts/desktop/configuration.nix
-        ./users/standard.nix
+	(userModule { username = username; })
         ./configuration.nix
 
         ./modules/newsboat.nix
@@ -49,7 +61,7 @@
       specialArgs = { inherit inputs; inherit username; };
       modules = [
         ./hosts/laptop/configuration.nix
-        ./users/standard.nix
+	(userModule { username = username; })
         ./configuration.nix
         ./modules/wireless-networking.nix
         ./modules/hyprland.nix
@@ -68,10 +80,10 @@
 
     nixosConfigurations.server = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit username; };
+      specialArgs = { inherit inputs; username = serverUsername; };
       modules = [
         ./hosts/server/configuration.nix
-        ./users/admin.nix
+	(userModule { username = serverUsername; extraGroups = [ "admin" ]; })
         ./configuration.nix
 
         ./modules/docker.nix

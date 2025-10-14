@@ -1,13 +1,14 @@
-{ config, username, pkgs, lib, ... }: 
+inputs@{ config, pkgs, lib, ... }: 
 let
-  standardUser = username;
+  standardUser = inputs.username;
 in 
 {
 
-users.users.${standardUser} = {
+  users.users.${standardUser} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "${standardUser}" ];
+    group = standardUser;
+    extraGroups = [ "wheel" ];
   };
-
+  users.groups.${standardUser} = {};
 
 }

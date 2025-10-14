@@ -1,12 +1,8 @@
-{ config, pkgs, lib, ... }: 
-
+inputs@{ config, pkgs, lib, ... }: 
 {
 
-users.users.admin = {
+  users.users.admin = {
     isNormalUser = true;
-    description = "admin";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [];
+    extraGroups = [ "wheel" "admin" ];
   };
-
 }
