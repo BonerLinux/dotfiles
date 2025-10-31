@@ -4,7 +4,8 @@
   imports =
     [
       ./hardware-configuration.nix
-
+      ../../configuration.nix
+      ../../modules/wireless-networking.nix
     ];
 
   networking.hostName = "laptop";

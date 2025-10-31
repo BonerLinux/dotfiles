@@ -44,19 +44,10 @@
       modules = [
         ./hosts/desktop/configuration.nix
 	(userModule { username = username; })
-        ./modules/nvidia.nix
-        ./modules/configuration.nix
 
-        ./modules/newsboat.nix
-        ./modules/filesystems.nix
-        ./modules/nvim.nix
-        ./modules/wireless-networking.nix
         ./modules/hyprland.nix
-        ./modules/shell.nix
-        ./modules/docker.nix
         ./modules/gaming.nix
         ./modules/music.nix
-        ./modules/ssh.nix
       ];
     };
 
@@ -66,19 +57,11 @@
       modules = [
         ./hosts/laptop/configuration.nix
 	(userModule { username = username; })
-	./modules/configuration.nix
 
-        ./modules/wireless-networking.nix
         ./modules/hyprland.nix
-        inputs.musnix.nixosModules.musnix
         ./modules/music.nix
         ./modules/osint.nix
-        ./modules/vpn.nix
         ./modules/quickemu.nix
-        ./modules/filesystems.nix
-        ./modules/nvim.nix
-        ./modules/shell.nix
-        ./modules/ssh.nix
       ];
     };
 
@@ -88,12 +71,6 @@
       modules = [
         ./hosts/server/configuration.nix
 	(userModule { username = serverUsername; extraGroups = [ "admin" ]; })
-        ./modules/nvidia.nix
-        ./modules/configuration.nix
-
-        ./modules/docker.nix
-        ./modules/nvim.nix
-        ./modules/shell.nix
       ];
     };
   };

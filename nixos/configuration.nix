@@ -1,5 +1,9 @@
 { config, pkgs, ... }: {
-	  imports = [];
+	  imports = [ 
+	    ./modules/shell.nix
+	    ./modules/nvim.nix
+	    ./modules/ssh.nix
+	  ];
 
 	  system.stateVersion = "25.05";
 

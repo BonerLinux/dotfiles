@@ -8,6 +8,7 @@ in
   hardware.bluetooth.powerOnBoot = true;
 
   environment.systemPackages = with pkgs; [
+    wireguard-tools
     bluetuith
   ];
 
