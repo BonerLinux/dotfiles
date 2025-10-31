@@ -40,6 +40,8 @@
 	  environment.systemPackages = with pkgs; [ # These are essential programs
 	    stow
 	    home-manager
+
+            gemini-cli #for testing
 	  ];
 
 	  # -- gnupg --
