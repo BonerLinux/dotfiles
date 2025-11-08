@@ -4,6 +4,8 @@ let
 in
 {
   environment.systemPackages = with pkgs; [
+    obsidian
+    anki
     firefox
     libreoffice
     nautilus
