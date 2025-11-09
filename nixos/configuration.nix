@@ -45,6 +45,8 @@
 	    rclone
 	    stow
 	    home-manager
+
+            gemini-cli #for testing
 	  ];
 
 	  # -- gnupg --
