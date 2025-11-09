@@ -10,6 +10,14 @@
 
   networking.hostName = "laptop";
 
+  # -- auto vpn --
+  networking.wg-quick.interfaces = {
+    clownweb = {
+      configFile = "/etc/wireguard/clownweb.conf";
+      autostart = true;
+    };
+  };
+
   # -- fingerprint --
   services.fprintd.enable = true;
   security.pam.services.sudo.fprintAuth = true;
