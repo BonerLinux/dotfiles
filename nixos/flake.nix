@@ -47,7 +47,7 @@
 
         ./modules/hyprland.nix
         ./modules/gaming.nix
-        ./modules/music.nix
+        ./modules/audio.nix
       ];
     };
 
@@ -59,7 +59,7 @@
 	(userModule { username = username; })
 
         ./modules/hyprland.nix
-        ./modules/music.nix
+        ./modules/audio.nix
         ./modules/osint.nix
         ./modules/quickemu.nix
       ];

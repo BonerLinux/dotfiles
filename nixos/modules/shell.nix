@@ -40,6 +40,7 @@
     shellAliases = {
       os="qemu-system-x86_64 -m 4G -smp 4 -enable-kvm -cpu host -drive file=$HOME/.vms/ubuntu/ubuntu.img,format=qcow2 -nic user -vga virtio";
       fetch = "clear && fastfetch";
+      shell = "nix-shell";
 
       clownweb = "sudo wg-quick up clownweb";
       cloud = "~/.system/scripts/cloud.sh";

@@ -18,16 +18,16 @@ in
     qpwgraph
     qjackctl
 
-    hydrogen
-    sfizz
-    x42-avldrums
-    helm
-    vital
-    surge-XT
-    distrho-ports
-    odin2
-    eq10q
-    lsp-plugins
+    # hydrogen
+    # sfizz
+    # x42-avldrums
+    # helm
+    # vital
+    # surge-XT
+    # distrho-ports
+    # odin2
+    # eq10q
+    # lsp-plugins
   ];
 
   services.pulseaudio.enable = false;
