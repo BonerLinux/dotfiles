@@ -46,8 +46,8 @@
       cloud = "~/.system/scripts/cloud.sh";
 
       install = "~/.system/scripts/install.sh";
-      rebuild = "~/.system/scripts/rebuild";
-      update = "~/.system/scripts/update";
+      rebuild = "~/.system/scripts/rebuild.sh";
+      update = "~/.system/scripts/update.sh";
 
     };
   };
