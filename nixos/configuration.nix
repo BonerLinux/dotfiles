@@ -5,7 +5,7 @@
 	    ./modules/ssh.nix
 	  ];
 
-	  system.stateVersion = "25.05";
+	  system.stateVersion = "25.11";
 
 	  # Boot
 	  boot.loader.systemd-boot.enable = true;
@@ -14,11 +14,14 @@
 	  boot.kernelPackages = pkgs.linuxPackages_zen;
 	  boot.kernelParams = [ "8250.nr_uarts=0" ];
 
-	  systemd.extraConfig = ''
-	    DefaultTimeoutStartSec=5s
-	    DefaultTimeoutStopSec=5s
-	  '';
 	  
+	  systemd.settings = {
+	    Manager = {
+	      DefaultTimeoutStopSec = "10s";
+	      DefaultTimeoutStartSec = "10s";
+	    };
+	  };
+
 	  # Local
 	  time.timeZone = "America/New_York";
 	  i18n.defaultLocale = "en_US.UTF-8";
