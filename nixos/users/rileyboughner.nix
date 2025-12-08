@@ -6,6 +6,15 @@
   
   programs.home-manager.enable = true;
 
+  programs.neovim = {
+    enable = true;
+    extraConfig = ''
+      set number
+      set nowrap
+      set ignorecase
+    '';
+  };
+
   programs.git = {
     enable = true;
     settings.user.name = "Riley Boughner";
