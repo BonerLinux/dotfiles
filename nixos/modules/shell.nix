@@ -45,6 +45,8 @@
       clownweb = "sudo wg-quick up clownweb";
       cloud = "~/.system/scripts/cloud.sh";
 
+      unzip = "nix run nixpkgs#unzip";
+
       install = "~/.system/scripts/install.sh";
       rebuild = "~/.system/scripts/rebuild.sh";
       update = "~/.system/scripts/update.sh";
