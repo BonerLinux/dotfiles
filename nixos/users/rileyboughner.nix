@@ -1,6 +1,6 @@
 { config, pkgs, username, ...}: {
 
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
   home.username = username;
   home.homeDirectory = "/home/${username}";
   
@@ -8,9 +8,9 @@
 
   programs.git = {
     enable = true;
-    userName = "Riley Boughner";
-    userEmail = "riley@clownweb.net";
-    extraConfig = {
+    settings.user.name = "Riley Boughner";
+    settings.user.email = "riley@clownweb.net";
+    settings = {
       credential.helper = "store";
     };
   };
