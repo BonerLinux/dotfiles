@@ -47,10 +47,8 @@
 	  environment.systemPackages = with pkgs; [ # These are essential programs
 	    rclone
 	    stow
-	    home-manager
 
 	    # for testing
-
             gemini-cli
 	  ];
 

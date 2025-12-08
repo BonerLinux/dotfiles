@@ -13,6 +13,10 @@
       set nowrap
       set ignorecase
     '';
+    plugins = with pkgs.vimPlugins; [
+      #nvim-treesitter.withAllGrammars
+      nvim-lspconfig
+    ];
   };
 
   programs.git = {
