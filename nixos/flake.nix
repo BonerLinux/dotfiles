@@ -45,6 +45,7 @@
         ./hosts/desktop/configuration.nix
 	(userModule { username = username; })
 
+        ./home-manager.nix
         ./modules/hyprland.nix
         ./modules/gaming.nix
         ./modules/audio.nix
@@ -58,6 +59,7 @@
         ./hosts/laptop/configuration.nix
 	(userModule { username = username; })
 
+        ./home-manager.nix
         ./modules/hyprland.nix
         ./modules/audio.nix
         ./modules/osint.nix

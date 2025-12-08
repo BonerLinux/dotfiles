@@ -49,7 +49,9 @@
 	    stow
 	    home-manager
 
-            gemini-cli #for testing
+	    # for testing
+
+            gemini-cli
 	  ];
 
 	  # -- gnupg --
