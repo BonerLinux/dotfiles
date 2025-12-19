@@ -20,7 +20,7 @@ in
 
     # hydrogen
     # sfizz
-    # x42-avldrums
+    x42-avldrums
     # helm
     # vital
     # surge-XT

@@ -36,6 +36,12 @@
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
 
+    shellInit = ''
+
+      export PATH="$HOME/.system/scripts:$PATH"
+
+    '';
+
     # Set up shell aliases
     shellAliases = {
       os="qemu-system-x86_64 -m 4G -smp 4 -enable-kvm -cpu host -drive file=$HOME/.vms/ubuntu/ubuntu.img,format=qcow2 -nic user -vga virtio";
@@ -43,13 +49,9 @@
       shell = "nix-shell";
 
       clownweb = "sudo wg-quick up clownweb";
-      cloud = "~/.system/scripts/cloud.sh";
-
+      
+      download = "nix run nixpkgs#yt-dlp -- -f bestaudio --extract-audio --audio-format best";
       unzip = "nix run nixpkgs#unzip";
-
-      install = "~/.system/scripts/install.sh";
-      rebuild = "~/.system/scripts/rebuild.sh";
-      update = "~/.system/scripts/update.sh";
 
     };
   };
