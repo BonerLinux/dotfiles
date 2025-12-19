@@ -32,6 +32,12 @@
   '';
 
   # -- mounts --
+  fileSystems."/mnt/backup" = {
+    device = "/dev/disk/by-label/backup";
+    fsType = "btrfs";
+    options = [ "compress=zstd" "nofail" "degraded" "autodefrag" ];
+  };
+
   fileSystems."/mnt/tank" = {
     device = "/dev/disk/by-label/tank";
     fsType = "btrfs";
