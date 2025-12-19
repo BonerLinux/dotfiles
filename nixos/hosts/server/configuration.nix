@@ -7,7 +7,6 @@
       ../../configuration.nix
       ../../modules/nvidia.nix
       ../../modules/docker.nix
-      ../../modules/mailserver.nix
     ];
 
   networking.hostName = "server";
