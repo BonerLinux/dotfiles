@@ -1,0 +1,5 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p rsync
+
+
+rsync -av server:/mnt/tank/immich ~/.backup
