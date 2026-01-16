@@ -14,20 +14,22 @@ in
     playerctl
 
     ardour
-    guitarix
     qpwgraph
     qjackctl
 
+    # x42-avldrums
+    # guitarix
     # hydrogen
     # sfizz
-    x42-avldrums
     # helm
     # vital
     # surge-XT
     # distrho-ports
     # odin2
     # eq10q
-    # lsp-plugins
+    drumgizmo
+    lsp-plugins
+
   ];
 
   services.pulseaudio.enable = false;
