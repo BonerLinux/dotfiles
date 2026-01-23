@@ -23,7 +23,7 @@ in
     # sfizz
     # helm
     # vital
-    # surge-XT
+     surge-XT
     # distrho-ports
     # odin2
     # eq10q
