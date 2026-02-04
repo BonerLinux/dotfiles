@@ -12,7 +12,6 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
 - `nixos/`: NixOS flake, system configuration, and Home Manager entry points.
 - `scripts/`: Helper scripts for rebuilding, theming, and syncing.
 - `dotfiles/`: Additional dotfiles (tracked for future expansion).
-- `.images/`: Screenshots showcased above.
 
 ## Quick start
 > These instructions assume the repo is checked out as `~/.system`.
@@ -50,9 +49,4 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
 
 ## TODO!
 
-- [ ] Spring cleaning
-- [ ] Make Bitwarden Authentication a popup in hyprland window rules
-- [ ] Determine robust solution for syncing files between all computers (Ive tried syncthing and nextcloud but I dont really like them)
-- [ ] Create Fork of wallpaper repo so that I can include my own custom wallpapers
-- [ ] Complete script for automating the installation of the system on any device
-- [ ] Create a custom installation Media
+- [ ] create change-wallpaper command as an alias
