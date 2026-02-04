@@ -43,10 +43,10 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
 1. Place wallpapers in `~/.wallpapers`.
 2. Run:
    ```bash
-   ~/.system/scripts/change-wallpaper
+   change-wallpaper
    ```
 3. The script copies the selected image to `~/.wallpaper`, updates Hyprpaper, and calls `set-theme-from-wallpaper`.
 
 ## TODO!
 
-- [ ] create change-wallpaper command as an alias
+- [x] create change-wallpaper command as an alias

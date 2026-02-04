@@ -52,6 +52,7 @@
       
       download = "nix run nixpkgs#yt-dlp -- -f bestaudio --extract-audio --audio-format best";
       unzip = "nix run nixpkgs#unzip";
+      change-wallpaper = "$HOME/.system/scripts/change-wallpaper";
 
     };
   };
