@@ -6,6 +6,7 @@
       ./hardware-configuration.nix
       ../../configuration.nix
       ../../modules/nvidia.nix
+      ../../modules/virtualization.nix
       ../../modules/docker.nix
     ];
 
@@ -47,5 +48,9 @@
   environment.systemPackages = with pkgs; [
     btrfs-progs
   ];
+
+  environment.sessionVariables = {
+    TANK_ROOT = "/mnt/tank";
+  };
   
 }
