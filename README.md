@@ -1,7 +1,12 @@
-![Project Screenshot](.images/fetch.png)
-![Project Screenshot](.images/wallpaper.png)
-![Project Screenshot](.images/picker.png)
-![Project Screenshot](.images/screenshot.png)
+<img width="1200" height="300" alt="WTF Homelab(2)" src="https://github.com/user-attachments/assets/87c0cbc6-8006-43c0-b1c9-e5bb72574cb9" />
+
+<div align="center">
+  <img src="https://img.shields.io/badge/NixOS-5277C3?style=for-the-badge&logo=nixos&logoColor=white" alt="NixOS" />
+  <img src="https://img.shields.io/badge/Hyprland-33ccff?style=for-the-badge&logo=hyprland&logoColor=white" alt="Hyprland" />
+  <img src="https://img.shields.io/badge/NeoVim-%2357A143.svg?style=for-the-badge&logo=neovim&logoColor=white" alt="Neovim" />
+  <img src="https://img.shields.io/badge/Zsh-F1502F?style=for-the-badge&logo=zsh&logoColor=white" alt="Zsh" />
+  <img src="https://img.shields.io/badge/Scratchpads-FFB13B?style=for-the-badge&logo=window-restore&logoColor=white" alt="Scratchpads" />
+</div>
 
 # Riley Boughners' Dotfiles
 
