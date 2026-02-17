@@ -21,17 +21,17 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
 ## Quick start
 > These instructions assume the repo is checked out as `~/.system`.
 
-1. Review the NixOS configuration:
+1. Install Nixos
    - `nixos/flake.nix`
    - `nixos/configuration.nix`
    - `nixos/home-manager.nix`
-2. Rebuild the system:
+2. Clone the installer:
    ```bash
-   ~/.system/scripts/rebuild
+   curl -L -o install https://raw.githubusercontent.com/rileybougher/dotfiles/main/scripts/install
    ```
-3. Update and commit flake inputs:
+3. install:
    ```bash
-   ~/.system/scripts/update
+   ./install
    ```
 
 ## Scripts
