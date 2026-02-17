@@ -1,0 +1,30 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p git
+
+USER_HOME=$(eval echo ~"$USER")
+
+# create a var for the dotfiles repo https://github.com/rileyboughner/dotfiles.git
+DOTFILES_REPO="https://github.com/rileyboughner/dotfiles.git"
+# create a var for the wallpaper repo https://github.com/rileyboughner/wallpapers.git
+WALLPAPERS_REPO="https://github.com/rileyboughner/wallpapers.git"
+
+# clone the dotfiles to ~/.dotfiles
+git clone "$DOTFILES_REPO" "$USER_HOME/.dotfiles"
+# clone the wallpapers to ~/.wallpapers
+git clone "$WALLPAPERS_REPO" "$USER_HOME/.wallpapers"
+
+# remove .config file and create fresh .config
+rm -rf "$USER_HOME/.config"
+mkdir -p "$USER_HOME/.config"
+
+# run this command to link dotfiles and config file ln -s /home/rileyboughner/.dotfiles/dotfiles/* ~/.config
+ln -s $USER_HOME/.dotfiles/dotfiles/* "$USER_HOME/.config/"
+# link .zshrc from ~/.dotfiles/dotfiles/zsh/.zshrc
+ln -s "$USER_HOME/.dotfiles/dotfiles/zsh/.zshrc" "$USER_HOME/.zshrc"
+
+# move the default wallpaper to .wallpaper
+
+# run the rebuild command
+$USER_HOME/.dotfiles/scripts/rebuild
+$USER_HOME/.dotfiles/scripts/set-theme-from-wallpaer
+
