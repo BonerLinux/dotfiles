@@ -27,7 +27,7 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
    - `nixos/home-manager.nix`
 2. Clone the installer:
    ```bash
-   curl -L -o install https://raw.githubusercontent.com/rileybougher/dotfiles/main/scripts/install
+   curl -L -o install https://raw.githubusercontent.com/rileybougher/dotfiles/master/scripts/install
    ```
 3. Make the installer executable:
    ```bash
