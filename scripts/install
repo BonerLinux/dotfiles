@@ -22,9 +22,12 @@ ln -s $USER_HOME/.dotfiles/dotfiles/* "$USER_HOME/.config/"
 # link .zshrc from ~/.dotfiles/dotfiles/zsh/.zshrc
 ln -s "$USER_HOME/.dotfiles/dotfiles/zsh/.zshrc" "$USER_HOME/.zshrc"
 
-# move the default wallpaper to .wallpaper
-
 # run the rebuild command
 $USER_HOME/.dotfiles/scripts/rebuild
-$USER_HOME/.dotfiles/scripts/set-theme-from-wallpaer
+
+#set the theme and wallpaper
+cp $USER_HOME/.wallpapers/fogsmoke/a_building_with_trees_in_the_background.jpg $USER_HOME/.wallpaper
+hyprctl hyprpaper preload "$USER_HOME/.wallpaper"
+hyprctl hyprpaper wallpaper ",$USER_HOME/.wallpaper"
+$USER_HOME/.dotfiles/scripts/set-theme-from-wallpaper
 

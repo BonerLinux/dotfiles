@@ -32,21 +32,6 @@ update_firefox_css() {
   cp "$wal_colors" "$HOME/.mozilla/firefox"
 }
 
-# Update mako colors
-update_mako_config() {
-  local bg=$(sed -n 1p "$colors_txt")
-  local border=$(sed -n 2p "$colors_txt")
-  local text=$(sed -n 8p "$colors_txt")
-  sed -i "
-    s/^background-color=.*/background-color=$bg/;
-    s/^text-color=.*/text-color=$text/;
-    s/^border-color=.*/border-color=$border/
-  " "$HOME/.config/mako/config"
-
-  pkill mako || true
-  mako &
-}
-
 # Update pywalfox theme
 update_pywalfox() {
   pywalfox update
