@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p git
+#!nix-shell -i bash -p git gum
 
 
 USER_HOME=$(eval echo ~"$USER")
@@ -23,8 +23,19 @@ ln -s $USER_HOME/.dotfiles/dotfiles/* "$USER_HOME/.config/"
 # link .zshrc from ~/.dotfiles/dotfiles/zsh/.zshrc
 ln -s "$USER_HOME/.dotfiles/dotfiles/zsh/.zshrc" "$USER_HOME/.zshrc"
 
-# run the rebuild command
-$USER_HOME/.dotfiles/scripts/rebuild
+
+# select the system to build
+SYSTEMS_PATH="$USER_HOME/.dotfiles/nixos/hosts"
+SYSTEMS=$(ls -d "$SYSTEMS_PATH"/*/ | xargs -n 1 basename)
+
+SELECTED_SYSTEM=$(echo "$SYSTEMS" | gum choose)
+
+if [ -z "$SELECTED_SYSTEM" ]; then
+  echo "No system selected. Exiting."
+  exit 1
+fi
+
+sudo nixos-rebuild switch --flake ".#$SELECTED_SYSTEM"
 
 #set the theme and wallpaper
 cp $USER_HOME/.wallpapers/fogsmoke/a_building_with_trees_in_the_background.jpg $USER_HOME/.wallpaper
