@@ -35,7 +35,7 @@ if [ -z "$SELECTED_SYSTEM" ]; then
   exit 1
 fi
 
-sudo nixos-rebuild switch --flake ".#$SELECTED_SYSTEM"
+sudo nixos-rebuild switch --flake "$USER_HOME/.dotfiles/nixos#$SELECTED_SYSTEM"
 
 #set the theme and wallpaper
 cp $USER_HOME/.wallpapers/fogsmoke/a_building_with_trees_in_the_background.jpg $USER_HOME/.wallpaper
