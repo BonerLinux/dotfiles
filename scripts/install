@@ -35,6 +35,9 @@ if [ -z "$SELECTED_SYSTEM" ]; then
   exit 1
 fi
 
+# copy the hardware config
+sudo cp /etc/nixos/hardware-configuration.nix "$SYSTEMS_PATH/$SELECTED_SYSTEM/hardawre.nix"
+
 sudo nixos-rebuild switch --flake "$USER_HOME/.dotfiles/nixos#$SELECTED_SYSTEM"
 
 #set the theme and wallpaper
