@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p git
 
+
 USER_HOME=$(eval echo ~"$USER")
 
 # create a var for the dotfiles repo https://github.com/rileyboughner/dotfiles.git
