@@ -29,7 +29,12 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
    ```bash
    curl -L -o install https://raw.githubusercontent.com/rileybougher/dotfiles/main/scripts/install
    ```
-3. install:
+3. Make the installer executable:
+   ```bash
+   chmod +x install
+   ./install
+   ```
+4. install:
    ```bash
    ./install
    ```
