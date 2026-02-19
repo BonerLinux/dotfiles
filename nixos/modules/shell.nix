@@ -38,7 +38,7 @@
 
     shellInit = ''
 
-      export PATH="$HOME/.system/scripts:$PATH"
+      export PATH="$HOME/.dotfiles/scripts:$PATH"
 
     '';
 
