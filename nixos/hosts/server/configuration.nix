@@ -7,6 +7,7 @@
       ../../configuration.nix
       ../../modules/nvidia.nix
       ../../modules/docker.nix
+      ../../modules/kubernetes.nix
     ];
 
   networking.hostName = "server";
