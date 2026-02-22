@@ -5,6 +5,7 @@
     [
       ./hardware-configuration.nix
       ../../configuration.nix
+      ../../modules/docker.nix
       ../../modules/wireless-networking.nix
     ];
 
