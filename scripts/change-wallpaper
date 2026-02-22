@@ -28,4 +28,4 @@ cp "$selected_wallpaper" "$WALLPAPER_DEST"
 hyprctl hyprpaper preload "$selected_wallpaper"
 hyprctl hyprpaper wallpaper ",$selected_wallpaper"
 
-~/.system/scripts/set-theme-from-wallpaper
+~/.dotfiles/scripts/set-theme-from-wallpaper

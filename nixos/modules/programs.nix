@@ -13,6 +13,6 @@ in
   ];
 
 
-  #users.users.${standardUser}.extraGroups = [ "hehe" ];
+
 
 }

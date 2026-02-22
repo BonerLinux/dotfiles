@@ -1,5 +1,11 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p rsync
 
+DATE=$(date +%Y-%m-%d)
+BACKUP_DIR="$HOME/backup/$DATE"
 
-rsync -av server:/mnt/tank/immich ~/.backup
+mkdir -p "$BACKUP_DIR"
+
+rsync -av server:/mnt/tank/immich "$BACKUP_DIR/immich"
+rsync -av server:/mnt/tank/config "$BACKUP_DIR/server-config"
+rsync -av server:/srv/files "$BACKUP_DIR/files"

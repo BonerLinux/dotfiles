@@ -1,7 +1,12 @@
-![Project Screenshot](.images/fetch.png)
-![Project Screenshot](.images/wallpaper.png)
-![Project Screenshot](.images/picker.png)
-![Project Screenshot](.images/screenshot.png)
+<img width="1200" height="300" alt="WTF Homelab(2)" src="https://github.com/user-attachments/assets/87c0cbc6-8006-43c0-b1c9-e5bb72574cb9" />
+
+<div align="center">
+  <img src="https://img.shields.io/badge/NixOS-5277C3?style=for-the-badge&logo=nixos&logoColor=white" alt="NixOS" />
+  <img src="https://img.shields.io/badge/Hyprland-33ccff?style=for-the-badge&logo=hyprland&logoColor=white" alt="Hyprland" />
+  <img src="https://img.shields.io/badge/NeoVim-%2357A143.svg?style=for-the-badge&logo=neovim&logoColor=white" alt="Neovim" />
+  <img src="https://img.shields.io/badge/Zsh-F1502F?style=for-the-badge&logo=zsh&logoColor=white" alt="Zsh" />
+  <img src="https://img.shields.io/badge/Scratchpads-FFB13B?style=for-the-badge&logo=window-restore&logoColor=white" alt="Scratchpads" />
+</div>
 
 # Riley Boughners' Dotfiles
 
@@ -16,17 +21,22 @@ Welcome to my dotfiles! These contain the configuration and automation I use acr
 ## Quick start
 > These instructions assume the repo is checked out as `~/.system`.
 
-1. Review the NixOS configuration:
+1. Install Nixos
    - `nixos/flake.nix`
    - `nixos/configuration.nix`
    - `nixos/home-manager.nix`
-2. Rebuild the system:
+2. Clone the installer:
    ```bash
-   ~/.system/scripts/rebuild
+   curl -L -o install https://raw.githubusercontent.com/rileyboughner/dotfiles/refs/heads/master/scripts/install
    ```
-3. Update and commit flake inputs:
+3. Make the installer executable:
    ```bash
-   ~/.system/scripts/update
+   chmod +x install
+   ./install
+   ```
+4. install:
+   ```bash
+   ./install
    ```
 
 ## Scripts
