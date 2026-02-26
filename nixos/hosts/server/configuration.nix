@@ -37,6 +37,7 @@
   ];
 
   environment.sessionVariables = {
+    MEDIA_DIRECTORY = "/mnt/tank/media";
     SERVICE_DIRECTORY = "/mnt/tank/services";
   };
   
