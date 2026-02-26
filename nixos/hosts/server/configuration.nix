@@ -8,6 +8,7 @@
       ../../modules/nvidia.nix
       ../../modules/docker.nix
       ../../modules/kubernetes.nix
+      ./nfs_server.nix
     ];
 
   networking.hostName = "server";
@@ -17,7 +18,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # -- ports --
-  # Enable IP forwarding (already correct)
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
   # Open necessary ports (already correct)
@@ -25,26 +25,19 @@
   networking.firewall.allowedUDPPorts = [ 51820 ];
 
   # Add NAT and forwarding rules for WireGuard
-  networking.firewall.extraCommands = ''
-    iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
-    iptables -A FORWARD -i eth0 -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-  '';
+  #networking.firewall.extraCommands = ''
+  #  iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
+  #  iptables -A FORWARD -i eth0 -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+  #  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  #'';
 
-  # -- mounts --
-  fileSystems."/mnt/tank" = {
-    device = "/dev/disk/by-label/tank";
-    fsType = "btrfs";
-    options = [ "compress=zstd" "nofail" "degraded" "autodefrag" ];
-  };
-
-  # -- packages --
+  # packages
   environment.systemPackages = with pkgs; [
     btrfs-progs
   ];
 
   environment.sessionVariables = {
-    TANK_ROOT = "/mnt/tank";
+    SERVICE_DIRECTORY = "/mnt/tank/services";
   };
   
 }
