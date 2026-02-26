@@ -4,4 +4,4 @@ USER_HOME=$(eval echo ~"$USER")
 
 echo $USER_HOME;
 
-sudo nixos-rebuild switch --flake "$USER_HOME/.dotfiles/nixos#"
+sudo nixos-rebuild switch --flake "$USER_HOME/.dotfiles/nixos#" --impure
