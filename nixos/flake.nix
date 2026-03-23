@@ -61,7 +61,6 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
-        ./modules/audio.nix
         ./modules/osint.nix
         ./modules/quickemu.nix
       ];

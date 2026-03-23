@@ -8,6 +8,11 @@ in
     role = "server";
   };
 
+  environment.systemPackages = with pkgs; [ # These are essential programs
+    helm
+  ];
+
+
   networking.firewall.allowedTCPPorts = [
     6443
   ];
