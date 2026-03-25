@@ -3,7 +3,6 @@
 {
   imports =
     [
-      ./hardware-configuration.nix
       ../../configuration.nix
       ../../modules/nvidia.nix
       ../../modules/docker.nix
