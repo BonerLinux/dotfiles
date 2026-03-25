@@ -1,5 +1,6 @@
 { config, pkgs, ... }: {
 	  imports = [ 
+            /etc/nixos/hardware-configuration.nix
 	    ./modules/shell.nix
 	    ./modules/nvim.nix
 	    ./modules/ssh.nix

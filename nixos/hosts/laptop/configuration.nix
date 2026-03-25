@@ -3,7 +3,6 @@
 {
   imports =
     [
-      /etc/nixos/hardware-configuration.nix
       ../../configuration.nix
       ../../modules/docker.nix
       ../../modules/kubernetes.nix
