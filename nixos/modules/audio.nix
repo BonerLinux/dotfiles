@@ -18,7 +18,7 @@ in
     qjackctl
 
     # x42-avldrums
-    # guitarix
+    guitarix
     # hydrogen
     # sfizz
     # helm
