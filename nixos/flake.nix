@@ -47,8 +47,9 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
+        ./modules/kubernetes.nix
         ./modules/gaming.nix
-        ./modules/audio.nix
+        #./modules/audio.nix
       ];
     };
 
