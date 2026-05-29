@@ -6,10 +6,15 @@ in
   services.k3s = {
     enable = true;
     role = "server";
+
+
+    extraFlags = toString [
+      "--write-kubeconfig-mode=0644"
+    ];
   };
 
   environment.systemPackages = with pkgs; [ # These are essential programs
-    helm
+    kubernetes-helm
   ];
 
 
