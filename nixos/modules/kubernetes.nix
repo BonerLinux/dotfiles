@@ -15,6 +15,7 @@ in
 
   environment.systemPackages = with pkgs; [ # These are essential programs
     kubernetes-helm
+    fluxcd
   ];
 
 
