@@ -2,8 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    discord
-    heroic
+    discord-ptb
+    #heroic
   ];
 
   programs.steam = {

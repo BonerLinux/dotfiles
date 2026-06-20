@@ -5,7 +5,8 @@
     [
       ../../configuration.nix
       ../../modules/nvidia.nix
-      ../../modules/docker.nix
+      #../../modules/kubernetes.nix
+      #../../modules/docker.nix
       ../../modules/wireless-networking.nix
     ];
 
