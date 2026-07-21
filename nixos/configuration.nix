@@ -12,8 +12,9 @@
 	  boot.loader.systemd-boot.enable = true;
 	  boot.initrd.systemd.enable = true;
 	  boot.loader.efi.canTouchEfiVariables = true;
-	  boot.kernelPackages = pkgs.linuxPackages_zen;
-	  boot.kernelParams = [ "8250.nr_uarts=0" ];
+	  boot.kernelPackages = pkgs.linuxPackages;
+	  #boot.kernelPackages = pkgs.linuxPackages_zen;
+	  #boot.kernelParams = [ "8250.nr_uarts=0" ];
 
 	  
 	  systemd.settings = {
