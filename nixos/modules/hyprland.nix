@@ -17,6 +17,8 @@
 
   environment.systemPackages = with pkgs; [
 
+    hyprpwcenter
+    hyprlauncher
     libnotify
     mako
     brightnessctl
@@ -30,7 +32,6 @@
     wl-clipboard
     pyprland
     pywal16
-    wofi
     hyprpaper
     imagemagick
     pywalfox-native
