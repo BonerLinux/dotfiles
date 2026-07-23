@@ -164,6 +164,12 @@ hl.animation({ leaf = "zoomFactor",    enabled = true,  speed = 7,    bezier = "
 
 -- "Smart gaps" / "No gaps when only"
 -- uncomment all if you wish to use that.
+
+hl.window_rule({
+  match   = { class = "firefox" },
+  opacity = "1.0 override 1 override 0.8 override",
+})
+
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
 hl.window_rule({
