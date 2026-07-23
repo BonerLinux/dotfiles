@@ -19,24 +19,29 @@
 
     hyprpwcenter
     hyprlauncher
+    hyprpaper
+    hyprshot
+
+    quickshell
+    kdePackages.qt5compat
+    libsForQt5.qt5.qtgraphicaleffects
+
     libnotify
     mako
     brightnessctl
     swayosd
     gtk3
     brave
-    everforest-gtk-theme
     kitty
-    waybar
     swaybg
     wl-clipboard
     pyprland
     pywal16
-    hyprpaper
     imagemagick
     pywalfox-native
-    hyprshot
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+
+    #waybar
 
   ];
 
