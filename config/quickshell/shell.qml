@@ -1,0 +1,378 @@
+import Quickshell
+import Quickshell.Wayland
+import Quickshell.Io
+import Quickshell.Hyprland
+import QtQuick
+import QtQuick.Layouts
+
+PanelWindow {
+    id: root
+
+    // ─────────────────────────────────────────────
+    // Theme
+    // ─────────────────────────────────────────────
+
+    property color colBg: "#1a1b26"
+    property color colFg: "#a9b1d6"
+    property color colMuted: "#444b6a"
+    property color colCyan: "#0db9d7"
+    property color colBlue: "#7aa2f7"
+    property color colYellow: "#e0af68"
+
+    property string fontFamily: "JetBrainsMono Nerd Font"
+    property int fontSize: 14
+
+    // ─────────────────────────────────────────────
+    // System data
+    // ─────────────────────────────────────────────
+
+    property string wifiName: "Disconnected"
+    property string ipAddress: "Unknown"
+    property int volumePercent: 0
+    property string focusedWindowTitle: "Desktop"
+
+    // Display state
+    property bool showIpAddress: false
+    property bool showFullDate: false
+
+    anchors.top: true
+    anchors.left: true
+    anchors.right: true
+
+    implicitHeight: 30
+    color: root.colBg
+
+    // ─────────────────────────────────────────────
+    // Wi-Fi Name
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: wifiProcess
+
+        command: [
+            "sh",
+            "-c",
+            "nmcli -t -f active,ssid dev wifi | awk -F: '$1==\"yes\" {print $2; exit}'"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.wifiName = text.trim() || "Disconnected"
+            }
+        }
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            wifiProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // IP Address
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: ipProcess
+
+        command: [
+            "sh",
+            "-c",
+            "ip -4 route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.ipAddress = text.trim() || "Unknown"
+            }
+        }
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            ipProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Network Manager TUI
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: nmtuiProcess
+
+        command: [
+            "kitty",
+            "--class",
+            "nmtui",
+            "-e",
+            "nmtui"
+        ]
+    }
+
+    // ─────────────────────────────────────────────
+    // Volume
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: volumeProcess
+
+        command: [
+            "sh",
+            "-c",
+            "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}'"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.volumePercent = parseInt(text.trim()) || 0
+            }
+        }
+    }
+
+    Process {
+        id: volumeChangeProcess
+    }
+
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            volumeProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // HyprPWCenter
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: volumeMixerProcess
+
+        command: [
+            "hyprpwcenter"
+        ]
+    }
+
+    // ─────────────────────────────────────────────
+    // Focused Window
+    // ─────────────────────────────────────────────
+
+    Connections {
+        target: Hyprland
+
+        function onRawEvent(event) {
+            if (event.name === "activewindow") {
+                let data = event.data.split(",")
+
+                if (data.length >= 2) {
+                    root.focusedWindowTitle = data.slice(1).join(",")
+                }
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Layout
+    // ─────────────────────────────────────────────
+
+    RowLayout {
+        anchors.fill: parent
+
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+
+        spacing: 8
+
+        // ─────────────────────────────────────────
+        // Time
+        // ─────────────────────────────────────────
+
+        MouseArea {
+            Layout.preferredWidth: clockText.implicitWidth
+            Layout.preferredHeight: clockText.implicitHeight
+
+            acceptedButtons: Qt.NoButton
+
+            onWheel: {
+                root.showFullDate = !root.showFullDate
+            }
+
+            Text {
+                id: clockText
+
+                color: root.colBlue
+
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
+
+                text: root.showFullDate
+                    ? Qt.formatDateTime(
+                        new Date(),
+                        "dddd, MMMM dd - h:mm AP"
+                    )
+                    : Qt.formatDateTime(
+                        new Date(),
+                        "h:mm AP"
+                    )
+
+                Timer {
+                    interval: 1000
+                    running: true
+                    repeat: true
+
+                    onTriggered: {
+                        clockText.text = root.showFullDate
+                            ? Qt.formatDateTime(
+                                new Date(),
+                                "dddd, MMMM dd - h:mm AP"
+                            )
+                            : Qt.formatDateTime(
+                                new Date(),
+                                "h:mm AP"
+                            )
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            width: 1
+            height: 16
+
+            color: root.colMuted
+        }
+
+        // ─────────────────────────────────────────
+        // Focused Window Title
+        // ─────────────────────────────────────────
+
+        Text {
+            text: root.focusedWindowTitle
+
+            color: root.colFg
+
+            elide: Text.ElideRight
+
+            Layout.maximumWidth: 600
+
+            font {
+                family: root.fontFamily
+                pixelSize: root.fontSize
+            }
+        }
+
+        // Push right side to the right
+        Item {
+            Layout.fillWidth: true
+        }
+
+        // ─────────────────────────────────────────
+        // Wi-Fi / IP Address
+        // ─────────────────────────────────────────
+
+        MouseArea {
+            Layout.preferredWidth: wifiText.implicitWidth
+            Layout.preferredHeight: wifiText.implicitHeight
+
+            acceptedButtons: Qt.LeftButton
+
+            onClicked: {
+                nmtuiProcess.running = true
+            }
+
+            onWheel: {
+                root.showIpAddress = !root.showIpAddress
+            }
+
+            Text {
+                id: wifiText
+
+                text: root.showIpAddress
+                    ? "󰩟 " + root.ipAddress
+                    : "󰤨 " + root.wifiName
+
+                color: root.colCyan
+
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
+            }
+        }
+
+        Rectangle {
+            width: 1
+            height: 16
+
+            color: root.colMuted
+        }
+
+        // ─────────────────────────────────────────
+        // Volume
+        // ─────────────────────────────────────────
+
+        MouseArea {
+            Layout.preferredWidth: volumeText.implicitWidth
+            Layout.preferredHeight: volumeText.implicitHeight
+
+            acceptedButtons: Qt.LeftButton
+
+            onClicked: {
+                volumeMixerProcess.running = true
+            }
+
+            onWheel: (wheel) => {
+                if (wheel.angleDelta.y > 0) {
+                    volumeChangeProcess.command = [
+                        "wpctl",
+                        "set-volume",
+                        "@DEFAULT_AUDIO_SINK@",
+                        "5%+"
+                    ]
+                } else {
+                    volumeChangeProcess.command = [
+                        "wpctl",
+                        "set-volume",
+                        "@DEFAULT_AUDIO_SINK@",
+                        "5%-"
+                    ]
+                }
+
+                volumeChangeProcess.running = true
+                volumeProcess.running = true
+            }
+
+            Text {
+                id: volumeText
+
+                text: "󰕾 " + root.volumePercent + "%"
+
+                color: root.colYellow
+
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
+            }
+        }
+    }
+}
