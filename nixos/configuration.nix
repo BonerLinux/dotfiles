@@ -53,7 +53,6 @@
 	    # for testing
             gemini-cli
 	    bottles
-	    wineWowPackages.staging
 	    winetricks
 	  ];
 

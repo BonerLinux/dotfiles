@@ -48,6 +48,10 @@
         ./home-manager.nix
         ./modules/hyprland.nix
         ./modules/gaming.nix
+        ./modules/terraform.nix
+        ./modules/quickemu.nix
+        ./modules/docker.nix
+        ./modules/kubernetes.nix
       ];
     };
 
@@ -60,8 +64,7 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
-        ./modules/osint.nix
-        ./modules/quickemu.nix
+        ./modules/kubernetes
       ];
     };
 
