@@ -19,3 +19,5 @@ hyprctl reload
 
 pkill quickshell
 quickshell &
+# Reload colors in running Neovim instances
+pkill -SIGUSR1 nvim
