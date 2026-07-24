@@ -8,6 +8,11 @@
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     musnix.url = "github:musnix/musnix";
