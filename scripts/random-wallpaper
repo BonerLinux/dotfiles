@@ -1,0 +1,21 @@
+#!/bin/sh
+
+USER_HOME=$(eval echo ~"$USER")
+
+WALLPAPER_DIR="$HOME/.wallpapers/nature"
+
+# Pick random wallpaper
+WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" -o -iname "*.webp" \) | shuf -n 1)
+
+# Reload hyprpaper with the new wallpaper
+hyprctl hyprpaper unload all
+hyprctl hyprpaper preload "$WALLPAPER"
+hyprctl hyprpaper wallpaper ",$WALLPAPER"
+
+# Generate pywal colors
+wal -i "$WALLPAPER"
+
+hyprctl reload
+
+pkill quickshell
+quickshell &
