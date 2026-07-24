@@ -46,6 +46,7 @@
 	  documentation.nixos.enable = false;
 	  nixpkgs.config.allowUnfree = true;
 
+
 	  environment.systemPackages = with pkgs; [ # These are essential programs
 	    rclone
 	    stow

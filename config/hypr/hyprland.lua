@@ -14,6 +14,11 @@
 -- Create your files separately and then require them like this:
 -- require("myColors")
 
+------------------
+---- COLORS ----
+------------------
+
+local colors = dofile(os.getenv("HOME") .. "/.cache/wal/colors.lua")
 
 ------------------
 ---- MONITORS ----
@@ -89,8 +94,8 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            inactive_border = "rgba(595959aa)",
+            active_border   = { colors = {"rgba(" .. colors.color4:sub(2) .. "ee)", "rgba(" .. colors.color5:sub(2) .. "ee)"}, angle = 45 },
+            inactive_border = "rgba(" .. colors.color8:sub(2) .. "aa)",
         },
 
         -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
@@ -111,14 +116,15 @@ hl.config({
         inactive_opacity = 0.90,
 
 	glow = {
-	    enabled = true
+	    enabled = true,
+	    color = "rgba(" .. colors.color4:sub(2) .. "ee)"
         },
 
         shadow = {
             enabled      = true,
             range        = 4,
             render_power = 3,
-            color        = 0xee1a1a1a,
+            color = "0xee" .. colors.background:sub(2),
         },
 
         blur = {
@@ -127,11 +133,11 @@ hl.config({
             passes    = 2,
             vibrancy  = 0.1696,
         },
-    },
+},
 
-    animations = {
-        enabled = true,
-    },
+animations = {
+	enabled = true,
+},
 })
 
 -- Default curves and animations
@@ -267,6 +273,7 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Backspace", hl.dsp.window.close())
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("random-wallpaper"))
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + Tab", hl.dsp.window.float({ action = "toggle" }))

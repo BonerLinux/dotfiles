@@ -12,13 +12,39 @@ PanelWindow {
     // Theme
     // ─────────────────────────────────────────────
 
-    property color colBg: "#1a1b26"
-    property color colFg: "#a9b1d6"
-    property color colMuted: "#444b6a"
-    property color colCyan: "#0db9d7"
-    property color colBlue: "#7aa2f7"
-    property color colYellow: "#e0af68"
 
+property color colBg: "#101b27"
+property color colFg: "#c3c6c9"
+property color colMuted: "#5f6975"
+property color colCyan: "#91807E"
+property color colBlue: "#A4595B"
+property color colYellow: "#BD3B3C"
+
+property var walColors: ({})
+
+FileView {
+    id: walColorsFile
+
+    path: Quickshell.env("HOME") + "/.cache/wal/colors.json"
+
+    watchChanges: true
+
+    onTextChanged: {
+        try {
+            root.walColors = JSON.parse(text)
+
+            root.colBg = root.walColors.special.background
+            root.colFg = root.walColors.special.foreground
+            root.colMuted = root.walColors.colors.color8
+            root.colCyan = root.walColors.colors.color6
+            root.colBlue = root.walColors.colors.color4
+            root.colYellow = root.walColors.colors.color3
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
     property string fontFamily: "JetBrainsMono Nerd Font"
     property int fontSize: 14
 
