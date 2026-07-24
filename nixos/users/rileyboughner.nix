@@ -24,58 +24,67 @@
     ];
 
     extraConfigLua = ''
-            -- Appearance
-            vim.opt.termguicolors = true
-            vim.opt.number = true
-            vim.opt.wrap = false
+       -- Appearance
+       vim.opt.termguicolors = true
+       vim.opt.number = true
+       vim.opt.wrap = false
 
-            -- Search
-            vim.opt.ignorecase = true
-            vim.opt.smartcase = true
+       -- Search
+       vim.opt.ignorecase = true
+       vim.opt.smartcase = true
 
-            -- Tabs / indentation
-            vim.opt.tabstop = 2
-            vim.opt.shiftwidth = 2
-            vim.opt.expandtab = true
+       -- Tabs / indentation
+       vim.opt.tabstop = 2
+       vim.opt.shiftwidth = 2
+       vim.opt.expandtab = true
 
-            -- UI
-            vim.opt.signcolumn = "yes"
-            vim.opt.cursorline = true
+       -- UI
+       vim.opt.signcolumn = "yes"
+       vim.opt.cursorline = true
 
-            -- Clipboard
-            vim.opt.clipboard = "unnamedplus"
+       -- Clipboard
+       vim.opt.clipboard = "unnamedplus"
 
-           vim.api.nvim_create_user_command("Format", function()
-        require("conform").format({
-          async = true,
-          lsp_fallback = true,
+      -- Pywal switch colors signal --
+       vim.api.nvim_create_autocmd("Signal", {
+          pattern = "SIGUSR1",
+          callback = function()
+            vim.cmd("colorscheme pywal")
+          end,
         })
-      end, {})
 
-            -- Pywal colors
-            vim.api.nvim_create_autocmd("VimEnter", {
-              callback = function()
-                vim.cmd("colorscheme pywal")
-              end,
-            })
+      -- Format Command --
+      vim.api.nvim_create_user_command("Format", function()
+         require("conform").format({
+           async = true,
+           lsp_fallback = true,
+         })
+       end, {})
 
-            -- Leader key
-            vim.g.mapleader = " "
+       -- Pywal colors
+       vim.api.nvim_create_autocmd("VimEnter", {
+         callback = function()
+           vim.cmd("colorscheme pywal")
+         end,
+       })
 
-            -- Keybinds
-            local map = vim.keymap.set
+       -- Leader key
+       vim.g.mapleader = " "
 
-            -- Save / quit
-            map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
-            map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+       -- Keybinds
+       local map = vim.keymap.set
 
-            -- Better movement
-            map("n", "J", "mzJ`z")
-            map("n", "<C-d>", "<C-d>zz")
-            map("n", "<C-u>", "<C-u>zz")
+       -- Save / quit
+       map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
+       map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
 
-            -- Clear search highlight
-            map("n", "<Esc>", "<cmd>noh<CR>")
+       -- Better movement
+       map("n", "J", "mzJ`z")
+       map("n", "<C-d>", "<C-d>zz")
+       map("n", "<C-u>", "<C-u>zz")
+
+       -- Clear search highlight
+       map("n", "<Esc>", "<cmd>noh<CR>")
     '';
 
     plugins = {
