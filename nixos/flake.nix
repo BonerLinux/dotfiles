@@ -2,10 +2,10 @@
   description = "My nix flake for managing my computers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
     unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
@@ -48,6 +48,10 @@
         ./home-manager.nix
         ./modules/hyprland.nix
         ./modules/gaming.nix
+        ./modules/terraform.nix
+        ./modules/quickemu.nix
+        ./modules/docker.nix
+        ./modules/kubernetes.nix
       ];
     };
 
@@ -60,8 +64,7 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
-        ./modules/osint.nix
-        ./modules/quickemu.nix
+        ./modules/kubernetes
       ];
     };
 
