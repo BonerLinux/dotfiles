@@ -48,13 +48,8 @@
 
 
 	  environment.systemPackages = with pkgs; [ # These are essential programs
-	    rclone
 	    stow
 
-	    # for testing
-            gemini-cli
-	    bottles
-	    winetricks
 	  ];
 
 	  # -- gnupg --
