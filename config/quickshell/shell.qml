@@ -29,23 +29,34 @@ FileView {
 
     watchChanges: true
 
-    onTextChanged: {
+    onLoaded: {
         try {
-            root.walColors = JSON.parse(text)
+            const parsed = JSON.parse(text())
 
-            root.colBg = root.walColors.special.background
-            root.colFg = root.walColors.special.foreground
-            root.colMuted = root.walColors.colors.color8
-            root.colCyan = root.walColors.colors.color6
-            root.colBlue = root.walColors.colors.color4
-            root.colYellow = root.walColors.colors.color3
+            root.walColors = parsed
+
+            root.colBg = parsed.special.background
+            root.colFg = parsed.special.foreground
+            root.colMuted = parsed.colors.color8
+            root.colCyan = parsed.colors.color6
+            root.colBlue = parsed.colors.color4
+            root.colYellow = parsed.colors.color3
+
+            console.log("Pywal colors loaded:")
+            console.log("Background:", root.colBg)
+            console.log("Foreground:", root.colFg)
+            console.log("Muted:", root.colMuted)
+            console.log("Cyan:", root.colCyan)
+            console.log("Blue:", root.colBlue)
+            console.log("Yellow:", root.colYellow)
 
         } catch (error) {
-            console.log(error)
+            console.log("Failed to load Pywal colors:", error)
         }
     }
-}
-    property string fontFamily: "JetBrainsMono Nerd Font"
+}   
+
+property string fontFamily: "JetBrainsMono Nerd Font"
     property int fontSize: 14
 
     // ─────────────────────────────────────────────

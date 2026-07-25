@@ -49,6 +49,7 @@ local fileManager = "nautilus"
 hl.on("hyprland.start", function()
 	hl.exec_cmd("quickshell")
 	hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("pypr")
 	hl.exec_cmd("random-wallpaper")
 end)
 
@@ -138,6 +139,25 @@ hl.config({
 	animations = {
 		enabled = true,
 	},
+})
+
+-- Disable animations for Brave Pyprland scratchpads
+hl.window_rule({
+	name = "no-animation-brave-scratchpads",
+	match = {
+		class = "^brave-.*__-Default$",
+	},
+  float = true,
+	no_anim = true,
+})
+
+-- Disable animations for terminal Pyprland scratchpads
+hl.window_rule({
+	name = "no-animation-terminal-scratchpads",
+	match = {
+		class = "^kitty-dropterm.*$",
+	},
+	no_anim = true,
 })
 
 -- Default curves and animations
@@ -268,15 +288,28 @@ hl.config({
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
+-- Pypr scratchpads
+hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("pypr toggle term"))
+hl.bind(mainMod .. " + ALT + Space", hl.dsp.exec_cmd("pypr toggle term2"))
+
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("pypr toggle gpt"))
+hl.bind(mainMod .. " + ALT + N", hl.dsp.exec_cmd("pypr toggle homeassistant"))
+
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("pypr toggle gmail"))
+hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
+
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
+
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Backspace", hl.dsp.window.close())
 hl.bind(
-	mainMod .. " + M",
+	mainMod .. " + Q",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("random-wallpaper"))
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + Tab", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))

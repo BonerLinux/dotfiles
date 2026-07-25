@@ -22,6 +22,7 @@
     hyprpaper
     hyprshot
 
+    papirus-icon-theme
     quickshell
     kdePackages.qt5compat
     libsForQt5.qt5.qtgraphicaleffects
