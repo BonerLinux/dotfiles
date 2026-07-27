@@ -1,5 +1,0 @@
-#!/bin/sh
-
-USER_HOME=$(eval echo ~"$USER")
-
-sudo nixos-rebuild switch --flake "$USER_HOME/.dotfiles/nixos#" --impure

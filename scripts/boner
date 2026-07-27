@@ -5,6 +5,10 @@ DOTFILES_TARGET="$HOME/.dotfiles"
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(dirname "$SCRIPT_DIR")
 
+cmd_rebuild() {
+    sudo nixos-rebuild switch --flake "$HOME/.dotfiles/nixos#" --impure
+}
+
 cmd_install() {
     if [ "$REPO_ROOT" != "$DOTFILES_TARGET" ]; then
         if [ -e "$DOTFILES_TARGET" ]; then
@@ -32,11 +36,13 @@ cmd_install() {
 
 case "${1:-}" in
     install) cmd_install ;;
+    rebuild) cmd_rebuild ;;
     *)
         echo "Usage: boner <command>" >&2
         echo "" >&2
         echo "Commands:" >&2
         echo "  install   Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
+        echo "  rebuild   Rebuild and switch NixOS configuration" >&2
         exit 1
         ;;
 esac
