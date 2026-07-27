@@ -18,9 +18,7 @@ cmd_install() {
 
     echo "Stowing config files..."
     mkdir -p "$HOME/.config"
-    for pkg in "$DOTFILES_TARGET/config"/*/; do
-        stow --dir "$DOTFILES_TARGET/config" --target "$HOME/.config" "$(basename "$pkg")"
-    done
+    stow --dir "$DOTFILES_TARGET" --target "$HOME/.config" config
 
     if [ ! -d "$HOME/.wallpapers" ]; then
         echo "Cloning wallpapers..."
