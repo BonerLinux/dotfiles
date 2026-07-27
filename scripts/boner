@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOTFILES_TARGET="$HOME/.dotfiles"
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+REPO_ROOT=$(dirname "$SCRIPT_DIR")
+
+cmd_install() {
+    if [ "$REPO_ROOT" != "$DOTFILES_TARGET" ]; then
+        if [ -e "$DOTFILES_TARGET" ]; then
+            echo "Error: $DOTFILES_TARGET already exists. Remove it first." >&2
+            exit 1
+        fi
+        echo "Moving dotfiles to $DOTFILES_TARGET..."
+        mv "$REPO_ROOT" "$DOTFILES_TARGET"
+        exec "$DOTFILES_TARGET/scripts/boner" install
+    fi
+
+    echo "Stowing config files..."
+    mkdir -p "$HOME/.config"
+    for pkg in "$DOTFILES_TARGET/config"/*/; do
+        stow --dir "$DOTFILES_TARGET/config" --target "$HOME/.config" "$(basename "$pkg")"
+    done
+
+    if [ ! -d "$HOME/.wallpapers" ]; then
+        echo "Cloning wallpapers..."
+        git clone https://github.com/dharmx/walls.git "$HOME/.wallpapers"
+    else
+        echo "$HOME/.wallpapers already exists, skipping clone."
+    fi
+
+    echo "Done."
+}
+
+case "${1:-}" in
+    install) cmd_install ;;
+    *)
+        echo "Usage: boner <command>" >&2
+        echo "" >&2
+        echo "Commands:" >&2
+        echo "  install   Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
+        exit 1
+        ;;
+esac
