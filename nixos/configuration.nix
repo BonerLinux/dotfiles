@@ -49,6 +49,8 @@
 
 	  environment.systemPackages = with pkgs; [ # These are essential programs
 	    stow
+      prismlauncher
+      claude-code
 
 	  ];
 
