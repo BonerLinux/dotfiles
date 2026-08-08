@@ -69,7 +69,6 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
-        ./modules/kubernetes
       ];
     };
 

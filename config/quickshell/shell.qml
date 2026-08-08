@@ -66,6 +66,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property string wifiName: "Disconnected"
     property string ipAddress: "Unknown"
     property int volumePercent: 0
+    property int batteryPercent: 0
+    property bool batteryCharging: false
+    property bool hasBattery: false
     property string focusedWindowTitle: "Desktop"
 
     // Display state
@@ -189,6 +192,40 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             volumeProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Battery
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: batteryProcess
+
+        command: [
+            "sh",
+            "-c",
+            "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1; cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                let lines = text.trim().split("\n")
+                root.hasBattery = lines[0] !== "" && !isNaN(parseInt(lines[0]))
+                root.batteryPercent = parseInt(lines[0]) || 0
+                root.batteryCharging = lines[1] === "Charging" || lines[1] === "Full"
+            }
+        }
+    }
+
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            batteryProcess.running = true
         }
     }
 
@@ -409,6 +446,62 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     pixelSize: root.fontSize
                     bold: true
                 }
+            }
+        }
+
+        // ─────────────────────────────────────────
+        // Battery
+        // ─────────────────────────────────────────
+
+        Rectangle {
+            width: 1
+            height: 16
+
+            color: root.colMuted
+            visible: root.hasBattery
+        }
+
+        Text {
+            id: batteryText
+
+            visible: root.hasBattery
+
+            text: {
+                let icon
+                if (root.batteryCharging) {
+                    icon = "󰂄"
+                } else if (root.batteryPercent >= 90) {
+                    icon = "󰁹"
+                } else if (root.batteryPercent >= 80) {
+                    icon = "󰂂"
+                } else if (root.batteryPercent >= 70) {
+                    icon = "󰂁"
+                } else if (root.batteryPercent >= 60) {
+                    icon = "󰂀"
+                } else if (root.batteryPercent >= 50) {
+                    icon = "󰁿"
+                } else if (root.batteryPercent >= 40) {
+                    icon = "󰁾"
+                } else if (root.batteryPercent >= 30) {
+                    icon = "󰁽"
+                } else if (root.batteryPercent >= 20) {
+                    icon = "󰁼"
+                } else if (root.batteryPercent >= 10) {
+                    icon = "󰁻"
+                } else {
+                    icon = "󰂎"
+                }
+                return icon + " " + root.batteryPercent + "%"
+            }
+
+            color: root.batteryPercent <= 20 && !root.batteryCharging
+                ? root.colBlue
+                : root.colFg
+
+            font {
+                family: root.fontFamily
+                pixelSize: root.fontSize
+                bold: true
             }
         }
     }
