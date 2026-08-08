@@ -4,8 +4,6 @@
   imports =
     [
       ../../configuration.nix
-      ../../modules/docker.nix
-      ../../modules/kubernetes.nix
       ../../modules/wireless-networking.nix
     ];
 
