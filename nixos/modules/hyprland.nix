@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ pkgs, config, inputs, username, ... }:
 
 {
   imports = [
@@ -6,6 +6,14 @@
   ];
 
   programs.hyprland.enable = true;
+
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      command = "${config.programs.hyprland.package}/bin/start-hyprland";
+      user = username;
+    };
+  };
 
   environment.sessionVariables = {
     HYPRSHOT_DIR  = "$HOME/Pictures/Screenshots";
