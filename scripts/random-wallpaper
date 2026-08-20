@@ -1,5 +1,13 @@
 #!/bin/sh
 
+LOG="/tmp/random-wallpaper.log"
+echo "$(date): script started, PID=$$, SIG=$HYPRLAND_INSTANCE_SIGNATURE" >> "$LOG"
+
+# Wait for hyprpaper IPC socket to be ready before issuing wallpaper commands
+until [ -S "/run/user/$(id -u)/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.hyprpaper.sock" ]; do
+    sleep 0.3
+done
+
 WALLPAPER_DIR="$HOME/.wallpapers/nature"
 HYPRTOOLKIT_CONFIG="$HOME/.config/hypr/hyprtoolkit.conf"
 WAL="$HOME/.cache/wal/colors"
@@ -12,10 +20,10 @@ WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( \
     -o -iname "*.webp" \
 \) | shuf -n 1)
 
-# Reload hyprpaper with the new wallpaper
-hyprctl hyprpaper unload all
-hyprctl hyprpaper preload "$WALLPAPER"
-hyprctl hyprpaper wallpaper ",$WALLPAPER"
+# Set wallpaper (hyprpaper v0.7+ handles load/unload automatically)
+echo "$(date): setting wallpaper: $WALLPAPER" >> "$LOG"
+hyprctl hyprpaper wallpaper ",$WALLPAPER" >> "$LOG" 2>&1
+echo "$(date): wallpaper cmd exit: $?" >> "$LOG"
 
 # Generate Pywal colors
 wal -i "$WALLPAPER"
