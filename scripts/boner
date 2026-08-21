@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p bash stow git
 set -euo pipefail
 
 DOTFILES_TARGET="$HOME/.dotfiles"
@@ -25,8 +26,10 @@ cmd_install() {
     stow --dir "$DOTFILES_TARGET" --target "$HOME/.config" config
 
     if [ ! -d "$HOME/.wallpapers" ]; then
-        echo "Cloning wallpapers..."
-        git clone https://github.com/dharmx/walls.git "$HOME/.wallpapers"
+        echo "Cloning wallpapers in the background (log: $HOME/.wallpapers-clone.log)..."
+        nohup git clone https://github.com/dharmx/walls.git "$HOME/.wallpapers" \
+            >"$HOME/.wallpapers-clone.log" 2>&1 &
+        disown
     else
         echo "$HOME/.wallpapers already exists, skipping clone."
     fi
