@@ -8,7 +8,7 @@
 
   # Export /mnt/users to your LAN
   services.nfs.server.exports = ''
-    /mnt/tank/users  192.168.1.0/24(rw,sync,no_subtree_check,insecure,no_root_squash)
+    /mnt/tank/files  192.168.1.0/24(rw,sync,no_subtree_check,insecure,no_root_squash)
   '';
 
   # Firewall: allow NFS traffic (rpcbind + nfs)
