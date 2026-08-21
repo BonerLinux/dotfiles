@@ -4,6 +4,7 @@
   imports =
     [
       ../../configuration.nix
+      ../../modules/nfs.nix
       ../../modules/wireless-networking.nix
     ];
 
