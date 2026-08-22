@@ -4,8 +4,8 @@
   imports =
     [
       ../../configuration.nix
-      ../../modules/nfs.nix
       ../../modules/wireless-networking.nix
+      ../../modules/nfs-client.nix
     ];
 
   networking.hostName = "laptop";
