@@ -51,6 +51,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("pypr")
 	hl.exec_cmd("random-wallpaper")
+	hl.exec_cmd("pywalfox start")
 end)
 
 -------------------------------
