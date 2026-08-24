@@ -25,6 +25,10 @@
 
   environment.systemPackages = with pkgs; [
 
+    (pkgs.runCommand "random-wallpaper" { } ''
+      install -Dm755 ${../../scripts/random-wallpaper} $out/bin/random-wallpaper
+    '')
+
     hyprpwcenter
     hyprlauncher
     hyprpaper
