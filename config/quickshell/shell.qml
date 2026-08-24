@@ -16,9 +16,8 @@ PanelWindow {
 property color colBg: "#101b27"
 property color colFg: "#c3c6c9"
 property color colMuted: "#5f6975"
-property color colCyan: "#91807E"
-property color colBlue: "#A4595B"
-property color colYellow: "#BD3B3C"
+property color colAccent: "#A4595B"
+property color colRed: "#e06c75"
 
 property var walColors: ({})
 
@@ -38,17 +37,15 @@ FileView {
             root.colBg = parsed.special.background
             root.colFg = parsed.special.foreground
             root.colMuted = parsed.colors.color8
-            root.colCyan = parsed.colors.color6
-            root.colBlue = parsed.colors.color4
-            root.colYellow = parsed.colors.color3
+            root.colAccent = parsed.colors.color4
+            root.colRed = parsed.colors.color1
 
             console.log("Pywal colors loaded:")
             console.log("Background:", root.colBg)
             console.log("Foreground:", root.colFg)
             console.log("Muted:", root.colMuted)
-            console.log("Cyan:", root.colCyan)
-            console.log("Blue:", root.colBlue)
-            console.log("Yellow:", root.colYellow)
+            console.log("Accent:", root.colAccent)
+            console.log("Red:", root.colRed)
 
         } catch (error) {
             console.log("Failed to load Pywal colors:", error)
@@ -70,10 +67,39 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool batteryCharging: false
     property bool hasBattery: false
     property string focusedWindowTitle: "Desktop"
+    property string weatherTemp: ""
+    property string weatherCondition: ""
+    property string weatherIcon: "󰖕"
 
     // Display state
     property bool showIpAddress: false
     property bool showFullDate: false
+    // Display mode: 0 = icon only, 1 = label only, 2 = icon + label
+    property int weatherDisplayMode: 2
+    property int wifiDisplayMode: 2
+    property int volumeDisplayMode: 2
+    property int batteryDisplayMode: 2
+    property bool batteryBlinkOn: true
+
+    function weatherIconFor(condition) {
+        const c = condition.toLowerCase()
+
+        if (c.includes("thunder")) return "󰖓"
+        if (c.includes("sleet")) return "󰙿"
+        if (c.includes("blizzard") || c.includes("snow")) return "󰖘"
+        if (c.includes("ice pellets") || c.includes("hail")) return "󰖒"
+        if (c.includes("drizzle") || c.includes("rain")) return "󰖗"
+        if (c.includes("fog") || c.includes("mist") || c.includes("haze")) return "󰖑"
+        if (c.includes("partly cloudy")) return "󰖕"
+        if (c.includes("overcast") || c.includes("cloud")) return "󰖐"
+        if (c.includes("clear") || c.includes("sunny")) return "󰖙"
+
+        return "󰖕"
+    }
+
+    function cycleDisplayMode(mode) {
+        return (mode + 1) % 3
+    }
 
     anchors.top: true
     anchors.left: true
@@ -142,22 +168,6 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         onTriggered: {
             ipProcess.running = true
         }
-    }
-
-    // ─────────────────────────────────────────────
-    // Network Manager TUI
-    // ─────────────────────────────────────────────
-
-    Process {
-        id: nmtuiProcess
-
-        command: [
-            "kitty",
-            "--class",
-            "nmtui",
-            "-e",
-            "nmtui"
-        ]
     }
 
     // ─────────────────────────────────────────────
@@ -230,15 +240,40 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     }
 
     // ─────────────────────────────────────────────
-    // HyprPWCenter
+    // Weather
     // ─────────────────────────────────────────────
 
     Process {
-        id: volumeMixerProcess
+        id: weatherProcess
 
         command: [
-            "hyprpwcenter"
+            "sh",
+            "-c",
+            "curl -s --max-time 5 'wttr.in/?format=%C|%t&u'"
         ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const parts = text.trim().split("|")
+
+                if (parts.length === 2 && parts[0] !== "") {
+                    root.weatherCondition = parts[0].trim()
+                    root.weatherTemp = parts[1].trim().replace(/^\+/, "")
+                    root.weatherIcon = root.weatherIconFor(root.weatherCondition)
+                }
+            }
+        }
+    }
+
+    Timer {
+        interval: 900000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            weatherProcess.running = true
+        }
     }
 
     // ─────────────────────────────────────────────
@@ -288,7 +323,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             Text {
                 id: clockText
 
-                color: root.colBlue
+                color: root.colAccent
 
                 font {
                     family: root.fontFamily
@@ -333,28 +368,52 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             color: root.colMuted
         }
 
-        // ─────────────────────────────────────────
-        // Focused Window Title
-        // ─────────────────────────────────────────
-
-        Text {
-            text: root.focusedWindowTitle
-
-            color: root.colFg
-
-            elide: Text.ElideRight
-
-            Layout.maximumWidth: 600
-
-            font {
-                family: root.fontFamily
-                pixelSize: root.fontSize
-            }
-        }
-
         // Push right side to the right
         Item {
             Layout.fillWidth: true
+        }
+
+        // ─────────────────────────────────────────
+        // Weather
+        // ─────────────────────────────────────────
+
+        MouseArea {
+            Layout.preferredWidth: weatherText.implicitWidth
+            Layout.preferredHeight: weatherText.implicitHeight
+
+            visible: root.weatherTemp !== ""
+
+            acceptedButtons: Qt.LeftButton
+
+            onClicked: {
+                root.weatherDisplayMode = root.cycleDisplayMode(root.weatherDisplayMode)
+            }
+
+            Text {
+                id: weatherText
+
+                text: {
+                    if (root.weatherDisplayMode === 0) return root.weatherIcon
+                    if (root.weatherDisplayMode === 1) return root.weatherTemp
+                    return root.weatherIcon + " " + root.weatherTemp
+                }
+
+                color: root.colAccent
+
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
+            }
+        }
+
+        Rectangle {
+            width: 1
+            height: 16
+
+            color: root.colMuted
+            visible: root.weatherTemp !== ""
         }
 
         // ─────────────────────────────────────────
@@ -368,7 +427,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             acceptedButtons: Qt.LeftButton
 
             onClicked: {
-                nmtuiProcess.running = true
+                root.wifiDisplayMode = root.cycleDisplayMode(root.wifiDisplayMode)
             }
 
             onWheel: {
@@ -378,11 +437,16 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             Text {
                 id: wifiText
 
-                text: root.showIpAddress
-                    ? "󰩟 " + root.ipAddress
-                    : "󰤨 " + root.wifiName
+                text: {
+                    const icon = root.showIpAddress ? "󰩟" : "󰤨"
+                    const label = root.showIpAddress ? root.ipAddress : root.wifiName
 
-                color: root.colCyan
+                    if (root.wifiDisplayMode === 0) return icon
+                    if (root.wifiDisplayMode === 1) return label
+                    return icon + " " + label
+                }
+
+                color: root.colAccent
 
                 font {
                     family: root.fontFamily
@@ -410,7 +474,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             acceptedButtons: Qt.LeftButton
 
             onClicked: {
-                volumeMixerProcess.running = true
+                root.volumeDisplayMode = root.cycleDisplayMode(root.volumeDisplayMode)
             }
 
             onWheel: (wheel) => {
@@ -437,9 +501,13 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             Text {
                 id: volumeText
 
-                text: "󰕾 " + root.volumePercent + "%"
+                text: {
+                    if (root.volumeDisplayMode === 0) return "󰕾"
+                    if (root.volumeDisplayMode === 1) return root.volumePercent + "%"
+                    return "󰕾 " + root.volumePercent + "%"
+                }
 
-                color: root.colYellow
+                color: root.colAccent
 
                 font {
                     family: root.fontFamily
@@ -461,48 +529,108 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             visible: root.hasBattery
         }
 
-        Text {
-            id: batteryText
+        Timer {
+            id: batteryBlinkTimer
+
+            interval: 500
+            repeat: true
+            running: root.hasBattery && root.batteryPercent < 5 && !root.batteryCharging
+
+            onRunningChanged: {
+                if (!running) {
+                    root.batteryBlinkOn = true
+                }
+            }
+
+            onTriggered: {
+                root.batteryBlinkOn = !root.batteryBlinkOn
+            }
+        }
+
+        MouseArea {
+            Layout.preferredWidth: batteryText.implicitWidth
+            Layout.preferredHeight: batteryText.implicitHeight
 
             visible: root.hasBattery
 
-            text: {
-                let icon
-                if (root.batteryCharging) {
-                    icon = "󰂄"
-                } else if (root.batteryPercent >= 90) {
-                    icon = "󰁹"
-                } else if (root.batteryPercent >= 80) {
-                    icon = "󰂂"
-                } else if (root.batteryPercent >= 70) {
-                    icon = "󰂁"
-                } else if (root.batteryPercent >= 60) {
-                    icon = "󰂀"
-                } else if (root.batteryPercent >= 50) {
-                    icon = "󰁿"
-                } else if (root.batteryPercent >= 40) {
-                    icon = "󰁾"
-                } else if (root.batteryPercent >= 30) {
-                    icon = "󰁽"
-                } else if (root.batteryPercent >= 20) {
-                    icon = "󰁼"
-                } else if (root.batteryPercent >= 10) {
-                    icon = "󰁻"
-                } else {
-                    icon = "󰂎"
+            acceptedButtons: Qt.LeftButton
+
+            onClicked: {
+                root.batteryDisplayMode = root.cycleDisplayMode(root.batteryDisplayMode)
+            }
+
+            Text {
+                id: batteryText
+
+                opacity: root.hasBattery && root.batteryPercent < 5 && !root.batteryCharging && !root.batteryBlinkOn
+                    ? 0
+                    : 1
+
+                text: {
+                    let icon
+                    if (root.batteryCharging) {
+                        icon = "󰂄"
+                    } else if (root.batteryPercent >= 90) {
+                        icon = "󰁹"
+                    } else if (root.batteryPercent >= 80) {
+                        icon = "󰂂"
+                    } else if (root.batteryPercent >= 70) {
+                        icon = "󰂁"
+                    } else if (root.batteryPercent >= 60) {
+                        icon = "󰂀"
+                    } else if (root.batteryPercent >= 50) {
+                        icon = "󰁿"
+                    } else if (root.batteryPercent >= 40) {
+                        icon = "󰁾"
+                    } else if (root.batteryPercent >= 30) {
+                        icon = "󰁽"
+                    } else if (root.batteryPercent >= 20) {
+                        icon = "󰁼"
+                    } else if (root.batteryPercent >= 10) {
+                        icon = "󰁻"
+                    } else {
+                        icon = "󰂎"
+                    }
+                    if (root.batteryDisplayMode === 0) return icon
+                    const label = root.batteryPercent + "%"
+                    if (root.batteryDisplayMode === 1) return label
+                    return icon + " " + label
                 }
-                return icon + " " + root.batteryPercent + "%"
-            }
 
-            color: root.batteryPercent <= 20 && !root.batteryCharging
-                ? root.colBlue
-                : root.colFg
+                color: root.batteryPercent <= 20 && !root.batteryCharging
+                    ? root.colRed
+                    : root.colAccent
 
-            font {
-                family: root.fontFamily
-                pixelSize: root.fontSize
-                bold: true
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
             }
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Focused Window Title (centered)
+    // ─────────────────────────────────────────────
+
+    Text {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        width: Math.min(implicitWidth, 600)
+
+        horizontalAlignment: Text.AlignHCenter
+
+        text: root.focusedWindowTitle
+
+        color: root.colFg
+
+        elide: Text.ElideRight
+
+        font {
+            family: root.fontFamily
+            pixelSize: root.fontSize
         }
     }
 }
