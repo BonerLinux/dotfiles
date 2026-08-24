@@ -12,12 +12,16 @@
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
-    nixfmt-rfc-style
+    nixfmt
     stylua
   ];
 
   programs.nixvim = {
     enable = true;
+
+    # Reuse home-manager's pkgs instead of nixvim constructing its own from
+    # a pinned/followed nixpkgs source (avoids the nixpkgs-follows mismatch warning).
+    nixpkgs.useGlobalPackages = true;
 
     extraPlugins = [
       pkgs.vimPlugins.pywal-nvim
@@ -107,6 +111,9 @@
 
       # File searching
       telescope.enable = true;
+
+      # Icons (used by telescope); explicit to avoid the deprecated auto-enable warning
+      web-devicons.enable = true;
 
       # Status bar
       lualine.enable = true;
