@@ -63,6 +63,9 @@ EOF
 # Reload Hyprland
 hyprctl reload
 
+# Reload mako so notifications pick up the new colors
+makoctl reload
+
 # Restart Quickshell so it picks up the new colors
 pkill quickshell
 quickshell &
