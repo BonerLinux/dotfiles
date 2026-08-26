@@ -294,7 +294,7 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("pypr toggle term"))
 hl.bind(mainMod .. " + ALT + Space", hl.dsp.exec_cmd("pypr toggle term2"))
 
-hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("pypr toggle gpt"))
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("pypr toggle claude"))
 hl.bind(mainMod .. " + ALT + N", hl.dsp.exec_cmd("pypr toggle homeassistant"))
 
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("pypr toggle gmail"))
@@ -302,6 +302,8 @@ hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
+
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
