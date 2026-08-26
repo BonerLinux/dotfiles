@@ -312,6 +312,7 @@ hl.bind(
 )
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("random-wallpaper"))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd(browser .. " https://uc.instructure.com/"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + Tab", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
