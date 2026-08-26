@@ -361,13 +361,6 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             }
         }
 
-        Rectangle {
-            width: 1
-            height: 16
-
-            color: root.colMuted
-        }
-
         // Push right side to the right
         Item {
             Layout.fillWidth: true

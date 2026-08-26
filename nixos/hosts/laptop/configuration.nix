@@ -6,6 +6,7 @@
       ../../configuration.nix
       ../../modules/wireless-networking.nix
       ../../modules/nfs-client.nix
+      ../../modules/quickemu.nix
     ];
 
   networking.hostName = "laptop";
@@ -20,15 +21,13 @@
   };
 
   # -- fingerprint --
+  # Framework's built-in reader (Goodix Moc, USB ID 27c6:609c) is
+  # supported directly by libfprint's gxfp driver, no TOD/proprietary
+  # driver needed. After rebuilding, enroll a finger with:
+  #   fprintd-enroll
+  # and verify with:
+  #   fprintd-verify
   services.fprintd.enable = true;
   security.pam.services.sudo.fprintAuth = true;
-
-  # -- fingerprint --
-  #services.fprintd.enable = true;
-  #security.pam.services.sudo.fprintAuth = true;
-  #systemd.services.fprind = {
-  #  wantedBy = [ "multi-user.target" ];
-  #  serviceConfig.Type = "simple";
-  #};
 }
 
