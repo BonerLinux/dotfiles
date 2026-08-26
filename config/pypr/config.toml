@@ -1,0 +1,72 @@
+[pyprland]
+plugins = ["scratchpads"]
+
+[scratchpads.term]
+command = "kitty --directory ~ --class kitty-dropterm"
+class = "kitty-dropterm"
+size = "92% 88%"
+position = "4% 40px"
+animation = ""
+lazy = true
+
+[scratchpads.term2]
+command = "kitty --directory ~ --class kitty-dropterm2"
+class = "kitty-dropterm2"
+size = "92% 88%"
+position = "4% 40px"
+animation = ""
+lazy = true
+
+[scratchpads.claude]
+command = "brave --app=https://claude.ai"
+class = "brave-claude.ai__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
+
+[scratchpads.homeassistant]
+command = "brave --app=https://home.virtualpicklenetwork.com"
+class = "brave-home.virtualpicklenetwork.com__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
+
+[scratchpads.gmail]
+command = "brave --app=https://mail.google.com"
+class = "brave-mail.google.com__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
+
+[scratchpads.outlook]
+command = "brave --app=https://outlook.office.com"
+class = "brave-outlook.office.com__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
+
+[scratchpads.todo]
+command = "brave --app=https://app.todoist.com"
+class = "brave-app.todoist.com__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
+
+[scratchpads.calendar]
+command = "brave --app=https://calendar.google.com"
+class = "brave-calendar.google.com__-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true

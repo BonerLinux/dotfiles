@@ -295,6 +295,18 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     }
 
     // ─────────────────────────────────────────────
+    // IPC (bar toggle)
+    // ─────────────────────────────────────────────
+
+    IpcHandler {
+        target: "bar"
+
+        function toggle(): void {
+            root.visible = !root.visible
+        }
+    }
+
+    // ─────────────────────────────────────────────
     // Layout
     // ─────────────────────────────────────────────
 
