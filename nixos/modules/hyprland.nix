@@ -33,6 +33,7 @@
     hyprlauncher
     hyprpaper
     hyprshot
+    hyprpolkitagent
 
     papirus-icon-theme
     quickshell
