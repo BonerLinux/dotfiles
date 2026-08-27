@@ -10,6 +10,22 @@ cmd_rebuild() {
     sudo nixos-rebuild switch --flake "$HOME/.dotfiles/nixos#" --impure
 }
 
+cmd_update() {
+    echo "Updating flake inputs..."
+    nix flake update --flake "$DOTFILES_TARGET/nixos"
+
+    if git -C "$DOTFILES_TARGET" diff --quiet -- nixos/flake.lock; then
+        echo "flake.lock unchanged."
+    else
+        echo "Committing updated flake.lock..."
+        git -C "$DOTFILES_TARGET" add nixos/flake.lock
+        git -C "$DOTFILES_TARGET" commit -m "nixos: update flake.lock"
+        git -C "$DOTFILES_TARGET" push
+    fi
+
+    cmd_rebuild
+}
+
 cmd_install() {
     if [ "$REPO_ROOT" != "$DOTFILES_TARGET" ]; then
         if [ -e "$DOTFILES_TARGET" ]; then
@@ -40,12 +56,14 @@ cmd_install() {
 case "${1:-}" in
     install) cmd_install ;;
     rebuild) cmd_rebuild ;;
+    update) cmd_update ;;
     *)
         echo "Usage: boner <command>" >&2
         echo "" >&2
         echo "Commands:" >&2
         echo "  install   Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
         echo "  rebuild   Rebuild and switch NixOS configuration" >&2
+        echo "  update    Update flake inputs, push flake.lock, and rebuild" >&2
         exit 1
         ;;
 esac
