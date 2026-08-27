@@ -67,3 +67,7 @@ All three share `nixos/configuration.nix` (shell, Neovim, SSH) and `nixos/module
 - **Audio** — switch output/input devices (PipeWire).
 - **Bluetooth** — pair, connect, disconnect, discover nearby devices.
 - **Wi-Fi** — connect/disconnect, toggle Wi-Fi on/off.
+
+| | | |
+| --- | --- | --- |
+| ![Audio picker](.images/audio-picker.png) | ![Bluetooth picker](.images/bluetooth-picker.png) | ![Wi-Fi picker](.images/wifi-picker.png) |
