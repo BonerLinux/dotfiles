@@ -19,8 +19,10 @@ Welcome to my dotfiles! These contain the NixOS system configuration and Hyprlan
 | --- | --- |
 | ![Desktop](.images/screenshot.png) | ![Fastfetch](.images/fetch.png) |
 | Desktop with a pywal-themed terminal | `fastfetch` picking up the current theme |
-| ![App launcher](.images/picker.png) | |
-| Hyprlauncher, also pywal-themed | |
+| ![App launcher](.images/picker.png) | ![Wallpaper picker: themes](.images/wallpaper-themes.png) |
+| Hyprlauncher, also pywal-themed | The `SUPER+W` wallpaper picker — search/select a theme... |
+| ![Wallpaper picker: grid](.images/wallpaper-grid.png) | |
+| ...then a live-searchable, keyboard-navigable image grid | |
 
 ## Repository layout
 - `nixos/` — the flake, per-host NixOS configuration (`nixos/hosts/{desktop,laptop,server}`), shared modules (`nixos/modules/`), and the Home Manager entry point.
