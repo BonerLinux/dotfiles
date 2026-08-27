@@ -64,7 +64,11 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     // System data
     // ─────────────────────────────────────────────
 
-    property string wifiName: "Disconnected"
+    readonly property var connectedWifiNetwork: {
+        const device = Networking.devices.values.find((d) => d.type === DeviceType.Wifi)
+        if (!device) return null
+        return device.networks.values.find((n) => n.connected) || null
+    }
     property string ipAddress: "Unknown"
     property int volumePercent: 0
     property int batteryPercent: 0
@@ -107,6 +111,17 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         return (mode + 1) % 3
     }
 
+    function wifiIconFor(net) {
+        if (!net) return "󰤮"
+
+        const s = net.signalStrength
+        if (s >= 80) return "󰤨"
+        if (s >= 60) return "󰤥"
+        if (s >= 40) return "󰤢"
+        if (s >= 20) return "󰤟"
+        return "󰤯"
+    }
+
     function togglePopup(target) {
         const wasVisible = target.visible
 
@@ -124,37 +139,6 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
     implicitHeight: 30
     color: root.colBg
-
-    // ─────────────────────────────────────────────
-    // Wi-Fi Name
-    // ─────────────────────────────────────────────
-
-    Process {
-        id: wifiProcess
-
-        command: [
-            "sh",
-            "-c",
-            "nmcli -t -f active,ssid dev wifi | awk -F: '$1==\"yes\" {print $2; exit}'"
-        ]
-
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.wifiName = text.trim() || "Disconnected"
-            }
-        }
-    }
-
-    Timer {
-        interval: 5000
-        running: true
-        repeat: true
-        triggeredOnStart: true
-
-        onTriggered: {
-            wifiProcess.running = true
-        }
-    }
 
     // ─────────────────────────────────────────────
     // IP Address
@@ -1574,8 +1558,11 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                 id: wifiText
 
                 text: {
-                    const icon = root.showIpAddress ? "󰩟" : "󰤨"
-                    const label = root.showIpAddress ? root.ipAddress : root.wifiName
+                    const net = root.connectedWifiNetwork
+                    const icon = root.showIpAddress ? "󰩟" : root.wifiIconFor(net)
+                    const label = root.showIpAddress
+                        ? root.ipAddress
+                        : (net ? net.name : "Disconnected")
 
                     if (root.wifiDisplayMode === 0) return icon
                     if (root.wifiDisplayMode === 1) return label
