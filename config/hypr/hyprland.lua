@@ -53,7 +53,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("mako")
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("pypr")
-	hl.exec_cmd("random-wallpaper")
+	hl.exec_cmd("restore-wallpaper")
 	hl.exec_cmd("pywalfox start")
 end)
 
@@ -314,7 +314,8 @@ hl.bind(
 	mainMod .. " + Q",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("random-wallpaper"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell ipc call wallpaper toggle"))
+hl.bind(mainMod .. " + ALT + W", hl.dsp.exec_cmd("random-wallpaper"))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd(browser .. " https://uc.instructure.com/"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))

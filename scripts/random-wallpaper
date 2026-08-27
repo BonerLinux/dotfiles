@@ -1,18 +1,7 @@
 #!/bin/sh
 
-LOG="/tmp/random-wallpaper.log"
-echo "$(date): script started, PID=$$, SIG=$HYPRLAND_INSTANCE_SIGNATURE" >> "$LOG"
-
-# Wait for hyprpaper IPC socket to be ready before issuing wallpaper commands
-until [ -S "/run/user/$(id -u)/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.hyprpaper.sock" ]; do
-    sleep 0.3
-done
-
 WALLPAPER_DIR="$HOME/.wallpapers/nature"
-HYPRTOOLKIT_CONFIG="$HOME/.config/hypr/hyprtoolkit.conf"
-WAL="$HOME/.cache/wal/colors"
 
-# Pick random wallpaper
 WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( \
     -iname "*.jpg" \
     -o -iname "*.png" \
@@ -20,59 +9,4 @@ WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( \
     -o -iname "*.webp" \
 \) | shuf -n 1)
 
-# Set wallpaper (hyprpaper v0.7+ handles load/unload automatically)
-echo "$(date): setting wallpaper: $WALLPAPER" >> "$LOG"
-hyprctl hyprpaper wallpaper ",$WALLPAPER" >> "$LOG" 2>&1
-echo "$(date): wallpaper cmd exit: $?" >> "$LOG"
-
-# Generate Pywal colors
-wal -i "$WALLPAPER"
-
-# Read Pywal colors
-background=$(sed -n '1p' "$WAL")
-foreground=$(sed -n '2p' "$WAL")
-color0=$(sed -n '3p' "$WAL")
-color4=$(sed -n '7p' "$WAL")
-color5=$(sed -n '8p' "$WAL")
-color8=$(sed -n '11p' "$WAL")
-
-# Generate HyprToolkit theme directly from Pywal
-cat > "$HYPRTOOLKIT_CONFIG" <<EOF
-background = 0xff${background#\#}
-base = 0xff${color0#\#}
-text = 0xff${foreground#\#}
-alternate_base = 0xff${color8#\#}
-bright_text = 0xff${foreground#\#}
-accent = 0xff${color4#\#}
-accent_secondary = 0xff${color5#\#}
-
-h1_size = 22
-h2_size = 17
-h3_size = 14
-font_size = 13
-small_font_size = 11
-
-icon_theme = "Papirus"
-font_family = "Sans Serif"
-font_family_monospace = "monospace"
-
-rounding_large = 12
-rounding_small = 8
-EOF
-
-# Reload Hyprland
-hyprctl reload
-
-# Reload mako so notifications pick up the new colors
-makoctl reload
-
-# Restart Quickshell so it picks up the new colors
-pkill quickshell
-quickshell &
-
-# Reload colors in running Neovim instances
-pkill -SIGUSR1 nvim
-
-# Restart Hyprlauncher so it picks up the new theme
-pkill hyprlauncher 2>/dev/null || true
-hyprlauncher -d >/dev/null 2>&1 &
+set-wallpaper "$WALLPAPER"
