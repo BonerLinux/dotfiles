@@ -69,10 +69,12 @@ makoctl reload
 
 # Restart swayosd so its OSD stylesheet picks up the new colors
 pkill swayosd-server 2>/dev/null || true
+sleep 0.3
 swayosd-server &
 
 # Restart Quickshell so it picks up the new colors
-pkill quickshell
+pkill quickshell 2>/dev/null || true
+sleep 0.3
 quickshell &
 
 # Reload colors in running Neovim instances
@@ -80,4 +82,5 @@ pkill -SIGUSR1 nvim
 
 # Restart Hyprlauncher so it picks up the new theme
 pkill hyprlauncher 2>/dev/null || true
+sleep 0.3
 hyprlauncher -d >/dev/null 2>&1 &
