@@ -11,52 +11,57 @@
 # Riley Boughners' Dotfiles
 
 ## About
-Welcome to my dotfiles! These contain the configuration and automation I use across my machines. The goal is a balance of functionality and aesthetics.
+Welcome to my dotfiles! These contain the NixOS system configuration and Hyprland desktop setup I use across my machines (`desktop`, `laptop`, `server`). The goal is a balance of functionality and aesthetics — a Quickshell bar with native system pickers, pywal-driven theming that flows through the whole desktop, and a NixOS flake that keeps all three hosts reproducible.
+
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Desktop](.images/screenshot.png) | ![Fastfetch](.images/fetch.png) |
+| Desktop with a pywal-themed terminal | `fastfetch` picking up the current theme |
+| ![App launcher](.images/picker.png) | |
+| Hyprlauncher, also pywal-themed | |
 
 ## Repository layout
-- `nixos/`: NixOS flake, system configuration, and Home Manager entry points.
-- `scripts/`: Helper scripts for rebuilding, theming, and syncing.
-- `dotfiles/`: Additional dotfiles (tracked for future expansion).
+- `nixos/` — the flake, per-host NixOS configuration (`nixos/hosts/{desktop,laptop,server}`), shared modules (`nixos/modules/`), and the Home Manager entry point.
+- `config/` — application config, stowed into `~/.config` by `scripts/boner`.
+- `scripts/` — helpers installed onto `$PATH`: dotfiles install/rebuild, and wallpaper/theme management.
 
-## Quick start
-> These instructions assume the repo is checked out as `~/.system`.
+## Hosts
+- **desktop** — NVIDIA, mounts the NFS share from `server`.
+- **laptop** — wireless networking, mounts the NFS share from `server`, fingerprint unlock, quickemu.
+- **server** — the NFS server, plus Docker and Kubernetes.
 
-1. Install Nixos
-   - `nixos/flake.nix`
-   - `nixos/configuration.nix`
-   - `nixos/home-manager.nix`
-2. Clone the installer:
+All three share `nixos/configuration.nix` (shell, Neovim, SSH) and `nixos/modules/hyprland.nix`. `nixos/modules/audio.nix` (PipeWire, musnix, Ardour and friends) is a deliberately opt-in module for audio production rather than something every host imports.
+
+## Install
+1. Install NixOS.
+2. Clone this repo anywhere and run its install script — it moves itself to `~/.dotfiles`, stows `config/` into `~/.config` with GNU Stow, and clones a wallpaper collection into `~/.wallpapers`:
    ```bash
-   curl -L -o install https://raw.githubusercontent.com/rileyboughner/dotfiles/refs/heads/master/scripts/install
+   git clone https://github.com/BonerLinux/dotfiles.git
+   ./dotfiles/scripts/boner install
    ```
-3. Make the installer executable:
+3. Rebuild the system for the current host:
    ```bash
-   chmod +x install
-   ./install
-   ```
-4. install:
-   ```bash
-   ./install
+   boner rebuild
    ```
 
 ## Scripts
 | Script | Purpose |
 | --- | --- |
-| `scripts/rebuild` | Runs `nixos-rebuild switch` for the local flake. |
-| `scripts/update` | Updates flake inputs and commits `flake.lock` if it changed. |
-| `scripts/change-wallpaper` | Picks a wallpaper with Wofi, sets Hyprpaper, and updates the theme. |
-| `scripts/set-theme-from-wallpaper` | Runs `pywal` and applies colors to Firefox, Mako, and more. |
-| `scripts/backup` | Syncs backups from the `server` host with `rsync`. |
-| `scripts/cloud` | Mounts the `server` cloud directory with `sshfs`. |
+| `scripts/boner` | `install` stows configs and clones the wallpaper repo; `rebuild` runs `nixos-rebuild switch` for the local flake. |
+| `scripts/set-wallpaper <path>` | Applies a specific wallpaper: sets it via hyprpaper, regenerates pywal colors, persists the choice to `~/.wallpaper`, and reloads every themed app (Hyprland, mako, swayosd, Quickshell, Neovim, Hyprlauncher). |
+| `scripts/random-wallpaper` | Picks a random image from `~/.wallpapers/nature` and hands it to `set-wallpaper`. |
+| `scripts/restore-wallpaper` | Reapplies the last wallpaper from `~/.wallpaper` on login, falling back to `random-wallpaper` if none is set yet. Doesn't redo the pywal/reload work, since that already happened when the wallpaper was originally chosen. |
 
-## Theming workflow
-1. Place wallpapers in `~/.wallpapers`.
-2. Run:
-   ```bash
-   change-wallpaper
-   ```
-3. The script copies the selected image to `~/.wallpaper`, updates Hyprpaper, and calls `set-theme-from-wallpaper`.
+## Wallpaper & theming
+- `SUPER+W` opens a centered wallpaper picker in the Quickshell bar: pick a theme folder from `~/.wallpapers`, then a wallpaper from a live-searchable, keyboard-navigable image grid.
+- `SUPER+ALT+W` picks a random wallpaper from the `nature` folder instead.
+- Whatever you pick persists across reboots via a `~/.wallpaper` symlink, restored on login by `restore-wallpaper`.
+- Every choice regenerates [pywal](https://github.com/eylles/pywal16) colors, which theme the terminal, Neovim, mako, swayosd, and the Quickshell bar via templates in `config/wal/templates/`.
 
-## TODO!
-
-- [x] create change-wallpaper command as an alias
+## The bar (Quickshell)
+`config/quickshell/shell.qml` is a Hyprland-aware status bar with right-click pickers backed directly by Quickshell's native service bindings (no shelling out to `wpctl`/`bluetoothctl`/`nmcli`):
+- **Audio** — switch output/input devices (PipeWire).
+- **Bluetooth** — pair, connect, disconnect, discover nearby devices.
+- **Wi-Fi** — connect/disconnect, toggle Wi-Fi on/off.
