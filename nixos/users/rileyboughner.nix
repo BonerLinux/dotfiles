@@ -91,8 +91,13 @@
        map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
        map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
 
-       -- Toggle spell check in any buffer
+       -- Spell check
        map("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle spell check" })
+       map("n", "<leader>sn", "]s", { desc = "Next misspelled word" })
+       map("n", "<leader>sp", "[s", { desc = "Previous misspelled word" })
+       map("n", "<leader>s=", "z=", { desc = "Spelling suggestions" })
+       map("n", "<leader>sg", "zg", { desc = "Add word to dictionary" })
+       map("n", "<leader>sw", "zw", { desc = "Mark word as wrong" })
 
        -- Better movement
        map("n", "J", "mzJ`z")
