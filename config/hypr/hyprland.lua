@@ -304,6 +304,7 @@ hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
+hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("pypr toggle wordle"))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
 
