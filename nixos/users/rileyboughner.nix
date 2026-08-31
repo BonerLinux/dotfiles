@@ -58,6 +58,27 @@
          end,
        })
 
+       -- Extensionless files (e.g. plain-text notes) get no filetype, so the
+       -- FileType autocmd above never fires for them; catch those directly.
+       -- Deferred via schedule() since this can register ahead of Neovim's
+       -- own filetype-detection autocmd on the same event, seeing a
+       -- not-yet-detected empty filetype on files that do have one.
+       vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+         pattern = "*",
+         callback = function()
+           local buf = vim.api.nvim_get_current_buf()
+           local win = vim.api.nvim_get_current_win()
+           vim.schedule(function()
+             if vim.api.nvim_win_is_valid(win)
+               and vim.api.nvim_win_get_buf(win) == buf
+               and vim.api.nvim_get_option_value("filetype", { buf = buf }) == ""
+             then
+               vim.wo[win].spell = true
+             end
+           end)
+         end,
+       })
+
       -- Pywal switch colors signal --
        vim.api.nvim_create_autocmd("Signal", {
           pattern = "SIGUSR1",
