@@ -9,6 +9,7 @@ in
     libreoffice
     nautilus
     home-manager
+    obsidian
   ];
 
 
