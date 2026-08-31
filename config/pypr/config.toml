@@ -70,3 +70,12 @@ position = "4% 40px"
 animation = ""
 process_tracking = false
 lazy = true
+
+[scratchpads.wordle]
+command = "brave --app=https://www.nytimes.com/games/wordle/index.html"
+class = "brave-www.nytimes.com__games_wordle_index.html-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true
