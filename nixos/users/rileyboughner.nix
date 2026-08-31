@@ -49,6 +49,15 @@
        -- Clipboard
        vim.opt.clipboard = "unnamedplus"
 
+       -- Spell check (English) for prose filetypes; toggle manually elsewhere
+       vim.opt.spelllang = "en_us"
+       vim.api.nvim_create_autocmd("FileType", {
+         pattern = { "markdown", "text", "gitcommit", "tex" },
+         callback = function()
+           vim.opt_local.spell = true
+         end,
+       })
+
       -- Pywal switch colors signal --
        vim.api.nvim_create_autocmd("Signal", {
           pattern = "SIGUSR1",
@@ -81,6 +90,9 @@
        -- Save / quit
        map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
        map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+
+       -- Toggle spell check in any buffer
+       map("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle spell check" })
 
        -- Better movement
        map("n", "J", "mzJ`z")
@@ -119,8 +131,12 @@
          ["\\vdash"] = "⊢",
          ["\\models"] = "⊨",
        }
+       -- :iabbrev rejects LHS values that mix a leading non-keyword char
+       -- (the backslash) with trailing keyword chars (E474: Invalid
+       -- argument), so use a plain insert-mode keymap on the literal
+       -- "trigger + space" sequence instead.
        for trigger, symbol in pairs(symbol_abbrevs) do
-         vim.cmd("iabbrev " .. trigger .. " " .. symbol)
+         vim.keymap.set("i", trigger .. " ", symbol .. " ")
        end
     '';
 
