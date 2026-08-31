@@ -149,7 +149,7 @@ hl.config({
 hl.window_rule({
 	name = "no-animation-brave-scratchpads",
 	match = {
-		class = "^brave-.*__-Default$",
+		class = "^brave-.*-Default$",
 	},
   float = true,
 	no_anim = true,
