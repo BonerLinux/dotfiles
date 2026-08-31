@@ -5,9 +5,8 @@
     [
       ../../configuration.nix
       ../../modules/nvidia.nix
+      ../../modules/audio.nix
       ../../modules/nfs-client.nix
-      #../../modules/kubernetes.nix
-      #../../modules/docker.nix
       ../../modules/wireless-networking.nix
     ];
 

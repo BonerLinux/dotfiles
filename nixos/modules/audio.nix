@@ -1,6 +1,28 @@
-{ config, pkgs, username, inputs, lib, ... }: 
+{ config, pkgs, username, inputs, lib, ... }:
 let
   standardUser = username;
+
+  # ardour/qjackctl/guitarix link real jack2's client lib (libjack2) at
+  # build time, which speaks jackd's actual IPC protocol - there is no
+  # real jackd here for it to find. PipeWire ships an ABI-compatible
+  # libjack.so that talks to PipeWire instead, but its "jack" output
+  # has no jack.pc, so overriding libjack2 at build time breaks these
+  # packages' pkg-config/meson/waf checks (and a global overlay on
+  # libjack2 recurses: pipewire depends on ffmpeg-headless, which links
+  # libjack2 for its own JACK muxer support).
+  # Fix: build normally against real jack2, then wrap the resulting
+  # binaries to prefer pipewire's libjack.so at runtime - these
+  # binaries use RUNPATH (not RPATH), so LD_LIBRARY_PATH takes effect.
+  withPipewireJack = pkg: pkgs.symlinkJoin {
+    name = "${pkg.pname or pkg.name}-pipewire-jack";
+    paths = [ pkg ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      for bin in $out/bin/*; do
+        wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${pkgs.pipewire.jack}/lib"
+      done
+    '';
+  };
 in
 {
   imports = [
@@ -8,17 +30,18 @@ in
   ];
 
   musnix.enable = true;
+
   environment.systemPackages = with pkgs; [
     pavucontrol
     alsa-utils
     playerctl
 
-    ardour
+    (withPipewireJack ardour)
     qpwgraph
-    qjackctl
+    (withPipewireJack qjackctl)
 
     # x42-avldrums
-    guitarix
+    (withPipewireJack guitarix)
     # hydrogen
     # sfizz
     # helm
