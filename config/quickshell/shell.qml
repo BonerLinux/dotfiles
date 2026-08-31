@@ -1782,21 +1782,11 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             }
 
             onWheel: (wheel) => {
-                if (wheel.angleDelta.y > 0) {
-                    volumeChangeProcess.command = [
-                        "wpctl",
-                        "set-volume",
-                        "@DEFAULT_AUDIO_SINK@",
-                        "5%+"
-                    ]
-                } else {
-                    volumeChangeProcess.command = [
-                        "wpctl",
-                        "set-volume",
-                        "@DEFAULT_AUDIO_SINK@",
-                        "5%-"
-                    ]
-                }
+                volumeChangeProcess.command = [
+                    "swayosd-client",
+                    "--output-volume",
+                    wheel.angleDelta.y > 0 ? "+5" : "-5"
+                ]
 
                 volumeChangeProcess.running = true
                 volumeProcess.running = true
