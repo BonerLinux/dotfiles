@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Wait for hyprpaper IPC socket to be ready before issuing wallpaper commands
+until [ -S "/run/user/$(id -u)/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.hyprpaper.sock" ]; do
+    sleep 0.3
+done
+
+WALLPAPER="$HOME/.wallpaper"
+
+if [ -e "$WALLPAPER" ]; then
+    hyprctl hyprpaper wallpaper ",$(realpath "$WALLPAPER")"
+else
+    random-wallpaper
+fi
