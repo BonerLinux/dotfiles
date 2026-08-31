@@ -121,7 +121,8 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     function wifiIconFor(net) {
         if (!net) return "󰤮"
 
-        const s = net.signalStrength
+        // signalStrength is a 0-1 fraction, not a 0-100 percentage
+        const s = net.signalStrength * 100
         if (s >= 80) return "󰤨"
         if (s >= 60) return "󰤥"
         if (s >= 40) return "󰤢"
@@ -784,13 +785,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
                                 text: {
                                     const net = netRow.modelData
-
-                                    let signalIcon = "󰤟"
-                                    if (net.signalStrength >= 80) signalIcon = "󰤨"
-                                    else if (net.signalStrength >= 60) signalIcon = "󰤥"
-                                    else if (net.signalStrength >= 40) signalIcon = "󰤢"
-                                    else if (net.signalStrength >= 20) signalIcon = "󰤟"
-                                    else signalIcon = "󰤯"
+                                    const signalIcon = root.wifiIconFor(net)
 
                                     const lock = net.security === WifiSecurityType.Open ? "" : " 󰌾"
                                     const status = net.stateChanging
