@@ -95,9 +95,9 @@
        map("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle spell check" })
        map("n", "<leader>sn", "]s", { desc = "Next misspelled word" })
        map("n", "<leader>sp", "[s", { desc = "Previous misspelled word" })
-       map("n", "<leader>s=", "z=", { desc = "Spelling suggestions" })
-       map("n", "<leader>sg", "zg", { desc = "Add word to dictionary" })
-       map("n", "<leader>sw", "zw", { desc = "Mark word as wrong" })
+       map("n", "<leader>sw", "z=", { desc = "Spelling suggestions" })
+       map("n", "<leader>sd", "zg", { desc = "Add word to dictionary" })
+       map("n", "<leader>sb", "zw", { desc = "Mark word as wrong" })
 
        -- Better movement
        map("n", "J", "mzJ`z")
