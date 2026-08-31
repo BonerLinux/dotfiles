@@ -395,6 +395,9 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl prev"), { l
 -- Caps Lock indicator (swayosd only displays state; the OS handles the actual toggle)
 hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true })
 
+-- Airplane mode: F10 toggles Wi-Fi and Bluetooth together
+hl.bind("F10", hl.dsp.exec_cmd("quickshell ipc call airplane toggle"), { locked = true })
+
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
 --------------------------------
