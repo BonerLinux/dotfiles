@@ -89,6 +89,39 @@
 
        -- Clear search highlight
        map("n", "<Esc>", "<cmd>noh<CR>")
+
+       -- Formal-languages / math symbol abbreviations (type the trigger + a space)
+       local symbol_abbrevs = {
+         ["\\forall"] = "∀",
+         ["\\exists"] = "∃",
+         ["\\in"] = "∈",
+         ["\\notin"] = "∉",
+         ["\\emptyset"] = "∅",
+         ["\\eps"] = "ε",
+         ["\\cup"] = "∪",
+         ["\\cap"] = "∩",
+         ["\\subeq"] = "⊆",
+         ["\\supeq"] = "⊇",
+         ["\\sub"] = "⊂",
+         ["\\sup"] = "⊃",
+         ["\\to"] = "→",
+         ["\\implies"] = "⇒",
+         ["\\iff"] = "⇔",
+         ["\\Sigma"] = "Σ",
+         ["\\delta"] = "δ",
+         ["\\Delta"] = "Δ",
+         ["\\lambda"] = "λ",
+         ["\\neq"] = "≠",
+         ["\\leq"] = "≤",
+         ["\\geq"] = "≥",
+         ["\\land"] = "∧",
+         ["\\lor"] = "∨",
+         ["\\vdash"] = "⊢",
+         ["\\models"] = "⊨",
+       }
+       for trigger, symbol in pairs(symbol_abbrevs) do
+         vim.cmd("iabbrev " .. trigger .. " " .. symbol)
+       end
     '';
 
     plugins = {

@@ -90,6 +90,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property int batteryDisplayMode: 2
     property bool batteryBlinkOn: true
     property var wifiPasswordTarget: null
+    property bool vpnActive: false
 
     function weatherIconFor(condition) {
         const c = condition.toLowerCase()
@@ -312,6 +313,59 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         function toggle(): void {
             root.togglePopup(wallpaperPopup)
+        }
+    }
+
+    IpcHandler {
+        target: "airplane"
+
+        function toggle(): void {
+            const adapter = Bluetooth.defaultAdapter
+            const radiosOn = (adapter && adapter.enabled) || Networking.wifiEnabled
+            const turnOn = !radiosOn
+
+            if (adapter) adapter.enabled = turnOn
+            Networking.wifiEnabled = turnOn
+        }
+    }
+
+    // Bluetooth defaults to off on every quickshell start
+    Component.onCompleted: {
+        if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.enabled = false
+    }
+
+    Connections {
+        target: Bluetooth
+
+        function onDefaultAdapterChanged() {
+            if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.enabled = false
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // VPN (WireGuard)
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: vpnProcess
+
+        command: ["sh", "-c", "wg show interfaces 2>/dev/null"]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.vpnActive = text.trim() !== ""
+            }
+        }
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            vpnProcess.running = true
         }
     }
 
@@ -1576,6 +1630,31 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     pixelSize: root.fontSize
                     bold: true
                 }
+            }
+        }
+
+        Rectangle {
+            width: 1
+            height: 16
+
+            color: root.colMuted
+        }
+
+        // ─────────────────────────────────────────
+        // VPN (WireGuard)
+        // ─────────────────────────────────────────
+
+        Text {
+            id: vpnText
+
+            text: root.vpnActive ? "󰖂" : "󰦜"
+
+            color: root.colAccent
+
+            font {
+                family: root.fontFamily
+                pixelSize: root.fontSize
+                bold: true
             }
         }
 
