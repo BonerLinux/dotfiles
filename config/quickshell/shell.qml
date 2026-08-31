@@ -80,7 +80,13 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property string weatherIcon: "󰖕"
 
     // Display state
-    property bool showIpAddress: false
+    // Wi-Fi scroll mode: 0 = network name, 1 = IP address, 2 = up/down speed
+    property int wifiScrollMode: 0
+    property real wifiDownSpeed: 0
+    property real wifiUpSpeed: 0
+    property real netPrevRxBytes: -1
+    property real netPrevTxBytes: -1
+    property real netPrevSampleTime: 0
     property bool showFullDate: false
     // Display mode: 0 = icon only, 1 = label only, 2 = icon + label
     property int weatherDisplayMode: 2
@@ -121,6 +127,12 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         if (s >= 40) return "󰤢"
         if (s >= 20) return "󰤟"
         return "󰤯"
+    }
+
+    function formatSpeed(bytesPerSec) {
+        if (bytesPerSec >= 1024 * 1024) return (bytesPerSec / (1024 * 1024)).toFixed(1) + " MB/s"
+        if (bytesPerSec >= 1024) return (bytesPerSec / 1024).toFixed(0) + " KB/s"
+        return Math.round(bytesPerSec) + " B/s"
     }
 
     function togglePopup(target) {
@@ -169,6 +181,55 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             ipProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Network Speed
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: netSpeedProcess
+
+        command: [
+            "sh",
+            "-c",
+            "iface=$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i==\"dev\") print $(i+1)}'); [ -n \"$iface\" ] && cat \"/sys/class/net/$iface/statistics/rx_bytes\" \"/sys/class/net/$iface/statistics/tx_bytes\" 2>/dev/null"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const parts = text.trim().split(/\s+/).map(Number)
+                const now = Date.now()
+
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                    if (root.netPrevSampleTime > 0) {
+                        const elapsed = (now - root.netPrevSampleTime) / 1000
+                        if (elapsed > 0) {
+                            root.wifiDownSpeed = Math.max(0, (parts[0] - root.netPrevRxBytes) / elapsed)
+                            root.wifiUpSpeed = Math.max(0, (parts[1] - root.netPrevTxBytes) / elapsed)
+                        }
+                    }
+                    root.netPrevRxBytes = parts[0]
+                    root.netPrevTxBytes = parts[1]
+                    root.netPrevSampleTime = now
+                } else {
+                    root.wifiDownSpeed = 0
+                    root.wifiUpSpeed = 0
+                    root.netPrevSampleTime = 0
+                }
+            }
+        }
+    }
+
+    Timer {
+        interval: 2000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            netSpeedProcess.running = true
         }
     }
 
@@ -1606,18 +1667,23 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             }
 
             onWheel: {
-                root.showIpAddress = !root.showIpAddress
+                root.wifiScrollMode = (root.wifiScrollMode + 1) % 3
             }
 
             Text {
                 id: wifiText
 
                 text: {
+                    if (root.wifiScrollMode === 2) {
+                        return "󰇚 " + root.formatSpeed(root.wifiDownSpeed)
+                            + "  󰕒 " + root.formatSpeed(root.wifiUpSpeed)
+                    }
+
                     const net = root.connectedWifiNetwork
-                    const icon = root.showIpAddress
+                    const icon = root.wifiScrollMode === 1
                         ? "󰩟"
                         : (root.vpnActive ? "󰖂" : root.wifiIconFor(net))
-                    const label = root.showIpAddress
+                    const label = root.wifiScrollMode === 1
                         ? root.ipAddress
                         : (net ? net.name : "Disconnected")
 
