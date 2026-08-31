@@ -937,8 +937,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     model: {
                         const adapter = Bluetooth.defaultAdapter
                         if (!adapter) return []
+                        const macAddress = /^([0-9A-F]{2}:){5}[0-9A-F]{2}$/i
                         return [...adapter.devices.values]
-                            .filter((d) => d.name && d.name.length > 0)
+                            .filter((d) => d.name && d.name.length > 0 && !macAddress.test(d.name))
                             .sort((a, b) => {
                                 if (a.connected !== b.connected) return a.connected ? -1 : 1
                                 if (a.paired !== b.paired) return a.paired ? -1 : 1
@@ -1613,7 +1614,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
                 text: {
                     const net = root.connectedWifiNetwork
-                    const icon = root.showIpAddress ? "󰩟" : root.wifiIconFor(net)
+                    const icon = root.showIpAddress
+                        ? "󰩟"
+                        : (root.vpnActive ? "󰖂" : root.wifiIconFor(net))
                     const label = root.showIpAddress
                         ? root.ipAddress
                         : (net ? net.name : "Disconnected")
@@ -1630,31 +1633,6 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     pixelSize: root.fontSize
                     bold: true
                 }
-            }
-        }
-
-        Rectangle {
-            width: 1
-            height: 16
-
-            color: root.colMuted
-        }
-
-        // ─────────────────────────────────────────
-        // VPN (WireGuard)
-        // ─────────────────────────────────────────
-
-        Text {
-            id: vpnText
-
-            text: root.vpnActive ? "󰖂" : "󰦜"
-
-            color: root.colAccent
-
-            font {
-                family: root.fontFamily
-                pixelSize: root.fontSize
-                bold: true
             }
         }
 
