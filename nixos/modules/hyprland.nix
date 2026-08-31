@@ -25,10 +25,23 @@
 
   environment.systemPackages = with pkgs; [
 
+    (pkgs.runCommand "random-wallpaper" { } ''
+      install -Dm755 ${../../scripts/random-wallpaper} $out/bin/random-wallpaper
+    '')
+
+    (pkgs.runCommand "set-wallpaper" { } ''
+      install -Dm755 ${../../scripts/set-wallpaper} $out/bin/set-wallpaper
+    '')
+
+    (pkgs.runCommand "restore-wallpaper" { } ''
+      install -Dm755 ${../../scripts/restore-wallpaper} $out/bin/restore-wallpaper
+    '')
+
     hyprpwcenter
     hyprlauncher
     hyprpaper
     hyprshot
+    hyprpolkitagent
 
     papirus-icon-theme
     quickshell
@@ -48,7 +61,7 @@
     pywal16
     imagemagick
     pywalfox-native
-    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+    inputs.rose-pine-hyprcursor.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     #waybar
 
