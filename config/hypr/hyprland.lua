@@ -63,8 +63,8 @@ end)
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("XCURSOR_SIZE", "19")
+hl.env("HYPRCURSOR_SIZE", "19")
 
 -----------------------
 ----- PERMISSIONS -----
@@ -273,6 +273,35 @@ hl.gesture({
 	action = "workspace",
 })
 
+-- Three finger swipe up/down to reveal/hide the "magic" special workspace
+hl.gesture({
+	fingers = 3,
+	direction = "vertical",
+	action = "special",
+	workspace_name = "magic",
+})
+
+-- Super + three finger swipe up/down to move the focused window into/out of the "magic" special workspace
+hl.gesture({
+	fingers = 3,
+	direction = "up",
+	mods = "SUPER",
+	action = function()
+		hl.dispatch(hl.dsp.window.move({ workspace = "special:magic" }))
+	end,
+})
+hl.gesture({
+	fingers = 3,
+	direction = "down",
+	mods = "SUPER",
+	action = function()
+		local monitor = hl.get_active_monitor()
+		if monitor and monitor.active_workspace then
+			hl.dispatch(hl.dsp.window.move({ workspace = monitor.active_workspace }))
+		end
+	end,
+})
+
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
 hl.device({
@@ -326,11 +355,20 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind(mainMod .. " + escape", hl.dsp.window.fullscreen())
 
--- Move focus with mainMod + arrow keys
-hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+-- Move focus with mainMod + arrow keys or hjkl
+-- Move the focused window around the layout with mainMod + ALT + arrow keys or hjkl
+local directions = {
+	{ key = "left", vim = "h", direction = "left" },
+	{ key = "down", vim = "j", direction = "down" },
+	{ key = "up", vim = "k", direction = "up" },
+	{ key = "right", vim = "l", direction = "right" },
+}
+for _, d in ipairs(directions) do
+	hl.bind(mainMod .. " + " .. d.key, hl.dsp.focus({ direction = d.direction }))
+	hl.bind(mainMod .. " + " .. d.vim, hl.dsp.focus({ direction = d.direction }))
+	hl.bind(mainMod .. " + ALT + " .. d.key, hl.dsp.window.move({ direction = d.direction }))
+	hl.bind(mainMod .. " + ALT + " .. d.vim, hl.dsp.window.move({ direction = d.direction }))
+end
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
