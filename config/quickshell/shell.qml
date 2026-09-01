@@ -993,7 +993,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     model: {
                         const adapter = Bluetooth.defaultAdapter
                         if (!adapter) return []
-                        const macAddress = /^([0-9A-F]{2}:){5}[0-9A-F]{2}$/i
+                        const macAddress = /^([0-9A-F]{2}[:-]){5}[0-9A-F]{2}$/i
                         return [...adapter.devices.values]
                             .filter((d) => d.name && d.name.length > 0 && !macAddress.test(d.name))
                             .sort((a, b) => {
