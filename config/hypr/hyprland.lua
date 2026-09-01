@@ -432,10 +432,10 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl prev"), { locked = true })
 
 -- Caps Lock indicator (swayosd only displays state; the OS handles the actual toggle)
--- Plain --caps-lock picks an unreliable source when multiple input devices
--- expose a "capslock" LED (e.g. a mouse receiver's phantom LED node), so it
--- can get stuck reporting "on". Point it at the real keyboard's LED instead.
-hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock-led input20::capslock"), { locked = true })
+-- Firing on release (not press) matches swayosd's own recommendation: the
+-- lock-key toggle may not be applied yet at press time, so a press-triggered
+-- bind can read stale state, which was showing caps lock as always "on".
+hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true, release = true })
 
 -- Airplane mode: F10 toggles Wi-Fi and Bluetooth together
 hl.bind("F10", hl.dsp.exec_cmd("quickshell ipc call airplane toggle"), { locked = true })
