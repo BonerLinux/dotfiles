@@ -97,6 +97,14 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool batteryBlinkOn: true
     property var wifiPasswordTarget: null
     property bool vpnActive: false
+    property var vpnConfigs: []
+    property var vpnActiveInterfaces: []
+
+    function toggleVpn(name) {
+        const action = root.vpnActiveInterfaces.includes(name) ? "down" : "up"
+        vpnToggleProcess.command = ["sudo", "-n", "/run/current-system/sw/bin/wg-quick", action, name]
+        vpnToggleProcess.running = true
+    }
 
     function weatherIconFor(condition) {
         const c = condition.toLowerCase()
@@ -415,9 +423,30 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         stdout: StdioCollector {
             onStreamFinished: {
-                root.vpnActive = text.trim() !== ""
+                const active = text.trim().split("\n").filter((s) => s.length > 0)
+                root.vpnActiveInterfaces = active
+                root.vpnActive = active.length > 0
             }
         }
+    }
+
+    Process {
+        id: vpnConfigsProcess
+
+        command: ["sh", "-c", "ls /etc/wireguard/*.conf 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/\\.conf$//'"]
+        running: true
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.vpnConfigs = text.trim().split("\n").filter((s) => s.length > 0)
+            }
+        }
+    }
+
+    Process {
+        id: vpnToggleProcess
+
+        onExited: vpnProcess.running = true
     }
 
     Timer {
@@ -428,6 +457,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             vpnProcess.running = true
+            vpnConfigsProcess.running = true
         }
     }
 
@@ -793,6 +823,65 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                                         : (net.connected ? " 󰄬" : "")
 
                                     return signalIcon + " " + net.name + lock + status
+                                }
+
+                                color: root.colFg
+
+                                font {
+                                    family: root.fontFamily
+                                    pixelSize: root.fontSize
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    width: wifiColumn.width
+                    height: root.vpnConfigs.length > 0 ? 1 : 0
+
+                    visible: root.vpnConfigs.length > 0
+
+                    color: root.colMuted
+                    opacity: 0.4
+                }
+
+                Repeater {
+                    model: root.vpnConfigs
+
+                    delegate: Rectangle {
+                        id: vpnRow
+
+                        required property string modelData
+
+                        width: wifiColumn.width
+                        height: 28
+
+                        radius: 6
+                        color: vpnArea.containsMouse
+                            ? Qt.rgba(root.colAccent.r, root.colAccent.g, root.colAccent.b, 0.2)
+                            : "transparent"
+
+                        MouseArea {
+                            id: vpnArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+
+                            onClicked: root.toggleVpn(vpnRow.modelData)
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.leftMargin: 8
+                                anchors.rightMargin: 8
+
+                                elide: Text.ElideRight
+
+                                text: {
+                                    const active = root.vpnActiveInterfaces.includes(vpnRow.modelData)
+                                    return "󰑣 " + vpnRow.modelData + (active ? " 󰄬" : "")
                                 }
 
                                 color: root.colFg
@@ -1655,9 +1744,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(wifiPopup)
-                } else {
                     root.wifiDisplayMode = root.cycleDisplayMode(root.wifiDisplayMode)
+                } else {
+                    root.togglePopup(wifiPopup)
                 }
             }
 
@@ -1718,9 +1807,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(bluetoothPopup)
-                } else {
                     root.bluetoothDisplayMode = root.cycleDisplayMode(root.bluetoothDisplayMode)
+                } else {
+                    root.togglePopup(bluetoothPopup)
                 }
             }
 
@@ -1775,9 +1864,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(audioPopup)
-                } else {
                     root.volumeDisplayMode = root.cycleDisplayMode(root.volumeDisplayMode)
+                } else {
+                    root.togglePopup(audioPopup)
                 }
             }
 
