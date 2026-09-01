@@ -1677,7 +1677,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     const net = root.connectedWifiNetwork
                     const icon = root.wifiScrollMode === 1
                         ? "󰩟"
-                        : (root.vpnActive ? "󰖂" : root.wifiIconFor(net))
+                        : (root.vpnActive ? "󰑣" : root.wifiIconFor(net))
                     const label = root.wifiScrollMode === 1
                         ? root.ipAddress
                         : (net ? net.name : "Disconnected")
