@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WALLPAPER_DIR="$HOME/.wallpapers/nature"
+WALLPAPER_DIR="$HOME/.wallpapers"
 
 WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( \
     -iname "*.jpg" \
