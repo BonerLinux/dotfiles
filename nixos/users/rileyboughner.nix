@@ -16,6 +16,10 @@
     stylua
   ];
 
+  # Native Wayland instead of XWayland - avoids XWayland window-creation
+  # overhead on launch under Hyprland.
+  home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
+
   programs.nixvim = {
     enable = true;
 
