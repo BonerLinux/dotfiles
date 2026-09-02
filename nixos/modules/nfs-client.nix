@@ -10,7 +10,7 @@
   fileSystems."/home/rileyboughner/Documents" = {
     device = "192.168.1.2:/mnt/tank/files/Documents";
     fsType = "nfs";
-    options = [ "rw" "_netdev" "x-systemd.automount" "noauto" ];
+    options = [ "rw" "_netdev" "x-systemd.automount" "noauto" "vers=4" ];
   };
 
   environment.systemPackages = with pkgs; [
