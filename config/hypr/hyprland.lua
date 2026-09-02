@@ -273,12 +273,48 @@ hl.gesture({
 	action = "workspace",
 })
 
--- Three finger swipe up/down to reveal/hide the "magic" special workspace
+-- Two finger pinch in to enter fullscreen, pinch out to exit
 hl.gesture({
-	fingers = 3,
+	fingers = 2,
+	direction = "pinchin",
+	action = function()
+		local window = hl.get_active_window()
+		if window and window.fullscreen == 0 then
+			hl.dispatch(hl.dsp.window.fullscreen())
+		end
+	end,
+})
+hl.gesture({
+	fingers = 2,
+	direction = "pinchout",
+	action = function()
+		local window = hl.get_active_window()
+		if window and window.fullscreen ~= 0 then
+			hl.dispatch(hl.dsp.window.fullscreen())
+		end
+	end,
+})
+
+-- Four finger swipe up/down to reveal/hide the "magic" special workspace
+hl.gesture({
+	fingers = 4,
 	direction = "vertical",
 	action = "special",
 	workspace_name = "magic",
+})
+
+-- Three finger swipe up to launch a terminal, down to close the focused window
+hl.gesture({
+	fingers = 3,
+	direction = "up",
+	action = function()
+		hl.dispatch(hl.dsp.exec_cmd(terminal))
+	end,
+})
+hl.gesture({
+	fingers = 3,
+	direction = "down",
+	action = "close",
 })
 
 -- Super + three finger swipe up/down to move the focused window into/out of the "magic" special workspace
@@ -388,6 +424,12 @@ hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region"))
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+
+-- Volume and brightness with mainMod + ALT/SHIFT + scroll (2-finger touchpad scroll)
+hl.bind(mainMod .. " + ALT + mouse_down", hl.dsp.exec_cmd("swayosd-client --output-volume -5"))
+hl.bind(mainMod .. " + ALT + mouse_up", hl.dsp.exec_cmd("swayosd-client --output-volume +5"))
+hl.bind(mainMod .. " + SHIFT + mouse_down", hl.dsp.exec_cmd("swayosd-client --brightness -5"))
+hl.bind(mainMod .. " + SHIFT + mouse_up", hl.dsp.exec_cmd("swayosd-client --brightness +5"))
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
