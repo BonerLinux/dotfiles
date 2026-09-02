@@ -14,6 +14,8 @@ fi
 
 HYPRTOOLKIT_CONFIG="$HOME/.config/hypr/hyprtoolkit.conf"
 WAL="$HOME/.cache/wal/colors"
+WAL_JSON="$HOME/.cache/wal/colors.json"
+QT6CT_DIR="$HOME/.config/qt6ct"
 
 # Wait for hyprpaper IPC socket to be ready before issuing wallpaper commands
 until [ -S "/run/user/$(id -u)/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.hyprpaper.sock" ]; do
@@ -61,6 +63,43 @@ rounding_large = 12
 rounding_small = 8
 EOF
 
+# Generate a qt6ct color scheme from Pywal so Qt apps (e.g. the hyprpolkitagent
+# authentication dialog) match the rest of the theme instead of falling back
+# to Qt's default white palette
+extract_wal_color() {
+    grep "\"$1\"" "$WAL_JSON" | head -1 | sed -E 's/.*: *"(#[0-9A-Fa-f]+)".*/\1/'
+}
+argb() {
+    printf 'ff%s' "$(printf '%s' "$1" | tr -d '#' | tr 'a-f' 'A-F')"
+}
+
+qt_bg=$(argb "$(extract_wal_color background)")
+qt_fg=$(argb "$(extract_wal_color foreground)")
+qt_muted=$(argb "$(extract_wal_color color8)")
+qt_accent=$(argb "$(extract_wal_color color4)")
+qt_accent2=$(argb "$(extract_wal_color color5)")
+qt_red=$(argb "$(extract_wal_color color1)")
+
+mkdir -p "$QT6CT_DIR/colors"
+
+# Color order follows QPalette::ColorRole (WindowText..PlaceholderText), as
+# read positionally by qt6ct's color scheme parser
+cat > "$QT6CT_DIR/colors/pywal.conf" <<EOF
+[ColorScheme]
+active_colors=#$qt_fg, #$qt_muted, #$qt_accent2, #$qt_accent, #$qt_muted, #$qt_bg, #$qt_fg, #$qt_accent2, #$qt_fg, #$qt_bg, #$qt_bg, #$qt_bg, #$qt_accent, #$qt_bg, #$qt_accent, #$qt_red, #$qt_muted, #$qt_fg, #$qt_bg, #$qt_fg, #$qt_muted
+disabled_colors=#$qt_muted, #$qt_muted, #$qt_accent2, #$qt_accent, #$qt_muted, #$qt_bg, #$qt_muted, #$qt_muted, #$qt_muted, #$qt_bg, #$qt_bg, #$qt_bg, #$qt_accent, #$qt_muted, #$qt_accent, #$qt_red, #$qt_muted, #$qt_muted, #$qt_bg, #$qt_muted, #$qt_muted
+inactive_colors=#$qt_fg, #$qt_muted, #$qt_accent2, #$qt_accent, #$qt_muted, #$qt_bg, #$qt_fg, #$qt_accent2, #$qt_fg, #$qt_bg, #$qt_bg, #$qt_bg, #$qt_accent, #$qt_bg, #$qt_accent, #$qt_red, #$qt_muted, #$qt_fg, #$qt_bg, #$qt_fg, #$qt_muted
+EOF
+
+cat > "$QT6CT_DIR/qt6ct.conf" <<EOF
+[Appearance]
+style=Fusion
+custom_palette=true
+color_scheme_path=$QT6CT_DIR/colors/pywal.conf
+icon_theme=Papirus
+standard_dialogs=default
+EOF
+
 # Reload Hyprland
 hyprctl reload
 
@@ -84,3 +123,7 @@ pkill -SIGUSR1 nvim
 pkill hyprlauncher 2>/dev/null || true
 sleep 0.3
 hyprlauncher -d >/dev/null 2>&1 &
+
+# Restart hyprpolkitagent (runs as a systemd user service) so its Qt
+# authentication dialog picks up the new qt6ct colors
+systemctl --user restart hyprpolkitagent.service

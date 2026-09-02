@@ -16,6 +16,10 @@
     stylua
   ];
 
+  # Native Wayland instead of XWayland - avoids XWayland window-creation
+  # overhead on launch under Hyprland.
+  home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
+
   programs.nixvim = {
     enable = true;
 
@@ -49,6 +53,36 @@
        -- Clipboard
        vim.opt.clipboard = "unnamedplus"
 
+       -- Spell check (English) for prose filetypes; toggle manually elsewhere
+       vim.opt.spelllang = "en_us"
+       vim.api.nvim_create_autocmd("FileType", {
+         pattern = { "markdown", "text", "gitcommit", "tex" },
+         callback = function()
+           vim.opt_local.spell = true
+         end,
+       })
+
+       -- Extensionless files (e.g. plain-text notes) get no filetype, so the
+       -- FileType autocmd above never fires for them; catch those directly.
+       -- Deferred via schedule() since this can register ahead of Neovim's
+       -- own filetype-detection autocmd on the same event, seeing a
+       -- not-yet-detected empty filetype on files that do have one.
+       vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+         pattern = "*",
+         callback = function()
+           local buf = vim.api.nvim_get_current_buf()
+           local win = vim.api.nvim_get_current_win()
+           vim.schedule(function()
+             if vim.api.nvim_win_is_valid(win)
+               and vim.api.nvim_win_get_buf(win) == buf
+               and vim.api.nvim_get_option_value("filetype", { buf = buf }) == ""
+             then
+               vim.wo[win].spell = true
+             end
+           end)
+         end,
+       })
+
       -- Pywal switch colors signal --
        vim.api.nvim_create_autocmd("Signal", {
           pattern = "SIGUSR1",
@@ -81,6 +115,14 @@
        -- Save / quit
        map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
        map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+
+       -- Spell check
+       map("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle spell check" })
+       map("n", "<leader>sn", "]s", { desc = "Next misspelled word" })
+       map("n", "<leader>sp", "[s", { desc = "Previous misspelled word" })
+       map("n", "<leader>sw", "z=", { desc = "Spelling suggestions" })
+       map("n", "<leader>sd", "zg", { desc = "Add word to dictionary" })
+       map("n", "<leader>sb", "zw", { desc = "Mark word as wrong" })
 
        -- Better movement
        map("n", "J", "mzJ`z")
@@ -119,8 +161,12 @@
          ["\\vdash"] = "⊢",
          ["\\models"] = "⊨",
        }
+       -- :iabbrev rejects LHS values that mix a leading non-keyword char
+       -- (the backslash) with trailing keyword chars (E474: Invalid
+       -- argument), so use a plain insert-mode keymap on the literal
+       -- "trigger + space" sequence instead.
        for trigger, symbol in pairs(symbol_abbrevs) do
-         vim.cmd("iabbrev " .. trigger .. " " .. symbol)
+         vim.keymap.set("i", trigger .. " ", symbol .. " ")
        end
     '';
 

@@ -80,7 +80,13 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property string weatherIcon: "󰖕"
 
     // Display state
-    property bool showIpAddress: false
+    // Wi-Fi scroll mode: 0 = network name, 1 = IP address, 2 = up/down speed
+    property int wifiScrollMode: 0
+    property real wifiDownSpeed: 0
+    property real wifiUpSpeed: 0
+    property real netPrevRxBytes: -1
+    property real netPrevTxBytes: -1
+    property real netPrevSampleTime: 0
     property bool showFullDate: false
     // Display mode: 0 = icon only, 1 = label only, 2 = icon + label
     property int weatherDisplayMode: 2
@@ -91,6 +97,14 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool batteryBlinkOn: true
     property var wifiPasswordTarget: null
     property bool vpnActive: false
+    property var vpnConfigs: []
+    property var vpnActiveInterfaces: []
+
+    function toggleVpn(name) {
+        const action = root.vpnActiveInterfaces.includes(name) ? "down" : "up"
+        vpnToggleProcess.command = ["sudo", "-n", "/run/current-system/sw/bin/wg-quick", action, name]
+        vpnToggleProcess.running = true
+    }
 
     function weatherIconFor(condition) {
         const c = condition.toLowerCase()
@@ -115,12 +129,19 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     function wifiIconFor(net) {
         if (!net) return "󰤮"
 
-        const s = net.signalStrength
+        // signalStrength is a 0-1 fraction, not a 0-100 percentage
+        const s = net.signalStrength * 100
         if (s >= 80) return "󰤨"
         if (s >= 60) return "󰤥"
         if (s >= 40) return "󰤢"
         if (s >= 20) return "󰤟"
         return "󰤯"
+    }
+
+    function formatSpeed(bytesPerSec) {
+        if (bytesPerSec >= 1024 * 1024) return (bytesPerSec / (1024 * 1024)).toFixed(1) + " MB/s"
+        if (bytesPerSec >= 1024) return (bytesPerSec / 1024).toFixed(0) + " KB/s"
+        return Math.round(bytesPerSec) + " B/s"
     }
 
     function togglePopup(target) {
@@ -169,6 +190,55 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             ipProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Network Speed
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: netSpeedProcess
+
+        command: [
+            "sh",
+            "-c",
+            "iface=$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i==\"dev\") print $(i+1)}'); [ -n \"$iface\" ] && cat \"/sys/class/net/$iface/statistics/rx_bytes\" \"/sys/class/net/$iface/statistics/tx_bytes\" 2>/dev/null"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const parts = text.trim().split(/\s+/).map(Number)
+                const now = Date.now()
+
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                    if (root.netPrevSampleTime > 0) {
+                        const elapsed = (now - root.netPrevSampleTime) / 1000
+                        if (elapsed > 0) {
+                            root.wifiDownSpeed = Math.max(0, (parts[0] - root.netPrevRxBytes) / elapsed)
+                            root.wifiUpSpeed = Math.max(0, (parts[1] - root.netPrevTxBytes) / elapsed)
+                        }
+                    }
+                    root.netPrevRxBytes = parts[0]
+                    root.netPrevTxBytes = parts[1]
+                    root.netPrevSampleTime = now
+                } else {
+                    root.wifiDownSpeed = 0
+                    root.wifiUpSpeed = 0
+                    root.netPrevSampleTime = 0
+                }
+            }
+        }
+    }
+
+    Timer {
+        interval: 2000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            netSpeedProcess.running = true
         }
     }
 
@@ -353,9 +423,30 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         stdout: StdioCollector {
             onStreamFinished: {
-                root.vpnActive = text.trim() !== ""
+                const active = text.trim().split("\n").filter((s) => s.length > 0)
+                root.vpnActiveInterfaces = active
+                root.vpnActive = active.length > 0
             }
         }
+    }
+
+    Process {
+        id: vpnConfigsProcess
+
+        command: ["sh", "-c", "ls /etc/wireguard/*.conf 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/\\.conf$//'"]
+        running: true
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.vpnConfigs = text.trim().split("\n").filter((s) => s.length > 0)
+            }
+        }
+    }
+
+    Process {
+        id: vpnToggleProcess
+
+        onExited: vpnProcess.running = true
     }
 
     Timer {
@@ -366,6 +457,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             vpnProcess.running = true
+            vpnConfigsProcess.running = true
         }
     }
 
@@ -723,13 +815,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
                                 text: {
                                     const net = netRow.modelData
-
-                                    let signalIcon = "󰤟"
-                                    if (net.signalStrength >= 80) signalIcon = "󰤨"
-                                    else if (net.signalStrength >= 60) signalIcon = "󰤥"
-                                    else if (net.signalStrength >= 40) signalIcon = "󰤢"
-                                    else if (net.signalStrength >= 20) signalIcon = "󰤟"
-                                    else signalIcon = "󰤯"
+                                    const signalIcon = root.wifiIconFor(net)
 
                                     const lock = net.security === WifiSecurityType.Open ? "" : " 󰌾"
                                     const status = net.stateChanging
@@ -737,6 +823,65 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                                         : (net.connected ? " 󰄬" : "")
 
                                     return signalIcon + " " + net.name + lock + status
+                                }
+
+                                color: root.colFg
+
+                                font {
+                                    family: root.fontFamily
+                                    pixelSize: root.fontSize
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    width: wifiColumn.width
+                    height: root.vpnConfigs.length > 0 ? 1 : 0
+
+                    visible: root.vpnConfigs.length > 0
+
+                    color: root.colMuted
+                    opacity: 0.4
+                }
+
+                Repeater {
+                    model: root.vpnConfigs
+
+                    delegate: Rectangle {
+                        id: vpnRow
+
+                        required property string modelData
+
+                        width: wifiColumn.width
+                        height: 28
+
+                        radius: 6
+                        color: vpnArea.containsMouse
+                            ? Qt.rgba(root.colAccent.r, root.colAccent.g, root.colAccent.b, 0.2)
+                            : "transparent"
+
+                        MouseArea {
+                            id: vpnArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+
+                            onClicked: root.toggleVpn(vpnRow.modelData)
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.leftMargin: 8
+                                anchors.rightMargin: 8
+
+                                elide: Text.ElideRight
+
+                                text: {
+                                    const active = root.vpnActiveInterfaces.includes(vpnRow.modelData)
+                                    return "󰑣 " + vpnRow.modelData + (active ? " 󰄬" : "")
                                 }
 
                                 color: root.colFg
@@ -937,8 +1082,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                     model: {
                         const adapter = Bluetooth.defaultAdapter
                         if (!adapter) return []
+                        const macAddress = /^([0-9A-F]{2}[:-]){5}[0-9A-F]{2}$/i
                         return [...adapter.devices.values]
-                            .filter((d) => d.name && d.name.length > 0)
+                            .filter((d) => d.name && d.name.length > 0 && !macAddress.test(d.name))
                             .sort((a, b) => {
                                 if (a.connected !== b.connected) return a.connected ? -1 : 1
                                 if (a.paired !== b.paired) return a.paired ? -1 : 1
@@ -1598,23 +1744,30 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(wifiPopup)
-                } else {
                     root.wifiDisplayMode = root.cycleDisplayMode(root.wifiDisplayMode)
+                } else {
+                    root.togglePopup(wifiPopup)
                 }
             }
 
             onWheel: {
-                root.showIpAddress = !root.showIpAddress
+                root.wifiScrollMode = (root.wifiScrollMode + 1) % 3
             }
 
             Text {
                 id: wifiText
 
                 text: {
+                    if (root.wifiScrollMode === 2) {
+                        return "󰇚 " + root.formatSpeed(root.wifiDownSpeed)
+                            + "  󰕒 " + root.formatSpeed(root.wifiUpSpeed)
+                    }
+
                     const net = root.connectedWifiNetwork
-                    const icon = root.showIpAddress ? "󰩟" : root.wifiIconFor(net)
-                    const label = root.showIpAddress
+                    const icon = root.wifiScrollMode === 1
+                        ? "󰩟"
+                        : (root.vpnActive ? "󰑣" : root.wifiIconFor(net))
+                    const label = root.wifiScrollMode === 1
                         ? root.ipAddress
                         : (net ? net.name : "Disconnected")
 
@@ -1641,31 +1794,6 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         }
 
         // ─────────────────────────────────────────
-        // VPN (WireGuard)
-        // ─────────────────────────────────────────
-
-        Text {
-            id: vpnText
-
-            text: root.vpnActive ? "󰖂" : "󰦜"
-
-            color: root.colAccent
-
-            font {
-                family: root.fontFamily
-                pixelSize: root.fontSize
-                bold: true
-            }
-        }
-
-        Rectangle {
-            width: 1
-            height: 16
-
-            color: root.colMuted
-        }
-
-        // ─────────────────────────────────────────
         // Bluetooth
         // ─────────────────────────────────────────
 
@@ -1679,9 +1807,9 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(bluetoothPopup)
-                } else {
                     root.bluetoothDisplayMode = root.cycleDisplayMode(root.bluetoothDisplayMode)
+                } else {
+                    root.togglePopup(bluetoothPopup)
                 }
             }
 
@@ -1736,28 +1864,18 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             onClicked: (mouse) => {
                 if (mouse.button === Qt.RightButton) {
-                    root.togglePopup(audioPopup)
-                } else {
                     root.volumeDisplayMode = root.cycleDisplayMode(root.volumeDisplayMode)
+                } else {
+                    root.togglePopup(audioPopup)
                 }
             }
 
             onWheel: (wheel) => {
-                if (wheel.angleDelta.y > 0) {
-                    volumeChangeProcess.command = [
-                        "wpctl",
-                        "set-volume",
-                        "@DEFAULT_AUDIO_SINK@",
-                        "5%+"
-                    ]
-                } else {
-                    volumeChangeProcess.command = [
-                        "wpctl",
-                        "set-volume",
-                        "@DEFAULT_AUDIO_SINK@",
-                        "5%-"
-                    ]
-                }
+                volumeChangeProcess.command = [
+                    "swayosd-client",
+                    "--output-volume",
+                    wheel.angleDelta.y > 0 ? "+5" : "-5"
+                ]
 
                 volumeChangeProcess.running = true
                 volumeProcess.running = true
