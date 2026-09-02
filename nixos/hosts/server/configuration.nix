@@ -8,6 +8,7 @@
       ../../modules/docker.nix
       ../../modules/kubernetes.nix
       ../../modules/nfs-server.nix
+      ../../modules/samba-server.nix
     ];
 
   networking.hostName = "server";
