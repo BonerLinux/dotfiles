@@ -17,10 +17,12 @@
 
   environment.sessionVariables = {
     HYPRSHOT_DIR  = "$HOME/Pictures/Screenshots";
+    QT_QPA_PLATFORMTHEME = "qt6ct";
   };
 
   fonts.packages = with pkgs; [
     nerd-fonts.noto
+    nerd-fonts.jetbrains-mono
   ];
 
   environment.systemPackages = with pkgs; [
@@ -45,6 +47,7 @@
 
     papirus-icon-theme
     quickshell
+    qt6Packages.qt6ct
     kdePackages.qt5compat
     libsForQt5.qt5.qtgraphicaleffects
 

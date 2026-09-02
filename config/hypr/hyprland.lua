@@ -63,8 +63,8 @@ end)
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("XCURSOR_SIZE", "19")
+hl.env("HYPRCURSOR_SIZE", "19")
 
 -----------------------
 ----- PERMISSIONS -----
@@ -149,7 +149,7 @@ hl.config({
 hl.window_rule({
 	name = "no-animation-brave-scratchpads",
 	match = {
-		class = "^brave-.*__-Default$",
+		class = "^brave-.*-Default$",
 	},
   float = true,
 	no_anim = true,
@@ -273,6 +273,35 @@ hl.gesture({
 	action = "workspace",
 })
 
+-- Three finger swipe up/down to reveal/hide the "magic" special workspace
+hl.gesture({
+	fingers = 3,
+	direction = "vertical",
+	action = "special",
+	workspace_name = "magic",
+})
+
+-- Super + three finger swipe up/down to move the focused window into/out of the "magic" special workspace
+hl.gesture({
+	fingers = 3,
+	direction = "up",
+	mods = "SUPER",
+	action = function()
+		hl.dispatch(hl.dsp.window.move({ workspace = "special:magic" }))
+	end,
+})
+hl.gesture({
+	fingers = 3,
+	direction = "down",
+	mods = "SUPER",
+	action = function()
+		local monitor = hl.get_active_monitor()
+		if monitor and monitor.active_workspace then
+			hl.dispatch(hl.dsp.window.move({ workspace = monitor.active_workspace }))
+		end
+	end,
+})
+
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
 hl.device({
@@ -304,6 +333,7 @@ hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
+hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("pypr toggle wordle"))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
 
@@ -325,11 +355,20 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind(mainMod .. " + escape", hl.dsp.window.fullscreen())
 
--- Move focus with mainMod + arrow keys
-hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+-- Move focus with mainMod + arrow keys or hjkl
+-- Move the focused window around the layout with mainMod + ALT + arrow keys or hjkl
+local directions = {
+	{ key = "left", vim = "h", direction = "left" },
+	{ key = "down", vim = "j", direction = "down" },
+	{ key = "up", vim = "k", direction = "up" },
+	{ key = "right", vim = "l", direction = "right" },
+}
+for _, d in ipairs(directions) do
+	hl.bind(mainMod .. " + " .. d.key, hl.dsp.focus({ direction = d.direction }))
+	hl.bind(mainMod .. " + " .. d.vim, hl.dsp.focus({ direction = d.direction }))
+	hl.bind(mainMod .. " + ALT + " .. d.key, hl.dsp.window.move({ direction = d.direction }))
+	hl.bind(mainMod .. " + ALT + " .. d.vim, hl.dsp.window.move({ direction = d.direction }))
+end
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
@@ -393,7 +432,10 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl prev"), { locked = true })
 
 -- Caps Lock indicator (swayosd only displays state; the OS handles the actual toggle)
-hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true })
+-- Firing on release (not press) matches swayosd's own recommendation: the
+-- lock-key toggle may not be applied yet at press time, so a press-triggered
+-- bind can read stale state, which was showing caps lock as always "on".
+hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true, release = true })
 
 -- Airplane mode: F10 toggles Wi-Fi and Bluetooth together
 hl.bind("F10", hl.dsp.exec_cmd("quickshell ipc call airplane toggle"), { locked = true })
