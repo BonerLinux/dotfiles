@@ -51,7 +51,16 @@
 	    stow
       prismlauncher
       claude-code
+	  ];
 
+	  # -- nix-ld --
+	  # Lets unpatched dynamically-linked binaries run (e.g. Prism Launcher's
+	  # auto-downloaded Mojang JVMs), which otherwise fail to execute on NixOS
+	  # since it lacks the standard FHS paths they expect.
+	  programs.nix-ld.enable = true;
+	  programs.nix-ld.libraries = with pkgs; [
+	    zlib
+	    stdenv.cc.cc.lib
 	  ];
 
 	  # -- gnupg --
