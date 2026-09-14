@@ -55,6 +55,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("pypr")
 	hl.exec_cmd("restore-wallpaper")
 	hl.exec_cmd("pywalfox start")
+	-- Wireplumber restores the last volume on its own; force it back to 0 on login.
+	hl.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%")
 end)
 
 -------------------------------
@@ -150,6 +152,16 @@ hl.window_rule({
 	name = "no-animation-brave-scratchpads",
 	match = {
 		class = "^brave-.*-Default$",
+	},
+  float = true,
+	no_anim = true,
+})
+
+-- Disable animations for Firefox Pyprland scratchpads
+hl.window_rule({
+	name = "no-animation-firefox-scratchpads",
+	match = {
+		class = "^firefox-.*$",
 	},
   float = true,
 	no_anim = true,
@@ -364,7 +376,7 @@ hl.bind(mainMod .. " + ALT + Space", hl.dsp.exec_cmd("pypr toggle term2"))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("pypr toggle claude"))
 hl.bind(mainMod .. " + ALT + N", hl.dsp.exec_cmd("pypr toggle homeassistant"))
 
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("pypr toggle gmail"))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("pypr toggle zoho"))
 hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
