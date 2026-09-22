@@ -157,16 +157,6 @@ hl.window_rule({
 	no_anim = true,
 })
 
--- Disable animations for Firefox Pyprland scratchpads
-hl.window_rule({
-	name = "no-animation-firefox-scratchpads",
-	match = {
-		class = "^firefox-.*$",
-	},
-  float = true,
-	no_anim = true,
-})
-
 -- Disable animations for terminal Pyprland scratchpads
 hl.window_rule({
 	name = "no-animation-terminal-scratchpads",
@@ -381,7 +371,6 @@ hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
-hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("pypr toggle wordle"))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
 
