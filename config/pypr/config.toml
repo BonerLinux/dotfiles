@@ -70,12 +70,3 @@ position = "4% 40px"
 animation = ""
 process_tracking = false
 lazy = true
-
-[scratchpads.wordle]
-command = "env GDK_BACKEND=x11 firefox --class=firefox-wordle --new-window https://www.nytimes.com/games/wordle/index.html"
-class = "firefox-wordle"
-size = "92% 92%"
-position = "4% 40px"
-animation = ""
-process_tracking = false
-lazy = true
