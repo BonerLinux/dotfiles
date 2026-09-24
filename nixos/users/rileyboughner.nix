@@ -14,6 +14,13 @@
   home.packages = with pkgs; [
     nixfmt
     stylua
+
+    (pkgs.buildGoModule {
+      pname = "todo-tui";
+      version = "0.1.0";
+      src = ../../scripts/todo-tui;
+      vendorHash = "sha256-SMhllO87YlmySHroKfPq1pHb67CwHaZ3XMp3t983etc=";
+    })
   ];
 
   # Native Wayland instead of XWayland - avoids XWayland window-creation

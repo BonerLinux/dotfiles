@@ -55,6 +55,7 @@
     mako
     brightnessctl
     swayosd
+    gcalcli
     gtk3
     brave
     kitty

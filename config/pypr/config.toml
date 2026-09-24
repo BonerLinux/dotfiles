@@ -54,12 +54,11 @@ process_tracking = false
 lazy = true
 
 [scratchpads.todo]
-command = "brave --app=https://app.todoist.com"
-class = "brave-app.todoist.com__-Default"
-size = "92% 92%"
+command = "kitty --class kitty-todo -e /home/rileyboughner/.dotfiles/scripts/todo tui"
+class = "kitty-todo"
+size = "92% 88%"
 position = "4% 40px"
 animation = ""
-process_tracking = false
 lazy = true
 
 [scratchpads.calendar]

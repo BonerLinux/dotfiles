@@ -78,6 +78,14 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property string weatherTemp: ""
     property string weatherCondition: ""
     property string weatherIcon: "󰖕"
+    property bool hasNextEvent: false
+    property bool calendarAuthenticated: false
+    property string nextEventTitle: ""
+    property real nextEventStartMs: 0
+    property real nowMs: Date.now()
+    property bool hasTasksData: false
+    property int tasksOverdueCount: 0
+    property int tasksDueTodayCount: 0
 
     // Display state
     // Wi-Fi scroll mode: 0 = network name, 1 = IP address, 2 = up/down speed
@@ -90,10 +98,12 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool showFullDate: false
     // Display mode: 0 = icon only, 1 = label only, 2 = icon + label
     property int weatherDisplayMode: 2
+    property int calendarDisplayMode: 2
     property int wifiDisplayMode: 2
     property int volumeDisplayMode: 2
     property int bluetoothDisplayMode: 2
     property int batteryDisplayMode: 2
+    property int taskDisplayMode: 2
     property bool batteryBlinkOn: true
     property var wifiPasswordTarget: null
     property bool vpnActive: false
@@ -142,6 +152,19 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         if (bytesPerSec >= 1024 * 1024) return (bytesPerSec / (1024 * 1024)).toFixed(1) + " MB/s"
         if (bytesPerSec >= 1024) return (bytesPerSec / 1024).toFixed(0) + " KB/s"
         return Math.round(bytesPerSec) + " B/s"
+    }
+
+    function formatCountdown(ms) {
+        if (ms <= 0) return "Now"
+
+        const totalMinutes = Math.round(ms / 60000)
+        const days = Math.floor(totalMinutes / 1440)
+        const hours = Math.floor((totalMinutes % 1440) / 60)
+        const minutes = totalMinutes % 60
+
+        if (days > 0) return days + "d " + hours + "h"
+        if (hours > 0) return hours + "h " + minutes + "m"
+        return minutes + "m"
     }
 
     function togglePopup(target) {
@@ -345,6 +368,157 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             weatherProcess.running = true
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Google Calendar (next event)
+    // ─────────────────────────────────────────────
+
+    // Checks for gcalcli's cached oauth token without ever invoking gcalcli
+    // itself while unauthenticated, since an unauthenticated call blocks on
+    // an interactive client-id/secret prompt.
+    Process {
+        id: calendarAuthCheckProcess
+
+        command: [
+            "sh",
+            "-c",
+            "test -f \"${XDG_DATA_HOME:-$HOME/.local/share}/gcalcli/oauth\" -o -f \"$HOME/.gcalcli_oauth\" && echo yes || echo no"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const authenticated = text.trim() === "yes"
+                const justAuthenticated = authenticated && !root.calendarAuthenticated
+
+                root.calendarAuthenticated = authenticated
+
+                if (!authenticated) {
+                    root.hasNextEvent = false
+                } else if (justAuthenticated) {
+                    calendarProcess.running = true
+                }
+            }
+        }
+    }
+
+    Process {
+        id: calendarInitProcess
+
+        command: [
+            "kitty", "--title", "gcalcli init", "-e",
+            "sh", "-c",
+            "gcalcli --client-secret \"$(cat \"$HOME/.config/gcalcli/client_secret\" 2>/dev/null)\" init"
+        ]
+    }
+
+    Process {
+        id: calendarProcess
+
+        command: [
+            "sh",
+            "-c",
+            "gcalcli --nocolor --client-secret \"$(cat \"$HOME/.config/gcalcli/client_secret\" 2>/dev/null)\" agenda --tsv --military now $(date -d '+7 days' '+%Y-%m-%d') < /dev/null 2>/dev/null | awk -F'\\t' 'NR>1 && $2!=\"\" {print; exit}'"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const line = text.trim()
+                const cols = line.split("\t")
+
+                if (cols.length < 5) {
+                    root.hasNextEvent = false
+                    return
+                }
+
+                const start = new Date(cols[0] + "T" + cols[1] + ":00")
+
+                if (isNaN(start.getTime())) {
+                    root.hasNextEvent = false
+                    return
+                }
+
+                root.nextEventStartMs = start.getTime()
+                root.nextEventTitle = cols[4]
+                root.hasNextEvent = true
+            }
+        }
+    }
+
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            calendarAuthCheckProcess.running = true
+        }
+    }
+
+    Timer {
+        interval: 300000
+        running: true
+        repeat: true
+
+        onTriggered: {
+            if (root.calendarAuthenticated) calendarProcess.running = true
+        }
+    }
+
+    // Redrives the countdown text between calendar refreshes
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+
+        onTriggered: {
+            root.nowMs = Date.now()
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Todoist (overdue + due today)
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: tasksProcess
+
+        command: [Quickshell.env("HOME") + "/.dotfiles/scripts/todo", "task", "count"]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const cols = text.trim().split("\t")
+
+                if (cols.length < 2) {
+                    root.hasTasksData = false
+                    return
+                }
+
+                const overdue = parseInt(cols[0])
+                const today = parseInt(cols[1])
+
+                if (isNaN(overdue) || isNaN(today)) {
+                    root.hasTasksData = false
+                    return
+                }
+
+                root.tasksOverdueCount = overdue
+                root.tasksDueTodayCount = today
+                root.hasTasksData = true
+            }
+        }
+    }
+
+    Timer {
+        interval: 300000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            tasksProcess.running = true
         }
     }
 
@@ -1700,7 +1874,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             visible: root.weatherTemp !== ""
 
-            acceptedButtons: Qt.LeftButton
+            acceptedButtons: Qt.RightButton
 
             onClicked: {
                 root.weatherDisplayMode = root.cycleDisplayMode(root.weatherDisplayMode)
@@ -1936,7 +2110,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
             visible: root.hasBattery
 
-            acceptedButtons: Qt.LeftButton
+            acceptedButtons: Qt.RightButton
 
             onClicked: {
                 root.batteryDisplayMode = root.cycleDisplayMode(root.batteryDisplayMode)
@@ -2015,6 +2189,136 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         font {
             family: root.fontFamily
             pixelSize: root.fontSize
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Bottom Bar
+    // ─────────────────────────────────────────────
+
+    PanelWindow {
+        id: bottomBar
+
+        anchors.bottom: true
+        anchors.left: true
+        anchors.right: true
+
+        implicitHeight: 30
+        color: root.colBg
+
+        IpcHandler {
+            target: "barBottom"
+
+            function toggle(): void {
+                bottomBar.visible = !bottomBar.visible
+            }
+        }
+
+        RowLayout {
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 10
+
+            spacing: 8
+
+            // ─────────────────────────────────────
+            // Google Calendar (next event)
+            // ─────────────────────────────────────
+
+            MouseArea {
+                id: calendarArea
+
+                Layout.preferredWidth: calendarText.implicitWidth
+                Layout.preferredHeight: calendarText.implicitHeight
+                Layout.maximumWidth: 260
+
+                visible: !root.calendarAuthenticated || root.hasNextEvent
+
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                onClicked: (mouse) => {
+                    if (mouse.button === Qt.RightButton) {
+                        if (root.calendarAuthenticated) {
+                            root.calendarDisplayMode = root.cycleDisplayMode(root.calendarDisplayMode)
+                        }
+                    } else if (!root.calendarAuthenticated) {
+                        if (!calendarInitProcess.running) calendarInitProcess.running = true
+                    }
+                }
+
+                Text {
+                    id: calendarText
+
+                    text: {
+                        if (!root.calendarAuthenticated) return "󰃭 Sign in"
+
+                        const countdown = root.formatCountdown(root.nextEventStartMs - root.nowMs)
+                        const icon = "󰃭"
+
+                        if (root.calendarDisplayMode === 0) return icon + " " + countdown + " · " + root.nextEventTitle
+                        if (root.calendarDisplayMode === 1) return icon + " " + countdown
+                        return icon + " " + root.nextEventTitle
+                    }
+
+                    elide: Text.ElideRight
+
+                    color: root.calendarAuthenticated ? root.colAccent : root.colMuted
+
+                    font {
+                        family: root.fontFamily
+                        pixelSize: root.fontSize
+                        bold: true
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 10
+
+            spacing: 8
+
+            // ─────────────────────────────────────
+            // Todoist (overdue + due today)
+            // ─────────────────────────────────────
+
+            MouseArea {
+                id: tasksArea
+
+                Layout.preferredWidth: tasksText.implicitWidth
+                Layout.preferredHeight: tasksText.implicitHeight
+
+                visible: root.hasTasksData
+
+                acceptedButtons: Qt.RightButton
+
+                onClicked: {
+                    root.taskDisplayMode = root.cycleDisplayMode(root.taskDisplayMode)
+                }
+
+                Text {
+                    id: tasksText
+
+                    text: {
+                        const total = root.tasksOverdueCount + root.tasksDueTodayCount
+                        const icon = "󰄲"
+
+                        if (root.taskDisplayMode === 0) return icon
+                        if (root.taskDisplayMode === 1) return String(total)
+                        return icon + " " + total
+                    }
+
+                    color: root.tasksOverdueCount > 0 ? root.colRed : root.colAccent
+
+                    font {
+                        family: root.fontFamily
+                        pixelSize: root.fontSize
+                        bold: true
+                    }
+                }
+            }
         }
     }
 }

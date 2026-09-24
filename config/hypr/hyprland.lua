@@ -373,6 +373,7 @@ hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
+hl.bind(mainMod .. " + ALT + B", hl.dsp.exec_cmd("quickshell ipc call barBottom toggle"))
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
