@@ -1,0 +1,401 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TOKEN_FILE="$HOME/.secrets/todoist"
+API="https://api.todoist.com/api/v1"
+
+die() {
+    echo "todo: $*" >&2
+    exit 1
+}
+
+CONFIG_DIR="$HOME/.config/todo"
+CONFIG_FILE="$CONFIG_DIR/config"
+
+ensure_config() {
+    [ -f "$CONFIG_FILE" ] && return
+    mkdir -p "$CONFIG_DIR"
+    cat >"$CONFIG_FILE" <<'EOF'
+# todo config
+#
+# default_mode: interface `todo` launches by default
+#   text - plain unix-style output (no picker tools, just text)
+#   tui  - ranger-style vim-motion interface (todo-tui, Go/bubbletea)
+default_mode=text
+#
+# default_view: which view the tui opens on (also changeable from its
+# Settings page, press S)
+#   today | overdue | today_overdue | all
+default_view=today
+EOF
+}
+
+config_get() {
+    local key="$1" default="${2:-}" val
+    val=$(grep -E "^${key}=" "$CONFIG_FILE" 2>/dev/null | tail -n1 | cut -d= -f2-)
+    echo "${val:-$default}"
+}
+
+config_set() {
+    local key="$1" value="$2"
+    if grep -qE "^${key}=" "$CONFIG_FILE" 2>/dev/null; then
+        sed -i "s|^${key}=.*|${key}=${value}|" "$CONFIG_FILE"
+    else
+        echo "${key}=${value}" >>"$CONFIG_FILE"
+    fi
+}
+
+# `todo config` (show all) | `todo config <option>` (get) | `todo config <option> <value>` (set)
+cmd_config() {
+    if [ $# -eq 0 ]; then
+        cat "$CONFIG_FILE"
+    elif [ $# -eq 1 ]; then
+        config_get "$1"
+    else
+        local key="$1"
+        shift
+        local value="$*"
+        if [ "$key" = "default_mode" ] && [[ "$value" != "text" && "$value" != "tui" ]]; then
+            die "default_mode must be 'text' or 'tui'"
+        fi
+        if [ "$key" = "default_view" ] && [[ "$value" != "today" && "$value" != "overdue" && "$value" != "today_overdue" && "$value" != "all" ]]; then
+            die "default_view must be one of: today, overdue, today_overdue, all"
+        fi
+        config_set "$key" "$value"
+        echo "todo: set $key=$value"
+    fi
+}
+
+ensure_config
+MODE=$(config_get default_mode text)
+
+# `config` only touches plain files (grep/sed/cat), so let it run even on a
+# machine missing curl/jq instead of dragging in nix-shell for no reason.
+if [ "${1:-}" = "config" ]; then
+    shift
+    cmd_config "$@"
+    exit 0
+fi
+
+# The vim-motion TUI is a separately compiled Go program (bubbletea) that
+# does its own HTTP/JSON — no curl/jq/nix-shell needed on this path either.
+cmd_tui() {
+    command -v todo-tui >/dev/null 2>&1 \
+        || die "todo-tui binary not found — run 'boner rebuild' to build it (see nixos/users/rileyboughner.nix)"
+    exec todo-tui
+}
+if [ "${1:-}" = "tui" ] || { [ -z "${1:-}" ] && [ "$MODE" = "tui" ]; }; then
+    cmd_tui
+fi
+
+# Skip the ~0.5-0.8s nix-shell startup cost when curl/jq are already on PATH
+# (the common case once installed system-wide), and only fall back to
+# fetching them via Nix if something's actually missing — keeps this script
+# working on a fresh machine (NixOS or any Linux with Nix installed) without
+# paying that tax on every single invocation.
+missing=()
+for bin in curl jq; do
+    command -v "$bin" >/dev/null 2>&1 || missing+=("$bin")
+done
+if [ "${#missing[@]}" -gt 0 ]; then
+    command -v nix-shell >/dev/null 2>&1 \
+        || die "missing ${missing[*]} and nix-shell isn't available to fetch them"
+    printf -v _relaunch '%q ' bash "$0" "$@"
+    exec nix-shell -p "${missing[@]}" --run "$_relaunch"
+fi
+
+if [ -t 1 ]; then
+    RED=$'\033[31m'
+    RESET=$'\033[0m'
+else
+    RED=""
+    RESET=""
+fi
+
+[ -f "$TOKEN_FILE" ] || die "no token at $TOKEN_FILE (echo YOUR_TOKEN > $TOKEN_FILE && chmod 600 $TOKEN_FILE)"
+TOKEN=$(<"$TOKEN_FILE")
+TODAY=$(date +%F)
+
+# The `filter` query param on GET /tasks is not honored by the API (it
+# silently returns the unfiltered active-task list instead), so pull every
+# active task (limit=200 avoids needing more than one page for any
+# reasonably sized task list) and filter/sort by due date ourselves.
+fetch_all_tasks() {
+    local cursor="" page next
+    while true; do
+        if [ -z "$cursor" ]; then
+            page=$(curl -sS -G "$API/tasks" -H "Authorization: Bearer $TOKEN" \
+                --data-urlencode "limit=200")
+        else
+            page=$(curl -sS -G "$API/tasks" -H "Authorization: Bearer $TOKEN" \
+                --data-urlencode "limit=200" --data-urlencode "cursor=$cursor")
+        fi
+        jq -c '.results[]' <<<"$page"
+        next=$(jq -r '.next_cursor' <<<"$page")
+        [ "$next" != "null" ] || break
+        cursor="$next"
+    done
+}
+
+# Tasks for a given view, one per line: id \t due(iso) \t priority \t content
+# mode: today_overdue | overdue | today | all
+fetch_tasks() {
+    local mode="$1"
+    fetch_all_tasks | jq -s -r --arg today "$TODAY" --arg mode "$mode" '
+        def key: (.due.date // .due.datetime[0:10] // "9999-99-99");
+        map(select(
+            if $mode == "all" then true
+            elif $mode == "today_overdue" then (.due != null and (key <= $today))
+            elif $mode == "overdue" then (.due != null and (key < $today))
+            elif $mode == "today" then (.due != null and (key == $today))
+            else true end
+        ))
+        | sort_by(.due.datetime // .due.date // "9999-99-99")
+        | .[]
+        | [.id, (.due.datetime // .due.date // ""), (.priority | tostring), .content]
+        | @tsv
+    '
+}
+
+prio_marker() {
+    case "$1" in
+        4) echo "p1" ;;
+        3) echo "p2" ;;
+        2) echo "p3" ;;
+        *) echo "" ;;
+    esac
+}
+
+fmt_due() {
+    local due="$1" d t
+    [ -n "$due" ] || { echo ""; return; }
+    d="${due:0:10}"
+    if [[ "$due" == *T* ]]; then
+        t=$(date -d "$due" +"%-I:%M %p" 2>/dev/null || echo "")
+        if [[ "$d" < "$TODAY" ]]; then echo "overdue $d $t";
+        elif [[ "$d" == "$TODAY" ]]; then echo "today $t";
+        else echo "$d $t"; fi
+    else
+        if [[ "$d" < "$TODAY" ]]; then echo "overdue $d"; else echo "today"; fi
+    fi
+}
+
+# Shared API actions (used by both text-mode commands and the tui) -----------
+
+api_close() {
+    curl -sS -o /dev/null -w "%{http_code}" -X POST \
+        "$API/tasks/$1/close" -H "Authorization: Bearer $TOKEN"
+}
+
+api_delete() {
+    curl -sS -o /dev/null -w "%{http_code}" -X DELETE \
+        "$API/tasks/$1" -H "Authorization: Bearer $TOKEN"
+}
+
+# Creates a task via quick-add; writes the JSON response to $1, returns the
+# HTTP status code on stdout.
+api_create() {
+    curl -sS -o "$1" -w "%{http_code}" "$API/tasks/quick" \
+        -H "Authorization: Bearer $TOKEN" --data-urlencode "text=$2"
+}
+
+# Reschedules a task via natural-language due text (e.g. "tomorrow 5pm").
+# $1 = task id, $2 = output file for the JSON response, $3 = due text.
+# Writes the JSON response to $2, returns the HTTP status code on stdout.
+api_reschedule() {
+    local body_json
+    body_json=$(jq -n --arg s "$3" '{due_string: $s}')
+    curl -sS -o "$2" -w "%{http_code}" -X POST "$API/tasks/$1" \
+        -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+        -d "$body_json"
+}
+
+# Text mode -------------------------------------------------------------
+
+# Prints a numbered task listing from fetch_tasks-shaped rows.
+print_task_list() {
+    local rows="$1" empty_msg="$2"
+    if [ -z "$rows" ]; then
+        echo "$empty_msg"
+        return
+    fi
+    local i=0 id due prio content p when
+    while IFS=$'\t' read -r id due prio content; do
+        i=$((i + 1))
+        p=$(prio_marker "$prio")
+        when=$(fmt_due "$due")
+        if [[ "$when" == overdue* ]]; then
+            when="${RED}${when}${RESET}"
+        fi
+        if [ -n "$when" ]; then
+            printf "%2d. %-3s %s  (%s)\n" "$i" "$p" "$content" "$when"
+        else
+            printf "%2d. %-3s %s\n" "$i" "$p" "$content"
+        fi
+    done <<<"$rows"
+}
+
+cmd_list() {
+    print_task_list "$(fetch_tasks today_overdue)" "Nothing due today or overdue."
+}
+
+# Prints "overdueCount\tdueTodayCount" for status-bar style consumers.
+cmd_task_count() {
+    local overdue today
+    overdue=$(fetch_tasks overdue | grep -c .)
+    today=$(fetch_tasks today | grep -c .)
+    printf '%d\t%d\n' "$overdue" "$today"
+}
+
+cmd_task_list() {
+    local arg="${1:-}" mode msg
+    case "$arg" in
+        "") mode="all"; msg="No active tasks." ;;
+        overdue) mode="overdue"; msg="Nothing overdue." ;;
+        today) mode="today"; msg="Nothing due today." ;;
+        *) die 'usage: todo task list [overdue|today]' ;;
+    esac
+    print_task_list "$(fetch_tasks "$mode")" "$msg"
+}
+
+# Resolves a number or plain-text search against a task view -> "id\tcontent".
+# Pure unix approach: exact index, or case-insensitive substring match with a
+# numbered prompt to disambiguate multiple hits. No picker tool involved.
+# mode: today_overdue (default) | all
+resolve_task() {
+    local arg="$1" mode="${2:-today_overdue}" rows line matches n
+    rows=$(fetch_tasks "$mode")
+    [ -n "$rows" ] || die "no matching tasks"
+
+    if [[ "$arg" =~ ^[0-9]+$ ]]; then
+        line=$(sed -n "${arg}p" <<<"$rows")
+        [ -n "$line" ] || die "no task numbered $arg"
+        cut -f1,4 <<<"$line"
+        return
+    fi
+
+    matches=$(awk -F'\t' -v q="$arg" '{ if (index(tolower($4), tolower(q)) > 0) print }' <<<"$rows")
+    [ -n "$matches" ] || die "no match for '$arg'"
+
+    n=$(printf '%s\n' "$matches" | wc -l)
+    if [ "$n" -eq 1 ]; then
+        cut -f1,4 <<<"$matches"
+        return
+    fi
+
+    echo "todo: multiple matches for '$arg':" >&2
+    local i=0 mid mdue mprio mcontent choice
+    while IFS=$'\t' read -r mid mdue mprio mcontent; do
+        i=$((i + 1))
+        printf "  %d) %s\n" "$i" "$mcontent" >&2
+    done <<<"$matches"
+    read -r -p "pick a number: " choice
+    [[ "$choice" =~ ^[0-9]+$ ]] || die "invalid selection"
+    line=$(sed -n "${choice}p" <<<"$matches")
+    [ -n "$line" ] || die "invalid selection"
+    cut -f1,4 <<<"$line"
+}
+
+cmd_complete() {
+    [ $# -ge 1 ] || die "usage: todo task complete <number|text>"
+    local id content code
+    IFS=$'\t' read -r id content < <(resolve_task "$*" today_overdue)
+    code=$(api_close "$id")
+    if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+        echo "todo: completed \"$content\""
+    else
+        die "complete failed (HTTP $code)"
+    fi
+}
+
+cmd_remove() {
+    [ $# -ge 1 ] || die "usage: todo task remove <number|text>"
+    local id content code reply
+    IFS=$'\t' read -r id content < <(resolve_task "$*" all)
+    read -r -p "todo: delete \"$content\"? [y/N] " reply
+    case "$reply" in
+        y | Y | yes | Yes | YES) ;;
+        *)
+            echo "todo: cancelled"
+            return 0
+            ;;
+    esac
+    code=$(api_delete "$id")
+    if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+        echo "todo: removed \"$content\""
+    else
+        die "remove failed (HTTP $code)"
+    fi
+}
+
+cmd_create() {
+    [ $# -ge 1 ] || die 'usage: todo task create "<text>"'
+    local text="$*" code body
+    body=$(mktemp)
+    code=$(api_create "$body" "$text")
+    if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+        local rcontent rdue when
+        rcontent=$(jq -r '.content' "$body")
+        rdue=$(jq -r '.due.datetime // .due.date // empty' "$body")
+        if [ -n "$rdue" ]; then
+            when=$(fmt_due "$rdue")
+            echo "todo: created \"$rcontent\"  ($when)"
+        else
+            echo "todo: created \"$rcontent\"  (no due date)"
+        fi
+    else
+        cat "$body" >&2
+        rm -f "$body"
+        die "create failed (HTTP $code)"
+    fi
+    rm -f "$body"
+}
+
+cmd_reschedule() {
+    [ $# -ge 2 ] || die 'usage: todo task reschedule <number|text> <when>'
+    local sel="$1"
+    shift
+    local when_text="$*"
+    local id content code body
+    IFS=$'\t' read -r id content < <(resolve_task "$sel" all)
+    body=$(mktemp)
+    code=$(api_reschedule "$id" "$body" "$when_text")
+    if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+        local rdue when
+        rdue=$(jq -r '.due.datetime // .due.date // empty' "$body")
+        if [ -n "$rdue" ]; then
+            when=$(fmt_due "$rdue")
+            echo "todo: rescheduled \"$content\"  ($when)"
+        else
+            echo "todo: rescheduled \"$content\"  (no due date)"
+        fi
+    else
+        cat "$body" >&2
+        rm -f "$body"
+        die "reschedule failed (HTTP $code)"
+    fi
+    rm -f "$body"
+}
+
+case "${1:-}" in
+    "")
+        # A bare invocation with default_mode=tui already exec'd into
+        # todo-tui above and never reaches here.
+        cmd_list
+        ;;
+    task)
+        shift
+        case "${1:-}" in
+            complete) shift; cmd_complete "$@" ;;
+            create) shift; cmd_create "$@" ;;
+            remove) shift; cmd_remove "$@" ;;
+            reschedule) shift; cmd_reschedule "$@" ;;
+            list) shift; cmd_task_list "${1:-}" ;;
+            count) shift; cmd_task_count ;;
+            *) die 'usage: todo | todo tui | todo task <complete|create|remove|reschedule|list|count> ... | todo config ...' ;;
+        esac
+        ;;
+    *)
+        die 'usage: todo | todo tui | todo task <complete|create|remove|reschedule|list|count> ... | todo config ...'
+        ;;
+esac

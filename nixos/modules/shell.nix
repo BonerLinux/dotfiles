@@ -9,6 +9,8 @@
     tree
     oh-my-posh
     fastfetch
+    jq
+    gum
 
     cowsay
     sl
