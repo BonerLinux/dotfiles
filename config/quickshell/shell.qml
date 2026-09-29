@@ -83,6 +83,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property string nextEventTitle: ""
     property real nextEventStartMs: 0
     property real nowMs: Date.now()
+    property var todayEvents: []
     property bool hasTasksData: false
     property int tasksOverdueCount: 0
     property int tasksDueTodayCount: 0
@@ -174,6 +175,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         wifiPopup.visible = false
         bluetoothPopup.visible = false
         wallpaperPopup.visible = false
+        calendarPopup.visible = false
 
         target.visible = !wasVisible
     }
@@ -442,6 +444,35 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                 root.nextEventStartMs = start.getTime()
                 root.nextEventTitle = cols[4]
                 root.hasNextEvent = true
+            }
+        }
+    }
+
+    // Lists every event starting today, for the "today's events" popup
+    Process {
+        id: todayEventsProcess
+
+        command: [
+            "sh",
+            "-c",
+            "gcalcli --nocolor --client-secret \"$(cat /run/agenix/gcalcli-client-secret 2>/dev/null)\" agenda --tsv --military today tomorrow < /dev/null 2>/dev/null | awk -F'\\t' 'NR>1 && $2!=\"\"'"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const lines = text.trim().split("\n").filter((l) => l.length > 0)
+
+                root.todayEvents = lines.map((line) => {
+                    const cols = line.split("\t")
+                    if (cols.length < 5) return null
+
+                    const start = new Date(cols[0] + "T" + cols[1] + ":00")
+                    const timeLabel = isNaN(start.getTime())
+                        ? cols[1]
+                        : Qt.formatDateTime(start, "h:mm AP")
+
+                    return { time: timeLabel, title: cols[4] }
+                }).filter((e) => e !== null)
             }
         }
     }
@@ -1330,6 +1361,130 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                                 font {
                                     family: root.fontFamily
                                     pixelSize: root.fontSize
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Google Calendar (today's events)
+    // ─────────────────────────────────────────────
+
+    PopupWindow {
+        id: calendarPopup
+
+        anchor.item: calendarArea
+        anchor.rect.x: 0
+        anchor.rect.y: -8
+        anchor.rect.width: calendarArea.width
+        anchor.rect.height: 0
+        anchor.edges: Edges.Top | Edges.Left
+        anchor.gravity: Edges.Top | Edges.Right
+
+        implicitWidth: 280
+        implicitHeight: calendarColumn.implicitHeight + 16
+
+        color: "transparent"
+        visible: false
+        grabFocus: true
+
+        onClosed: calendarPopup.visible = false
+
+        onVisibleChanged: {
+            if (visible) todayEventsProcess.running = true
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 10
+            color: root.colBg
+            border.color: root.colMuted
+            border.width: 1
+
+            Column {
+                id: calendarColumn
+
+                anchors.fill: parent
+                anchors.margins: 8
+
+                spacing: 2
+
+                Text {
+                    text: "Today's Events"
+
+                    color: root.colMuted
+
+                    bottomPadding: 4
+
+                    font {
+                        family: root.fontFamily
+                        pixelSize: root.fontSize - 2
+                        bold: true
+                    }
+                }
+
+                Text {
+                    visible: root.todayEvents.length === 0
+
+                    text: "No events today"
+
+                    color: root.colMuted
+
+                    font {
+                        family: root.fontFamily
+                        pixelSize: root.fontSize
+                    }
+                }
+
+                Repeater {
+                    model: root.todayEvents
+
+                    delegate: Item {
+                        id: eventRow
+
+                        required property var modelData
+
+                        width: calendarColumn.width
+                        height: eventRowLayout.implicitHeight + 6
+
+                        RowLayout {
+                            id: eventRowLayout
+
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            spacing: 8
+
+                            Text {
+                                text: eventRow.modelData.time
+
+                                color: root.colAccent
+
+                                font {
+                                    family: root.fontFamily
+                                    pixelSize: root.fontSize - 1
+                                    bold: true
+                                }
+                            }
+
+                            Text {
+                                Layout.fillWidth: true
+
+                                text: eventRow.modelData.title
+
+                                elide: Text.ElideRight
+
+                                color: root.colFg
+
+                                font {
+                                    family: root.fontFamily
+                                    pixelSize: root.fontSize - 1
                                 }
                             }
                         }
@@ -2243,6 +2398,8 @@ property string fontFamily: "JetBrainsMono Nerd Font"
                         }
                     } else if (!root.calendarAuthenticated) {
                         if (!calendarInitProcess.running) calendarInitProcess.running = true
+                    } else {
+                        root.togglePopup(calendarPopup)
                     }
                 }
 
