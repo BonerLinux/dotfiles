@@ -9,7 +9,7 @@
       Host server
         HostName 192.168.1.2
         User admin
-        IdentityFile ~/.secrets/keys/server
+        IdentityFile /run/agenix/server-ssh-key
 
     ";
   };

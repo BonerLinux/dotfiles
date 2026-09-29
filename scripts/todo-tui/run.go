@@ -2,21 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+const tokenPath = "/run/agenix/todoist-token"
+
 func run() error {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-	tokenPath := filepath.Join(home, ".secrets", "todoist")
 	token, err := ReadToken(tokenPath)
 	if err != nil {
-		return fmt.Errorf("no token at %s (echo YOUR_TOKEN > %s && chmod 600 %s)", tokenPath, tokenPath, tokenPath)
+		return fmt.Errorf("no token at %s (edit nixos/secrets/todoist-token.age with agenix, then rebuild)", tokenPath)
 	}
 
 	client := NewClient(token)
