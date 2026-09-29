@@ -16,6 +16,9 @@
     hyprland.url = "github:hyprwm/hyprland?ref=v0.36.0";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     musnix.url = "github:musnix/musnix";
+
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, ... } @inputs: 
@@ -57,6 +60,7 @@
         ./modules/quickemu.nix
         ./modules/docker.nix
         ./modules/kubernetes.nix
+        ./modules/secrets.nix
       ];
     };
 
@@ -69,6 +73,7 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
+        ./modules/secrets.nix
       ];
     };
 

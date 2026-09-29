@@ -1,6 +1,7 @@
-{ config, pkgs, ... }: {
-	  imports = [ 
+{ config, pkgs, inputs, ... }: {
+	  imports = [
             /etc/nixos/hardware-configuration.nix
+	    inputs.agenix.nixosModules.default
 	    ./modules/shell.nix
 	    ./modules/nvim.nix
 	    ./modules/ssh.nix

@@ -409,7 +409,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         command: [
             "kitty", "--title", "gcalcli init", "-e",
             "sh", "-c",
-            "gcalcli --client-secret \"$(cat \"$HOME/.config/gcalcli/client_secret\" 2>/dev/null)\" init"
+            "gcalcli --client-secret \"$(cat /run/agenix/gcalcli-client-secret 2>/dev/null)\" init"
         ]
     }
 
@@ -419,7 +419,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
         command: [
             "sh",
             "-c",
-            "gcalcli --nocolor --client-secret \"$(cat \"$HOME/.config/gcalcli/client_secret\" 2>/dev/null)\" agenda --tsv --military now $(date -d '+7 days' '+%Y-%m-%d') < /dev/null 2>/dev/null | awk -F'\\t' 'NR>1 && $2!=\"\" {print; exit}'"
+            "gcalcli --nocolor --client-secret \"$(cat /run/agenix/gcalcli-client-secret 2>/dev/null)\" agenda --tsv --military now $(date -d '+7 days' '+%Y-%m-%d') < /dev/null 2>/dev/null | awk -F'\\t' 'NR>1 && $2!=\"\" {print; exit}'"
         ]
 
         stdout: StdioCollector {

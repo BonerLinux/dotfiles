@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TOKEN_FILE="$HOME/.secrets/todoist"
+TOKEN_FILE="/run/agenix/todoist-token"
 API="https://api.todoist.com/api/v1"
 
 die() {
@@ -112,7 +112,7 @@ else
     RESET=""
 fi
 
-[ -f "$TOKEN_FILE" ] || die "no token at $TOKEN_FILE (echo YOUR_TOKEN > $TOKEN_FILE && chmod 600 $TOKEN_FILE)"
+[ -f "$TOKEN_FILE" ] || die "no token at $TOKEN_FILE (edit nixos/secrets/todoist-token.age with agenix, then rebuild)"
 TOKEN=$(<"$TOKEN_FILE")
 TODAY=$(date +%F)
 
