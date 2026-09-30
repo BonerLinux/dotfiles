@@ -83,6 +83,9 @@
       modules = [
         ./hosts/server/configuration.nix
 	(userModule { username = serverUsername; extraGroups = [ "admin" ]; })
+
+        ./home-manager.nix
+        ./modules/git-credentials.nix
       ];
     };
   };
