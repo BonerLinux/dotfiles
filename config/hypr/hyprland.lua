@@ -371,6 +371,7 @@ hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("pypr toggle outlook"))
 
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("pypr toggle todo"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("pypr toggle calendar"))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pypr toggle messages"))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("quickshell ipc call bar toggle"))
 hl.bind(mainMod .. " + ALT + B", hl.dsp.exec_cmd("quickshell ipc call barBottom toggle"))
@@ -389,7 +390,6 @@ hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd(browser .. " https://uc.instr
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + Tab", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind(mainMod .. " + escape", hl.dsp.window.fullscreen())
 
@@ -483,6 +483,9 @@ hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = t
 
 -- Airplane mode: F10 toggles Wi-Fi and Bluetooth together
 hl.bind("F10", hl.dsp.exec_cmd("quickshell ipc call airplane toggle"), { locked = true })
+
+-- Print Screen (F11 without Fn) screenshots the active window
+hl.bind("F11", hl.dsp.exec_cmd("hyprshot -m window"))
 
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----

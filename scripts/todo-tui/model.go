@@ -237,10 +237,11 @@ type Model struct {
 	allTasks []Task
 	loaded   bool
 
-	mode      mode
-	input     textinput.Model
-	confirmID string
-	confirmTx string
+	mode           mode
+	input          textinput.Model
+	confirmID      string
+	confirmTx      string
+	addViewDefault bool // true for 'i' (schedule per current window), false for 'a' (always unscheduled)
 
 	modeIdx     int // index into modeValues, mirrors config's default_mode
 	settingsRow int // 0 = default_mode, 1 = default_view
@@ -524,7 +525,11 @@ func (m Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			if text == "" {
 				return m, nil
 			}
-			return m, m.doCreate(text)
+			view := viewAll
+			if m.addViewDefault {
+				view = viewOrder[m.viewIdx]
+			}
+			return m, m.doCreate(text, view)
 		}
 		var cmd tea.Cmd
 		m.input, cmd = m.input.Update(msg)
@@ -715,6 +720,14 @@ func (m Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "a":
 		m.mode = modeAdd
+		m.addViewDefault = false
+		m.input.Placeholder = "e.g. call dentist tomorrow 3pm p1"
+		m.input.Focus()
+		return m, textinput.Blink
+
+	case "i":
+		m.mode = modeAdd
+		m.addViewDefault = true
 		m.input.Placeholder = "e.g. call dentist tomorrow 3pm p1"
 		m.input.Focus()
 		return m, textinput.Blink
@@ -864,11 +877,21 @@ func (m Model) doBulkDelete(ids []string) tea.Cmd {
 	}
 }
 
-func (m Model) doCreate(text string) tea.Cmd {
+// doCreate adds a task via QuickAdd, then, if the typed text carried no date
+// of its own (t.Due is nil) and the window being viewed implies a default,
+// schedules it accordingly: Today and Today+Overdue default to today;
+// Overdue and All leave it unscheduled, matching what's already shown there.
+func (m Model) doCreate(text string, view viewMode) tea.Cmd {
 	return func() tea.Msg {
 		t, err := m.client.QuickAdd(text)
 		if err != nil {
 			return flashMsg{text: err.Error(), bad: true}
+		}
+		if t.Due == nil && (view == viewToday || view == viewTodayOverdue) {
+			t, err = m.client.Reschedule(t.ID, "today")
+			if err != nil {
+				return flashMsg{text: err.Error(), bad: true}
+			}
 		}
 		when, _ := fmtDue(t.Due, m.today)
 		if when == "" {
@@ -987,7 +1010,8 @@ func helpText() string {
 		"  d            delete selected task (confirms first)",
 		"  R            reschedule selected task (natural language, e.g. 'tomorrow 5pm')",
 		"  V            visual line select; j/k/g/G extend, c/d act on all, esc cancels",
-		"  a            add a new task",
+		"  a            add a new task, always unscheduled unless you type a date",
+		"  i            add a new task, scheduled per the current window (today for Today/Today+Overdue)",
 		"  r            refresh current view",
 		"  S            settings (default_mode, default_view)",
 		"  ?            this help",
