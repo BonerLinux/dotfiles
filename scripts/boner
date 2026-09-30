@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash stow git
+#!nix-shell -i bash -p bash stow git jq
 set -euo pipefail
 
 DOTFILES_TARGET="$HOME/.dotfiles"
@@ -24,6 +24,41 @@ cmd_update() {
     fi
 
     cmd_rebuild
+}
+
+cmd_secrets() {
+    local subcmd="${1:-list}"
+    case "$subcmd" in
+        update) cmd_secrets_update "${2:-}" ;;
+        list) cmd_secrets_list ;;
+        *)
+            echo "Usage: boner secrets [update NAME]" >&2
+            exit 1
+            ;;
+    esac
+}
+
+cmd_secrets_list() {
+    local rules="$DOTFILES_TARGET/nixos/secrets/secrets.nix"
+    local admin_key host_key
+
+    admin_key=$(awk -F': ' '/^# public key:/ {print $2}' "$HOME/.config/agenix/key.txt" 2>/dev/null || true)
+    host_key=$(cut -d' ' -f1,2 /etc/ssh/ssh_host_ed25519_key.pub 2>/dev/null || true)
+
+    nix eval --json --file "$rules" | jq -r \
+        --arg admin "$admin_key" --arg host "$host_key" '
+        to_entries[]
+        | select(.value.publicKeys | index($admin) or index($host))
+        | .key
+        | sub("\\.age$"; "")
+    '
+}
+
+cmd_secrets_update() {
+    local name="${1:?Usage: boner secrets update NAME}"
+    name="${name%.age}.age"
+
+    (cd "$DOTFILES_TARGET/nixos/secrets" && nix run github:ryantm/agenix -- -e "$name" -i "$HOME/.config/agenix/key.txt")
 }
 
 cmd_install() {
@@ -57,13 +92,16 @@ case "${1:-}" in
     install) cmd_install ;;
     rebuild) cmd_rebuild ;;
     update) cmd_update ;;
+    secrets) cmd_secrets "${@:2}" ;;
     *)
         echo "Usage: boner <command>" >&2
         echo "" >&2
         echo "Commands:" >&2
-        echo "  install   Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
-        echo "  rebuild   Rebuild and switch NixOS configuration" >&2
-        echo "  update    Update flake inputs, push flake.lock, and rebuild" >&2
+        echo "  install               Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
+        echo "  rebuild               Rebuild and switch NixOS configuration" >&2
+        echo "  update                Update flake inputs, push flake.lock, and rebuild" >&2
+        echo "  secrets               List agenix secrets decryptable by this key/host" >&2
+        echo "  secrets update NAME   Edit/create a secret (opens \$EDITOR via agenix)" >&2
         exit 1
         ;;
 esac
