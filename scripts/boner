@@ -57,8 +57,27 @@ cmd_secrets_list() {
 cmd_secrets_update() {
     local name="${1:?Usage: boner secrets update NAME}"
     name="${name%.age}.age"
+    local secret_file="$DOTFILES_TARGET/nixos/secrets/$name"
+    local before after
+
+    before=$(sha256sum "$secret_file" 2>/dev/null | cut -d' ' -f1 || true)
+
+    case "$name" in
+        git-credentials-*)
+            echo "Format (whole line, not just the token):" >&2
+            echo "  https://USERNAME:TOKEN@github.com" >&2
+            echo "" >&2
+            ;;
+    esac
 
     (cd "$DOTFILES_TARGET/nixos/secrets" && nix run github:ryantm/agenix -- -e "$name" -i "$HOME/.config/agenix/key.txt")
+
+    after=$(sha256sum "$secret_file" 2>/dev/null | cut -d' ' -f1 || true)
+
+    if [ "$before" != "$after" ]; then
+        echo "" >&2
+        echo "$name changed -- commit it and run 'boner rebuild' for it to take effect." >&2
+    fi
 }
 
 cmd_install() {
