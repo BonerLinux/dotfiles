@@ -259,8 +259,9 @@
       # points at -- agenix-decrypted, so neither token ever sits on disk
       # as plaintext.
       credential."https://github.com".useHttpPath = true;
-      credential."https://github.com/BonerLinux".helper = "store --file /run/agenix/git-credentials-personal";
-      credential."https://github.com/boughnerengineering".helper = "store --file /run/agenix/git-credentials-work";
+      credential."https://github.com/rileyboughner".helper = "store --file /run/agenix/git-credentials-rileyboughner";
+      credential."https://github.com/boughnerengineering".helper = "store --file /run/agenix/git-credentials-boughnerengineering";
+      credential."https://github.com/BonerLinux".helper = "store --file /run/agenix/git-credentials-bonerlinux";
     };
   };
 

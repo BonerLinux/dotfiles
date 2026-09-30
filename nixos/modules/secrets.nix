@@ -10,13 +10,18 @@
     owner = username;
   };
 
-  age.secrets.git-credentials-personal = {
-    file = ../secrets/git-credentials-personal.age;
+  age.secrets.git-credentials-rileyboughner = {
+    file = ../secrets/git-credentials-rileyboughner.age;
     owner = username;
   };
 
-  age.secrets.git-credentials-work = {
-    file = ../secrets/git-credentials-work.age;
+  age.secrets.git-credentials-boughnerengineering = {
+    file = ../secrets/git-credentials-boughnerengineering.age;
+    owner = username;
+  };
+
+  age.secrets.git-credentials-bonerlinux = {
+    file = ../secrets/git-credentials-bonerlinux.age;
     owner = username;
   };
 

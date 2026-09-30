@@ -14,8 +14,9 @@ in
   # Shared across every workstation.
   "todoist-token.age".publicKeys = workstations;
   "gcalcli-client-secret.age".publicKeys = workstations;
-  "git-credentials-personal.age".publicKeys = workstations;
-  "git-credentials-work.age".publicKeys = workstations;
+  "git-credentials-rileyboughner.age".publicKeys = workstations;
+  "git-credentials-boughnerengineering.age".publicKeys = workstations;
+  "git-credentials-bonerlinux.age".publicKeys = workstations;
 
   # One SSH identity per machine for logging into `server` -- each host only
   # decrypts its own key, so compromising one laptop doesn't leak the others.
