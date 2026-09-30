@@ -69,3 +69,12 @@ position = "4% 40px"
 animation = ""
 process_tracking = false
 lazy = true
+
+[scratchpads.messages]
+command = "brave --app=https://messages.google.com/web/conversations"
+class = "brave-messages.google.com__web_conversations-Default"
+size = "92% 92%"
+position = "4% 40px"
+animation = ""
+process_tracking = false
+lazy = true

@@ -1,11 +1,11 @@
-anchor=top-center
+anchor=bottom-right
 width=320
-margin=40,10,10,10
+outer-margin=10,40,40,10
 padding=12,16
 border-size=2
 border-radius=8
 font=JetBrainsMono Nerd Font 11
-default-timeout=5000
+default-timeout=3000
 max-visible=5
 sort=-time
 layer=overlay
@@ -24,7 +24,7 @@ default-timeout=3000
 background-color={color0}CC
 text-color={color7}ff
 border-color={color5}ff
-default-timeout=5000
+default-timeout=3000
 
 [urgency=high]
 background-color={color0}EE

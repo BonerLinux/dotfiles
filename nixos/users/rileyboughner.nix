@@ -255,7 +255,12 @@
     settings.user.name = "Riley Boughner";
     settings.user.email = "mail@rileyboughner.dev";
     settings = {
-      credential.helper = "store";
+      # Pick the right PAT automatically based on which org a remote's URL
+      # points at -- agenix-decrypted, so neither token ever sits on disk
+      # as plaintext.
+      credential."https://github.com".useHttpPath = true;
+      credential."https://github.com/BonerLinux".helper = "store --file /run/agenix/git-credentials-personal";
+      credential."https://github.com/boughnerengineering".helper = "store --file /run/agenix/git-credentials-work";
     };
   };
 

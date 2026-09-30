@@ -10,6 +10,16 @@
     owner = username;
   };
 
+  age.secrets.git-credentials-personal = {
+    file = ../secrets/git-credentials-personal.age;
+    owner = username;
+  };
+
+  age.secrets.git-credentials-work = {
+    file = ../secrets/git-credentials-work.age;
+    owner = username;
+  };
+
   # Each host decrypts its own dedicated server-access key, but consumers
   # (nixos/modules/ssh.nix) always read it from this same stable path.
   age.secrets.server-ssh-key = {

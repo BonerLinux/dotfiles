@@ -99,7 +99,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool showFullDate: false
     // Display mode: 0 = icon only, 1 = label only, 2 = icon + label
     property int weatherDisplayMode: 2
-    property int calendarDisplayMode: 2
+    property int calendarDisplayMode: 0
     property int wifiDisplayMode: 2
     property int volumeDisplayMode: 2
     property int bluetoothDisplayMode: 2
