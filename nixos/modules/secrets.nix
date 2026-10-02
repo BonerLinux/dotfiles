@@ -12,11 +12,6 @@
     owner = username;
   };
 
-  age.secrets.youtube-client-secret = {
-    file = ../secrets/youtube-client-secret.age;
-    owner = username;
-  };
-
   # Each host decrypts its own dedicated server-access key, but consumers
   # (nixos/modules/ssh.nix) always read it from this same stable path.
   age.secrets.server-ssh-key = {
