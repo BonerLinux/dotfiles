@@ -11,6 +11,11 @@
         User admin
         IdentityFile /run/agenix/server-ssh-key
 
+      Host desktop
+        HostName 192.168.1.4
+        User rileyboughner
+        IdentityFile /run/agenix/desktop-ssh-key
+
     ";
   };
 
