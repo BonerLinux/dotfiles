@@ -27,4 +27,8 @@ in
   # decrypts its own key, so compromising one laptop doesn't leak the others.
   "server-ssh-key-laptop.age".publicKeys = [ laptop admin ];
   "server-ssh-key-desktop.age".publicKeys = [ admin ]; # add `desktop` once its key is captured, then `agenix -r`
+
+  # Private key for logging into `desktop` from the other workstations. The
+  # matching .pub is trusted in nixos/hosts/desktop/configuration.nix.
+  "desktop-ssh-key.age".publicKeys = workstations;
 }

@@ -25,16 +25,19 @@ Welcome to my dotfiles! These contain the NixOS system configuration and Hyprlan
 | ...then a live-searchable, keyboard-navigable image grid | |
 
 ## Repository layout
-- `nixos/` — the flake, per-host NixOS configuration (`nixos/hosts/{desktop,laptop,server}`), shared modules (`nixos/modules/`), and the Home Manager entry point.
+- `nixos/` — the flake, per-host NixOS configuration (`nixos/hosts/{desktop,laptop,server}`), shared modules (`nixos/modules/`), per-user Home Manager configs (`nixos/users/`), and [agenix](https://github.com/ryantm/agenix)-encrypted secrets (`nixos/secrets/`).
 - `config/` — application config, stowed into `~/.config` by `scripts/boner`.
 - `scripts/` — helpers installed onto `$PATH`: dotfiles install/rebuild, and wallpaper/theme management.
 
 ## Hosts
-- **desktop** — NVIDIA, mounts the NFS share from `server`.
+- **desktop** — NVIDIA, mounts the NFS share from `server`, gaming (Steam, Heroic, Discord), Docker/Kubernetes, quickemu/libvirt VMs, Terraform.
 - **laptop** — wireless networking, mounts the NFS share from `server`, fingerprint unlock, quickemu.
-- **server** — the NFS server, plus Docker and Kubernetes.
+- **server** — headless; NFS and Samba file sharing, plus Docker and Kubernetes (k3s).
 
-All three share `nixos/configuration.nix` (shell, Neovim, SSH) and `nixos/modules/hyprland.nix`. `nixos/modules/audio.nix` (PipeWire, musnix, Ardour and friends) is a deliberately opt-in module for audio production rather than something every host imports.
+All three share `nixos/configuration.nix` (shell, Neovim, SSH) and `nixos/modules/hyprland.nix` (desktop/laptop only). `nixos/modules/audio.nix` (PipeWire, musnix, Ardour and friends) is a deliberately opt-in module for audio production rather than something every host imports.
+
+## Secrets
+Credentials (git PATs per GitHub org, Todoist/gcalcli tokens, inter-host SSH keys) are encrypted at rest with [agenix](https://github.com/ryantm/agenix) and committed as `.age` files under `nixos/secrets/`. Each host decrypts only the secrets it's granted access to and exposes them at `/run/agenix/<name>`; `programs.git` in `nixos/users/rileyboughner.nix` picks the right decrypted PAT automatically based on which GitHub org a remote belongs to.
 
 ## Install
 1. Install NixOS.
@@ -66,7 +69,7 @@ All three share `nixos/configuration.nix` (shell, Neovim, SSH) and `nixos/module
 `config/quickshell/shell.qml` is a Hyprland-aware status bar with right-click pickers backed directly by Quickshell's native service bindings (no shelling out to `wpctl`/`bluetoothctl`/`nmcli`):
 - **Audio** — switch output/input devices (PipeWire).
 - **Bluetooth** — pair, connect, disconnect, discover nearby devices.
-- **Wi-Fi** — connect/disconnect, toggle Wi-Fi on/off.
+- **Wi-Fi** — connect/disconnect, toggle Wi-Fi on/off; also lists WireGuard tunnels and toggles them passwordlessly via a scoped `wg-quick` sudo rule.
 
 | | | |
 | --- | --- | --- |
