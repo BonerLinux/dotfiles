@@ -19,12 +19,20 @@ in
   # Shared across every workstation.
   "todoist-token.age".publicKeys = workstations;
   "gcalcli-client-secret.age".publicKeys = workstations;
+
+  # Google OAuth client registered as "TVs and Limited Input devices" --
+  # the only client type that supports device-code login, which is what
+  # ytmusicapi needs and what the YT Music -> Lidarr sync job on `server`
+  # uses. Deliberately separate from gcalcli-client-secret: that one is a
+  # Desktop-app client and cannot do device-code login.
+  "youtube-client-secret.age".publicKeys = gitHosts;
+
   "git-credentials-rileyboughner.age".publicKeys = gitHosts;
   "git-credentials-boughnerengineering.age".publicKeys = gitHosts;
   "git-credentials-bonerlinux.age".publicKeys = gitHosts;
 
   # One SSH identity per machine for logging into `server` -- each host only
-  # decrypts its own key, so compromising one laptop doesn't leak the others.
+  # decrypts its own key, so compromising one laptop doesnt leak the others.
   "server-ssh-key-laptop.age".publicKeys = [ laptop admin ];
   "server-ssh-key-desktop.age".publicKeys = [ desktop admin ];
 

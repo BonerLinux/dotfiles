@@ -86,6 +86,7 @@
 
         ./home-manager.nix
         ./modules/git-credentials.nix
+        ./modules/secrets.nix
       ];
     };
   };
