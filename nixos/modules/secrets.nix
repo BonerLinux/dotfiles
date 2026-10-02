@@ -18,4 +18,10 @@
     file = ../secrets/server-ssh-key-${config.networking.hostName}.age;
     owner = username;
   };
+
+  # Key for logging into `desktop` from other workstations (nixos/modules/ssh.nix).
+  age.secrets.desktop-ssh-key = {
+    file = ../secrets/desktop-ssh-key.age;
+    owner = username;
+  };
 }

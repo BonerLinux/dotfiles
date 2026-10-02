@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }: {
+{ config, pkgs, inputs, username, ... }: {
 	  imports = [
             /etc/nixos/hardware-configuration.nix
 	    inputs.agenix.nixosModules.default
@@ -70,11 +70,28 @@
 	    pinentryPackage = pkgs.pinentry-tty;
 	  };
 
-	  # -- garbage collection -- 
+	  # -- garbage collection --
 	  nix.settings.experimental-features = [ "nix-command" "flakes" ]; nix.gc = {
 	    automatic = true;
 	    dates = "weekly";
 	    options = "--delete-older-than 7d";
 	  };
+
+	  # Let `boner rebuild` run without a password prompt. Note this is a
+	  # much wider grant than the other NOPASSWD rules in this repo (e.g.
+	  # wireless-networking.nix's wg-quick toggle): nixos-rebuild switch
+	  # activates arbitrary root-owned config, so this is effectively
+	  # passwordless root for this user via `boner rebuild`/`boner update`.
+	  security.sudo.extraRules = [
+	    {
+	      users = [ username ];
+	      commands = [
+	        {
+	          command = "/run/current-system/sw/bin/nixos-rebuild switch --flake * --impure";
+	          options = [ "NOPASSWD" ];
+	        }
+	      ];
+	    }
+	  ];
 
 }

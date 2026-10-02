@@ -289,6 +289,9 @@ in
       credential."https://github.com/rileyboughner".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-rileyboughner";
       credential."https://github.com/boughnerengineering".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-boughnerengineering";
       credential."https://github.com/BonerLinux".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-bonerlinux";
+      # elifouts/DevBits -- a repo you push to under someone else's account,
+      # authenticated with your personal token.
+      credential."https://github.com/elifouts".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-rileyboughner";
     };
   };
 

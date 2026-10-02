@@ -27,4 +27,10 @@ in
   # decrypts its own key, so compromising one laptop doesn't leak the others.
   "server-ssh-key-laptop.age".publicKeys = [ laptop admin ];
   "server-ssh-key-desktop.age".publicKeys = [ admin ]; # add `desktop` once its key is captured, then `agenix -r`
+
+  # Private key for logging into `desktop` from the other workstations.
+  # TODO: generate with `ssh-keygen -t ed25519 -f desktop-ssh-key -C desktop-access`,
+  # add the matching .pub to desktop's authorized_keys, then
+  # `agenix -e desktop-ssh-key.age < desktop-ssh-key` to create this file.
+  "desktop-ssh-key.age".publicKeys = workstations;
 }

@@ -13,6 +13,7 @@
     gum
 
     cowsay
+    pipes
     sl
     asciiquarium
     cmatrix
