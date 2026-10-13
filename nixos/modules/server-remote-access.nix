@@ -23,7 +23,7 @@
       IdentityFile /run/agenix/server-to-desktop-key
 
     Host laptop
-      HostName 192.168.1.5
+      HostName 192.168.1.3
       User rileyboughner
       IdentityFile /run/agenix/server-to-laptop-key
 
