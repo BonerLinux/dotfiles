@@ -47,4 +47,5 @@ in
   # matching .pub halves are trusted in each workstation's configuration.nix.
   "server-to-desktop-key.age".publicKeys = [ server admin ];
   "server-to-laptop-key.age".publicKeys = [ server admin ];
+  "server-to-router-key.age".publicKeys = [ server admin ];
 }

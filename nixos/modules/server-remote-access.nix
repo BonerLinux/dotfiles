@@ -11,6 +11,10 @@
     file = ../secrets/server-to-laptop-key.age;
     owner = username;
   };
+  age.secrets.server-to-router-key = {
+    file = ../secrets/server-to-router-key.age;
+    owner = username;
+  };
 
   programs.ssh.extraConfig = ''
     Host desktop
@@ -22,6 +26,11 @@
       HostName 192.168.1.5
       User rileyboughner
       IdentityFile /run/agenix/server-to-laptop-key
+
+    Host router
+      HostName 192.168.1.1
+      User root
+      IdentityFile /run/agenix/server-to-router-key
   '';
 
   # Let the admin user's systemd --user instance (and the
