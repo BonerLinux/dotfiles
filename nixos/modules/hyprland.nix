@@ -81,6 +81,6 @@
   ];
 
   environment.shellInit = ''
-    (cat ~/.cache/wal/sequences &)
+    [ -t 1 ] && (cat ~/.cache/wal/sequences &)
   '';
 }

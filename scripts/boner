@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash stow git jq
+#!nix-shell -i bash -p bash stow git jq virt-viewer
 set -euo pipefail
 
 DOTFILES_TARGET="$HOME/.dotfiles"
@@ -80,6 +80,23 @@ cmd_secrets_update() {
     fi
 }
 
+cmd_vm() {
+    local name="${1:?Usage: boner vm NAME}"
+    local port
+
+    case "$name" in
+        cyber-defence) port=5930 ;;
+        *)
+            echo "Unknown VM: $name" >&2
+            echo "Available VMs: cyber-defence" >&2
+            exit 1
+            ;;
+    esac
+
+    echo "Connecting to $name via SPICE (192.168.1.2:$port)..."
+    exec remote-viewer "spice://192.168.1.2:${port}"
+}
+
 cmd_install() {
     if [ "$REPO_ROOT" != "$DOTFILES_TARGET" ]; then
         if [ -e "$DOTFILES_TARGET" ]; then
@@ -112,6 +129,7 @@ case "${1:-}" in
     rebuild) cmd_rebuild ;;
     update) cmd_update ;;
     secrets) cmd_secrets "${@:2}" ;;
+    vm) cmd_vm "${@:2}" ;;
     *)
         echo "Usage: boner <command>" >&2
         echo "" >&2
@@ -121,6 +139,7 @@ case "${1:-}" in
         echo "  update                Update flake inputs, push flake.lock, and rebuild" >&2
         echo "  secrets               List agenix secrets decryptable by this key/host" >&2
         echo "  secrets update NAME   Edit/create a secret (opens \$EDITOR via agenix)" >&2
+        echo "  vm NAME               Open a SPICE viewer to a VM hosted on the server" >&2
         exit 1
         ;;
 esac

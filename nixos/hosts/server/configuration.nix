@@ -10,6 +10,8 @@
       ../../modules/nfs-server.nix
       ../../modules/samba-server.nix
       ../../modules/tank-backup.nix
+      ../../modules/quickemu.nix
+      ../../modules/vm-cyber-defence.nix
     ];
 
   networking.hostName = "server";
@@ -22,7 +24,7 @@
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
   # Open necessary ports (already correct)
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 5930 ];
   networking.firewall.allowedUDPPorts = [ 51820 ];
 
   # Add NAT and forwarding rules for WireGuard
