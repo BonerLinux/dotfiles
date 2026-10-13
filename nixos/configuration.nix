@@ -82,12 +82,23 @@
 	  # wireless-networking.nix's wg-quick toggle): nixos-rebuild switch
 	  # activates arbitrary root-owned config, so this is effectively
 	  # passwordless root for this user via `boner rebuild`/`boner update`.
+	  # Passwordless poweroff/reboot, same username-scoped rationale as the
+	  # nixos-rebuild rule above -- lets Claude Code's remote control (or the
+	  # user, via ssh) shut down/restart a machine without a password prompt.
 	  security.sudo.extraRules = [
 	    {
 	      users = [ username ];
 	      commands = [
 	        {
 	          command = "/run/current-system/sw/bin/nixos-rebuild switch --flake * --impure";
+	          options = [ "NOPASSWD" ];
+	        }
+	        {
+	          command = "/run/current-system/sw/bin/systemctl poweroff";
+	          options = [ "NOPASSWD" ];
+	        }
+	        {
+	          command = "/run/current-system/sw/bin/systemctl reboot";
 	          options = [ "NOPASSWD" ];
 	        }
 	      ];
