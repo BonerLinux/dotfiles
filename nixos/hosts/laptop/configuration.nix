@@ -12,6 +12,13 @@
 
   networking.hostName = "laptop";
 
+  # Trust the public half of server-to-laptop-key.age (see
+  # nixos/secrets/secrets.nix), used by Claude Code Remote Control running
+  # on `server` to reach this machine.
+  users.users.rileyboughner.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDHk8gh3PFQisND9c+yno1y837kTbP/CHm9KurwQV7fn server-to-laptop"
+  ];
+
   # -- lid switch --
   # Shut down on lid close (undocked/battery); ignored when docked
   # so an external monitor can still be used in clamshell mode.

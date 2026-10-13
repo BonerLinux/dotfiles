@@ -39,4 +39,12 @@ in
   # Private key for logging into `desktop` from the other workstations. The
   # matching .pub is trusted in nixos/hosts/desktop/configuration.nix.
   "desktop-ssh-key.age".publicKeys = workstations;
+
+  # Dedicated outbound identities for `server` to reach the workstations
+  # directly (Claude Code remote control). One key per target, same
+  # isolation rationale as the server-ssh-key-* keys above: compromising
+  # the server's access to one workstation doesn't leak the other. The
+  # matching .pub halves are trusted in each workstation's configuration.nix.
+  "server-to-desktop-key.age".publicKeys = [ server admin ];
+  "server-to-laptop-key.age".publicKeys = [ server admin ];
 }

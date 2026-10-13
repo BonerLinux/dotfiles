@@ -87,6 +87,7 @@
         ./home-manager.nix
         ./modules/git-credentials.nix
         ./modules/youtube-secret.nix
+        ./modules/server-remote-access.nix
       ];
     };
   };
