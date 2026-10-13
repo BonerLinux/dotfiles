@@ -101,6 +101,13 @@
 	          command = "/run/current-system/sw/bin/systemctl reboot";
 	          options = [ "NOPASSWD" ];
 	        }
+	        {
+	          # `shutdown` is a different binary than `systemctl poweroff`/
+	          # `reboot` above -- sudoers matches commands literally, so it
+	          # needs its own entry to cover `shutdown now`, `shutdown -r now`, etc.
+	          command = "/run/current-system/sw/bin/shutdown *";
+	          options = [ "NOPASSWD" ];
+	        }
 	      ];
 	    }
 	  ];

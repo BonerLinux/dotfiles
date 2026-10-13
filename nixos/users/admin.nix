@@ -57,11 +57,13 @@ in
       After = [ "network-online.target" ];
     };
     Service = {
-      # claude --remote-control checks isatty(stdout) to decide whether to
-      # run interactively; under systemd stdout is the journal, not a tty,
-      # so it falls back to --print mode and exits immediately demanding a
-      # prompt. `script` allocates a real pty so it starts normally.
-      ExecStart = "${pkgs.util-linux}/bin/script -qefc '${pkgs.claude-code}/bin/claude --remote-control' /dev/null";
+      # `claude remote-control` (not the --remote-control flag on a normal
+      # session) is the persistent broker that actually registers as a
+      # device in claude.ai/code's device list and can spawn sessions
+      # on demand. It also checks isatty(stdout) to decide whether to run
+      # interactively; under systemd stdout is the journal, not a tty, so
+      # `script` allocates a real pty so it starts normally.
+      ExecStart = "${pkgs.util-linux}/bin/script -qefc '${pkgs.claude-code}/bin/claude remote-control --name server' /dev/null";
       WorkingDirectory = config.home.homeDirectory;
       Restart = "always";
       RestartSec = 5;
