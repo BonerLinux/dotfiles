@@ -94,6 +94,7 @@ cmd_vm() {
     esac
 
     echo "Connecting to $name via SPICE (192.168.1.2:$port)..."
+    export GTK_THEME="Adwaita:dark"
     exec remote-viewer "spice://192.168.1.2:${port}"
 }
 
