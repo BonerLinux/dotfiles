@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, username, ... }:
+{ pkgs, config, lib, inputs, username, ... }:
 
 {
   imports = [
@@ -18,6 +18,15 @@
   environment.sessionVariables = {
     HYPRSHOT_DIR  = "$HOME/Pictures/Screenshots";
     QT_QPA_PLATFORMTHEME = "qt6ct";
+  } // lib.optionalAttrs (lib.elem "nvidia" config.services.xserver.videoDrivers) {
+    # Hyprland (wlroots) needs these for Xwayland GLX/glamor + GBM buffer
+    # sharing to work with the proprietary NVIDIA driver. Without them,
+    # Xwayland clients (e.g. Steam) fail GLX visual selection or crash in
+    # Vulkan WSI/present code, and DMA-BUF sharing falls back to slow SHM.
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    __NV_DISABLE_EXPLICIT_SYNC = "1";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
 
   fonts.packages = with pkgs; [

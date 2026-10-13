@@ -351,11 +351,9 @@ hl.device({
 ---- KEYBINDINGS ----
 ---------------------
 
-hl.config({
-	input = {
-		kb_options = "caps:swapescape",
-	},
-})
+-- caps/escape swap now happens at the evdev layer via keyd (see
+-- modules/keyd.nix), not here: GLFW apps like Minecraft ignore
+-- compositor-level XKB remaps, so this used to only work for XKB-aware apps.
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
