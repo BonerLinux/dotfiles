@@ -42,7 +42,7 @@ in
 
     # x42-avldrums
     (withPipewireJack guitarix)
-    # hydrogen
+    hydrogen
     # sfizz
     # helm
     # vital
