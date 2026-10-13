@@ -45,5 +45,28 @@ in
       credential."https://github.com/BonerLinux".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-bonerlinux";
     };
   };
+
+  # Persistent Claude Code Remote Control, running from the admin home
+  # directory so it's reachable from claude.ai/code without a login
+  # session kept open. Needs the admin user's systemd instance to linger
+  # at boot -- see systemd.tmpfiles.rules in
+  # nixos/modules/server-remote-access.nix.
+  systemd.user.services.claude-remote-control = {
+    Unit = {
+      Description = "Claude Code Remote Control (persistent)";
+      After = [ "network-online.target" ];
+    };
+    Service = {
+      # claude --remote-control checks isatty(stdout) to decide whether to
+      # run interactively; under systemd stdout is the journal, not a tty,
+      # so it falls back to --print mode and exits immediately demanding a
+      # prompt. `script` allocates a real pty so it starts normally.
+      ExecStart = "${pkgs.util-linux}/bin/script -qefc '${pkgs.claude-code}/bin/claude --remote-control' /dev/null";
+      WorkingDirectory = config.home.homeDirectory;
+      Restart = "always";
+      RestartSec = 5;
+    };
+    Install.WantedBy = [ "default.target" ];
+  };
 }
 

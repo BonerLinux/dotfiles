@@ -23,4 +23,11 @@
       User rileyboughner
       IdentityFile /run/agenix/server-to-laptop-key
   '';
+
+  # Let the admin user's systemd --user instance (and the
+  # claude-remote-control.service defined on it, see users/admin.nix)
+  # start at boot and keep running with no login session. Equivalent to
+  # `loginctl enable-linger admin`, done declaratively since that command
+  # itself needs root.
+  systemd.tmpfiles.rules = [ "f /var/lib/systemd/linger/${username} 0644 root root -" ];
 }
