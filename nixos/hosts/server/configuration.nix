@@ -9,6 +9,7 @@
       ../../modules/kubernetes.nix
       ../../modules/nfs-server.nix
       ../../modules/samba-server.nix
+      ../../modules/tank-backup.nix
     ];
 
   networking.hostName = "server";
