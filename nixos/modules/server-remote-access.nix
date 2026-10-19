@@ -33,7 +33,7 @@
       HostName 192.168.1.3
       User rileyboughner
       IdentityFile /run/agenix/server-to-laptop-key
-      ProxyCommand ${pkgs.netcat}/bin/nc -z -w2 192.168.1.3 22 2>/dev/null && exec ${pkgs.netcat}/bin/nc 192.168.1.3 22 || exec ${pkgs.netcat}/bin/nc 10.0.0.3 22
+      ProxyCommand ${pkgs.netcat}/bin/nc -z -w2 192.168.1.3 22 </dev/null >/dev/null 2>/dev/null && exec ${pkgs.netcat}/bin/nc 192.168.1.3 22 || exec ${pkgs.netcat}/bin/nc 10.0.0.3 22
 
     Host router
       HostName 192.168.1.1
