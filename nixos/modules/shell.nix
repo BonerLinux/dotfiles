@@ -51,7 +51,7 @@
       fetch = "clear && fastfetch";
       shell = "nix-shell";
 
-      clownweb = "sudo wg-quick up clownweb";
+      clownweb = "sudo wg-quick up vpn";
       
       download = "nix run nixpkgs#yt-dlp -- -f bestaudio --extract-audio --audio-format best";
       unzip = "nix run nixpkgs#unzip";

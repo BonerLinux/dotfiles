@@ -58,7 +58,7 @@
         interface="$1"
         action="$2"
         home_ssid="The-Clown-House"
-        vpn_name="clownweb"
+        vpn_name="vpn"
         wg_quick="/run/current-system/sw/bin/wg-quick"
         nmcli="/run/current-system/sw/bin/nmcli"
         ip="/run/current-system/sw/bin/ip"
