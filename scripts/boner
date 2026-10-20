@@ -98,6 +98,53 @@ cmd_vm() {
     exec remote-viewer "spice://192.168.1.2:${port}"
 }
 
+cmd_wallpaper() {
+    local subcmd="${1:-}"
+    case "$subcmd" in
+        # set/random/restore stay thin wrappers around the standalone
+        # scripts instead of reimplementing them here: those are also
+        # launched directly by Hyprland/Quickshell, where this script's
+        # nix-shell shebang would add ~0.3-1s of pure startup overhead on
+        # every wallpaper switch.
+        set)     shift; exec set-wallpaper "$@" ;;
+        random)  exec random-wallpaper ;;
+        restore) exec restore-wallpaper ;;
+        warm)    cmd_wallpaper_warm ;;
+        *)
+            echo "Usage: boner wallpaper {set PATH|random|restore|warm}" >&2
+            exit 1
+            ;;
+    esac
+}
+
+cmd_wallpaper_warm() {
+    local wallpaper_dir="$HOME/.wallpapers"
+    local total
+
+    if [ ! -d "$wallpaper_dir" ]; then
+        echo "No wallpapers found at $wallpaper_dir" >&2
+        exit 1
+    fi
+
+    total=$(find "$wallpaper_dir" -type f \( \
+        -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" -o -iname "*.webp" \
+    \) | wc -l)
+    echo "Pre-caching pywal colors for up to $total wallpapers (already-cached ones are skipped fast)..."
+
+    # wal already caches generated colorschemes per-image under
+    # ~/.cache/wal/schemes/, keyed by path+size+backend. Priming that cache
+    # ahead of time means set-wallpaper's own `wal -i` call hits it instead
+    # of re-running color quantization, which is most of a wallpaper
+    # switch's latency for a never-before-seen image. -n -s -t -e skip
+    # every live side effect (wallpaper/terminal/tty/gtk reload), so this
+    # is safe to run in the background without visibly touching anything.
+    find "$wallpaper_dir" -type f \( \
+        -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" -o -iname "*.webp" \
+    \) -print0 | nice -n 10 xargs -0 -P "$(nproc)" -I{} wal -i "{}" -n -s -t -e -q
+
+    echo "Done."
+}
+
 cmd_install() {
     if [ "$REPO_ROOT" != "$DOTFILES_TARGET" ]; then
         if [ -e "$DOTFILES_TARGET" ]; then
@@ -114,8 +161,8 @@ cmd_install() {
     stow --dir "$DOTFILES_TARGET" --target "$HOME/.config" config
 
     if [ ! -d "$HOME/.wallpapers" ]; then
-        echo "Cloning wallpapers in the background (log: $HOME/.wallpapers-clone.log)..."
-        nohup git clone https://github.com/dharmx/walls.git "$HOME/.wallpapers" \
+        echo "Cloning wallpapers and pre-caching their pywal colors in the background (log: $HOME/.wallpapers-clone.log)..."
+        nohup sh -c "git clone https://github.com/dharmx/walls.git '$HOME/.wallpapers' && '$DOTFILES_TARGET/scripts/boner' wallpaper warm" \
             >"$HOME/.wallpapers-clone.log" 2>&1 &
         disown
     else
@@ -131,6 +178,7 @@ case "${1:-}" in
     update) cmd_update ;;
     secrets) cmd_secrets "${@:2}" ;;
     vm) cmd_vm "${@:2}" ;;
+    wallpaper) cmd_wallpaper "${@:2}" ;;
     *)
         echo "Usage: boner <command>" >&2
         echo "" >&2
@@ -141,6 +189,10 @@ case "${1:-}" in
         echo "  secrets               List agenix secrets decryptable by this key/host" >&2
         echo "  secrets update NAME   Edit/create a secret (opens \$EDITOR via agenix)" >&2
         echo "  vm NAME               Open a SPICE viewer to a VM hosted on the server" >&2
+        echo "  wallpaper set PATH    Set the wallpaper and regenerate the pywal theme" >&2
+        echo "  wallpaper random      Set a random wallpaper from ~/.wallpapers" >&2
+        echo "  wallpaper restore     Restore the last-set wallpaper" >&2
+        echo "  wallpaper warm        Pre-cache pywal colors for every wallpaper" >&2
         exit 1
         ;;
 esac
