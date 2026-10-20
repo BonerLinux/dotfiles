@@ -60,7 +60,13 @@ hl.on("hyprland.start", function()
 	-- near-instant (~40ms measured) vs a cold launch. Hidden on its own
 	-- special workspace by the hide-firefox-prewarm window rule below, so
 	-- it never visibly appears at login.
-	hl.exec_cmd("firefox --new-window about:blank")
+	--
+	-- Uses a local file with a unique title instead of about:blank: every
+	-- freshly-opened window (including real ones from Super+F) briefly
+	-- shows the title "Mozilla Firefox" before its content loads, so
+	-- matching on that generic title hid every new window, not just this
+	-- one.
+	hl.exec_cmd("firefox --new-window file://" .. os.getenv("HOME") .. "/.config/hypr/firefox-prewarm.html")
 	hl.exec_cmd("pywalfox start")
 	-- Wireplumber restores the last volume on its own; force it back to 0 on login.
 	hl.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%")
@@ -184,15 +190,16 @@ hl.window_rule({
 })
 
 -- Hide the Firefox pre-warm window (see the firefox exec_cmd above) on its
--- own special workspace so it never visibly appears. about:blank's window
--- title is always exactly "Mozilla Firefox" with no page-title prefix -
--- distinctive enough to target without a custom --class flag, which
--- Firefox doesn't support.
+-- own special workspace so it never visibly appears. Matches on the
+-- unique title from firefox-prewarm.html, NOT the generic "Mozilla
+-- Firefox" every fresh window briefly shows before its content loads -
+-- matching that generic title hid every new window opened via Super+F
+-- too, not just this one.
 hl.window_rule({
 	name = "hide-firefox-prewarm",
 	match = {
 		class = "^firefox$",
-		title = "^Mozilla Firefox$",
+		title = "^__firefox_prewarm__ — Mozilla Firefox$",
 	},
 	workspace = "special:firefox-prewarm silent",
 	no_anim = true,
