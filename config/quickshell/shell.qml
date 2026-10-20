@@ -2354,6 +2354,8 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     PanelWindow {
         id: bottomBar
 
+        visible: false
+
         anchors.bottom: true
         anchors.left: true
         anchors.right: true

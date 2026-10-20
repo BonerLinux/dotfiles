@@ -103,6 +103,16 @@ hl.config({
 				angle = 45,
 			},
 			inactive_border = "rgba(" .. colors.color8:sub(2) .. "aa)",
+
+			-- Pyprland denies grouping on scratchpad windows, which makes
+			-- Hyprland render them with col.nogroup_border(_active) instead of
+			-- the normal active/inactive border. Mirror those here so
+			-- scratchpads (kitty-dropterm, etc.) still match the pywal theme.
+			nogroup_border_active = {
+				colors = { "rgba(" .. colors.color4:sub(2) .. "ee)", "rgba(" .. colors.color5:sub(2) .. "ee)" },
+				angle = 45,
+			},
+			nogroup_border = "rgba(" .. colors.color8:sub(2) .. "aa)",
 		},
 
 		-- Set to true to enable resizing windows by clicking and dragging on borders and gaps
