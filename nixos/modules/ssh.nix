@@ -1,22 +1,22 @@
-{ config, pkgs, lib, ... }: 
+{ config, pkgs, lib, hosts, ... }:
 
 {
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   programs.ssh = {
-    extraConfig = "
-      
+    extraConfig = ''
+
       Host server
-        HostName 192.168.1.2
-        User admin
+        HostName ${hosts.server.ip}
+        User ${hosts.server.user}
         IdentityFile /run/agenix/server-ssh-key
 
       Host desktop
-        HostName 192.168.1.4
-        User rileyboughner
+        HostName ${hosts.desktop.ip}
+        User ${hosts.desktop.user}
         IdentityFile /run/agenix/desktop-ssh-key
 
-    ";
+    '';
   };
 
   networking.firewall.allowedTCPPorts = [ 22 ];

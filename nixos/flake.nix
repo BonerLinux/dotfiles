@@ -36,6 +36,7 @@
     #options
     username = "rileyboughner";
     serverUsername = "admin";
+    hosts = import ./hosts.nix;
 
     system = "x86_64-linux";
     pkgs = import nixpkgs {
@@ -48,7 +49,7 @@
   {
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit username; };
+      specialArgs = { inherit inputs username hosts; };
       modules = [
         ./hosts/desktop/configuration.nix
 	(userModule { username = username; })
@@ -67,7 +68,7 @@
 
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; inherit username; };
+      specialArgs = { inherit inputs username hosts; };
       modules = [
         ./hosts/laptop/configuration.nix
 	(userModule { username = username; })
@@ -81,7 +82,7 @@
 
     nixosConfigurations.server = nixpkgs.lib.nixosSystem{
       inherit system;
-      specialArgs = { inherit inputs; username = serverUsername; };
+      specialArgs = { inherit inputs hosts; username = serverUsername; };
       modules = [
         ./hosts/server/configuration.nix
 	(userModule { username = serverUsername; extraGroups = [ "admin" ]; })
