@@ -21,6 +21,58 @@ if [ "${#missing[@]}" -gt 0 ]; then
     exec nix-shell -p "${missing[@]}" --run "$_relaunch"
 fi
 
+bold="" head="" reset="" dim=""
+if [ -t 2 ]; then
+    bold=$'\033[1m'
+    head=$'\033[1;36m'
+    dim=$'\033[2m'
+    reset=$'\033[0m'
+fi
+
+_section() { printf '%s%s%s\n' "$head" "$1" "$reset" >&2; }
+_row() { printf '  %s%-22s%s%s\n' "$bold" "$1" "$reset" "$2" >&2; }
+
+_rows_setup() {
+    _row "install"  "Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers"
+    _row "rebuild"  "Rebuild and switch NixOS configuration"
+    _row "update"   "Update flake inputs, push flake.lock, and rebuild"
+    _row "push"     "Push local dotfiles commits to the remote"
+    _row "pull"     "Pull the latest dotfiles commits from the remote"
+}
+
+_rows_wallpaper() {
+    _row "wallpaper set <path>" "Set the wallpaper and regenerate the pywal theme"
+    _row "wallpaper random"     "Set a random wallpaper from ~/.wallpapers"
+    _row "wallpaper restore"    "Restore the last-set wallpaper"
+    _row "wallpaper warm"       "Pre-cache pywal colors for every wallpaper"
+}
+
+_rows_secrets() {
+    _row "secrets"               "List agenix secrets decryptable by this key/host"
+    _row "secrets update <name>" "Edit/create a secret (opens \$EDITOR via agenix)"
+}
+
+_rows_remote() {
+    _row "vm cyber-defence" "Connect to the cyber-defence VM hosted on server"
+}
+
+# Per-subcommand usage, shown whenever that subcommand is called with a
+# missing/unrecognized argument instead of a bare bash error.
+_usage_wallpaper() {
+    printf 'Usage: boner wallpaper %s<subcommand>%s [args]\n\n' "$dim" "$reset" >&2
+    _rows_wallpaper
+}
+
+_usage_secrets() {
+    printf 'Usage: boner secrets %s[update <name>]%s\n\n' "$dim" "$reset" >&2
+    _rows_secrets
+}
+
+_usage_vm() {
+    printf 'Usage: boner vm %s<name>%s\n\n' "$dim" "$reset" >&2
+    _rows_remote
+}
+
 cmd_rebuild() {
     sudo nixos-rebuild switch --flake "$HOME/.dotfiles/nixos#" --impure
 }
@@ -41,13 +93,21 @@ cmd_update() {
     cmd_rebuild
 }
 
+cmd_push() {
+    git -C "$DOTFILES_TARGET" push
+}
+
+cmd_pull() {
+    git -C "$DOTFILES_TARGET" pull
+}
+
 cmd_secrets() {
     local subcmd="${1:-list}"
     case "$subcmd" in
         update) cmd_secrets_update "${2:-}" ;;
         list) cmd_secrets_list ;;
         *)
-            echo "Usage: boner secrets [update NAME]" >&2
+            _usage_secrets
             exit 1
             ;;
     esac
@@ -70,7 +130,11 @@ cmd_secrets_list() {
 }
 
 cmd_secrets_update() {
-    local name="${1:?Usage: boner secrets update NAME}"
+    local name="${1:-}"
+    if [ -z "$name" ]; then
+        _usage_secrets
+        exit 1
+    fi
     name="${name%.age}.age"
     local secret_file="$DOTFILES_TARGET/nixos/secrets/$name"
     local before after
@@ -96,14 +160,20 @@ cmd_secrets_update() {
 }
 
 cmd_vm() {
-    local name="${1:?Usage: boner vm NAME}"
+    local name="${1:-}"
     local port
+
+    if [ -z "$name" ]; then
+        _usage_vm
+        exit 1
+    fi
 
     case "$name" in
         cyber-defence) port=5930 ;;
         *)
             echo "Unknown VM: $name" >&2
-            echo "Available VMs: cyber-defence" >&2
+            echo >&2
+            _usage_vm
             exit 1
             ;;
     esac
@@ -125,12 +195,19 @@ cmd_wallpaper() {
         # launched directly by Hyprland/Quickshell, where this script's
         # nix-shell shebang would add ~0.3-1s of pure startup overhead on
         # every wallpaper switch.
-        set)     shift; exec set-wallpaper "$@" ;;
+        set)
+            shift
+            if [ -z "${1:-}" ]; then
+                _usage_wallpaper
+                exit 1
+            fi
+            exec set-wallpaper "$@"
+            ;;
         random)  exec random-wallpaper ;;
         restore) exec restore-wallpaper ;;
         warm)    cmd_wallpaper_warm ;;
         *)
-            echo "Usage: boner wallpaper {set PATH|random|restore|warm}" >&2
+            _usage_wallpaper
             exit 1
             ;;
     esac
@@ -192,46 +269,31 @@ cmd_install() {
 }
 
 print_usage() {
-    local bold="" head="" reset="" dim=""
-    if [ -t 2 ]; then
-        bold=$'\033[1m'
-        head=$'\033[1;36m'
-        dim=$'\033[2m'
-        reset=$'\033[0m'
-    fi
-
-    _section() { printf '%s%s%s\n' "$head" "$1" "$reset" >&2; }
-    _row() { printf '  %s%-20s%s%s\n' "$bold" "$1" "$reset" "$2" >&2; }
-
     printf '%sboner%s - dotfiles management\n\n' "$bold" "$reset" >&2
     printf 'Usage: boner %s<command>%s [args]\n\n' "$dim" "$reset" >&2
 
     _section "Setup"
-    _row "install"             "Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers"
-    _row "rebuild"              "Rebuild and switch NixOS configuration"
-    _row "update"               "Update flake inputs, push flake.lock, and rebuild"
+    _rows_setup
     echo >&2
 
     _section "Wallpaper"
-    _row "wallpaper set PATH"   "Set the wallpaper and regenerate the pywal theme"
-    _row "wallpaper random"     "Set a random wallpaper from ~/.wallpapers"
-    _row "wallpaper restore"    "Restore the last-set wallpaper"
-    _row "wallpaper warm"       "Pre-cache pywal colors for every wallpaper"
+    _rows_wallpaper
     echo >&2
 
     _section "Secrets"
-    _row "secrets"              "List agenix secrets decryptable by this key/host"
-    _row "secrets update NAME"  "Edit/create a secret (opens \$EDITOR via agenix)"
+    _rows_secrets
     echo >&2
 
     _section "Remote"
-    _row "vm NAME"               "Open a SPICE viewer to a VM hosted on the server"
+    _rows_remote
 }
 
 case "${1:-}" in
     install) cmd_install ;;
     rebuild) cmd_rebuild ;;
     update) cmd_update ;;
+    push) cmd_push ;;
+    pull) cmd_pull ;;
     secrets) cmd_secrets "${@:2}" ;;
     vm) cmd_vm "${@:2}" ;;
     wallpaper) cmd_wallpaper "${@:2}" ;;
