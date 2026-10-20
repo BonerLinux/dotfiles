@@ -109,12 +109,19 @@ makoctl reload
 # Restart swayosd so its OSD stylesheet picks up the new colors
 pkill swayosd-server 2>/dev/null || true
 sleep 0.3
-swayosd-server &
+swayosd-server >/dev/null 2>&1 &
 
 # Restart Quickshell so it picks up the new colors
+#
+# This script is itself run as a Quickshell child process (the wallpaper
+# picker's wallpaperSetProcess), which pipes this script's stdout/stderr
+# back to itself. pkill below kills that reader, closing the pipe - so the
+# freshly spawned quickshell must NOT inherit the now-broken pipe as its
+# own stdout/stderr, or its first log line raises SIGPIPE and kills it
+# silently (the bar just vanishes with no error anywhere).
 pkill quickshell 2>/dev/null || true
 sleep 0.3
-quickshell &
+quickshell >/dev/null 2>&1 &
 
 # Reload colors in running Neovim instances
 pkill -SIGUSR1 nvim
