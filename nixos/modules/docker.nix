@@ -7,7 +7,13 @@ in
 
     virtualisation.docker = {
       enable = true;
-      enableOnBoot = true;
+      # Socket-activated instead of eagerly started: docker.service sat
+      # directly in the critical path to graphical.target, adding ~2.5s to
+      # every login for a daemon that isn't needed until something actually
+      # runs `docker`. The daemon now starts on first use instead. Trade-off:
+      # containers with a restart policy no longer auto-start at boot - they
+      # come back once docker is first touched in a session.
+      enableOnBoot = false;
       package = pkgs.docker_25;
     };
 

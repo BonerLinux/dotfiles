@@ -13,6 +13,10 @@
 	  boot.loader.systemd-boot.enable = true;
 	  boot.initrd.systemd.enable = true;
 	  boot.loader.efi.canTouchEfiVariables = true;
+	  # Nothing picks a different boot entry each boot - cut the menu wait
+	  # down from the default 5s. Hold a key during POST to still get the
+	  # full menu (e.g. to roll back to an older generation).
+	  boot.loader.timeout = 1;
 	  boot.kernelPackages = pkgs.linuxPackages;
 	  #boot.kernelPackages = pkgs.linuxPackages_zen;
 	  #boot.kernelParams = [ "8250.nr_uarts=0" ];
