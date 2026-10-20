@@ -67,6 +67,10 @@ hl.on("hyprland.start", function()
 	-- matching on that generic title hid every new window, not just this
 	-- one.
 	hl.exec_cmd("firefox --new-window file://" .. os.getenv("HOME") .. "/.config/hypr/firefox-prewarm.html")
+	-- Pre-warm the messages/zoho/outlook scratchpads (see
+	-- scripts/prewarm-scratchpads for why this isn't just `lazy = false`
+	-- in pypr's own config).
+	hl.exec_cmd("prewarm-scratchpads")
 	hl.exec_cmd("pywalfox start")
 	-- Wireplumber restores the last volume on its own; force it back to 0 on login.
 	hl.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%")

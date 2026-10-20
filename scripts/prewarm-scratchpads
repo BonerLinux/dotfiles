@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Pyprland's own `lazy = false` bulk-startup spawn is unreliable for the
+# process_tracking = false (Brave PWA) scratchpads - across repeated clean
+# tests it consistently missed 2-3 of them with no error anywhere, while
+# `pypr toggle` on the exact same scratchpads worked instantly every time.
+# Explicitly toggle each one twice (show, then hide) instead, which is the
+# reliable code path. kitty-todo isn't here because its own `lazy = false`
+# in config.toml already works correctly.
+
+until [ -S "/run/user/$(id -u)/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.pyprland.sock" ]; do
+    sleep 0.3
+done
+
+for name in messages zoho outlook; do
+    pypr toggle "$name"
+    sleep 1
+    pypr toggle "$name"
+done

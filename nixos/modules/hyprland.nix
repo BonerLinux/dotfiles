@@ -48,6 +48,10 @@
       install -Dm755 ${../../scripts/restore-wallpaper} $out/bin/restore-wallpaper
     '')
 
+    (pkgs.runCommand "prewarm-scratchpads" { } ''
+      install -Dm755 ${../../scripts/prewarm-scratchpads} $out/bin/prewarm-scratchpads
+    '')
+
     (pkgs.makeDesktopItem {
       name = "vm-cyber-defence";
       desktopName = "cyber-defence (VM)";

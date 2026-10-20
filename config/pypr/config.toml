@@ -42,7 +42,7 @@ size = "92% 92%"
 position = "4% 40px"
 animation = ""
 process_tracking = false
-lazy = false
+lazy = true
 
 [scratchpads.outlook]
 command = "brave --app=https://outlook.office.com"
@@ -51,7 +51,7 @@ size = "92% 92%"
 position = "4% 40px"
 animation = ""
 process_tracking = false
-lazy = false
+lazy = true
 
 [scratchpads.todo]
 command = "kitty --class kitty-todo -e /home/rileyboughner/.dotfiles/scripts/todo tui"
@@ -77,4 +77,4 @@ size = "92% 92%"
 position = "4% 40px"
 animation = ""
 process_tracking = false
-lazy = false
+lazy = true
