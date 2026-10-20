@@ -1,10 +1,25 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash stow git jq virt-viewer
+#!/usr/bin/env bash
 set -euo pipefail
 
 DOTFILES_TARGET="$HOME/.dotfiles"
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(dirname "$SCRIPT_DIR")
+
+# Fall back to nix-shell only for deps that are actually missing (e.g. a
+# brand new machine, before its first nixos-rebuild has applied these as
+# systemPackages). Unconditionally wrapping the whole script in nix-shell
+# (as this used to) pays its ~0.3-1s nixpkgs-evaluation cost on every
+# single invocation, which is most of why `boner` felt slow to run at all
+# on an already set-up system. virt-viewer is deliberately left out here -
+# see cmd_vm, which is the only command that needs it.
+missing=()
+for bin in stow git jq; do
+    command -v "$bin" >/dev/null 2>&1 || missing+=("$bin")
+done
+if [ "${#missing[@]}" -gt 0 ]; then
+    printf -v _relaunch '%q ' bash "$0" "$@"
+    exec nix-shell -p "${missing[@]}" --run "$_relaunch"
+fi
 
 cmd_rebuild() {
     sudo nixos-rebuild switch --flake "$HOME/.dotfiles/nixos#" --impure
@@ -95,7 +110,11 @@ cmd_vm() {
 
     echo "Connecting to $name via SPICE (192.168.1.2:$port)..."
     export GTK_THEME="Adwaita:dark"
-    exec remote-viewer "spice://192.168.1.2:${port}"
+    if command -v remote-viewer >/dev/null 2>&1; then
+        exec remote-viewer "spice://192.168.1.2:${port}"
+    else
+        exec nix-shell -p virt-viewer --run "remote-viewer 'spice://192.168.1.2:${port}'"
+    fi
 }
 
 cmd_wallpaper() {
@@ -172,6 +191,43 @@ cmd_install() {
     echo "Done."
 }
 
+print_usage() {
+    local bold="" head="" reset="" dim=""
+    if [ -t 2 ]; then
+        bold=$'\033[1m'
+        head=$'\033[1;36m'
+        dim=$'\033[2m'
+        reset=$'\033[0m'
+    fi
+
+    _section() { printf '%s%s%s\n' "$head" "$1" "$reset" >&2; }
+    _row() { printf '  %s%-20s%s%s\n' "$bold" "$1" "$reset" "$2" >&2; }
+
+    printf '%sboner%s - dotfiles management\n\n' "$bold" "$reset" >&2
+    printf 'Usage: boner %s<command>%s [args]\n\n' "$dim" "$reset" >&2
+
+    _section "Setup"
+    _row "install"             "Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers"
+    _row "rebuild"              "Rebuild and switch NixOS configuration"
+    _row "update"               "Update flake inputs, push flake.lock, and rebuild"
+    echo >&2
+
+    _section "Wallpaper"
+    _row "wallpaper set PATH"   "Set the wallpaper and regenerate the pywal theme"
+    _row "wallpaper random"     "Set a random wallpaper from ~/.wallpapers"
+    _row "wallpaper restore"    "Restore the last-set wallpaper"
+    _row "wallpaper warm"       "Pre-cache pywal colors for every wallpaper"
+    echo >&2
+
+    _section "Secrets"
+    _row "secrets"              "List agenix secrets decryptable by this key/host"
+    _row "secrets update NAME"  "Edit/create a secret (opens \$EDITOR via agenix)"
+    echo >&2
+
+    _section "Remote"
+    _row "vm NAME"               "Open a SPICE viewer to a VM hosted on the server"
+}
+
 case "${1:-}" in
     install) cmd_install ;;
     rebuild) cmd_rebuild ;;
@@ -179,20 +235,9 @@ case "${1:-}" in
     secrets) cmd_secrets "${@:2}" ;;
     vm) cmd_vm "${@:2}" ;;
     wallpaper) cmd_wallpaper "${@:2}" ;;
+    help|-h|--help) print_usage ;;
     *)
-        echo "Usage: boner <command>" >&2
-        echo "" >&2
-        echo "Commands:" >&2
-        echo "  install               Move dotfiles to ~/.dotfiles, stow configs, clone wallpapers" >&2
-        echo "  rebuild               Rebuild and switch NixOS configuration" >&2
-        echo "  update                Update flake inputs, push flake.lock, and rebuild" >&2
-        echo "  secrets               List agenix secrets decryptable by this key/host" >&2
-        echo "  secrets update NAME   Edit/create a secret (opens \$EDITOR via agenix)" >&2
-        echo "  vm NAME               Open a SPICE viewer to a VM hosted on the server" >&2
-        echo "  wallpaper set PATH    Set the wallpaper and regenerate the pywal theme" >&2
-        echo "  wallpaper random      Set a random wallpaper from ~/.wallpapers" >&2
-        echo "  wallpaper restore     Restore the last-set wallpaper" >&2
-        echo "  wallpaper warm        Pre-cache pywal colors for every wallpaper" >&2
+        print_usage
         exit 1
         ;;
 esac
