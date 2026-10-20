@@ -54,6 +54,13 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("pypr")
 	hl.exec_cmd("restore-wallpaper")
+	-- Pre-warm Firefox so Super+F opens a window on an already-running
+	-- process instead of paying a full cold start. Firefox's own remoting
+	-- protocol makes opening a window on an already-running instance
+	-- near-instant (~40ms measured) vs a cold launch. Hidden on its own
+	-- special workspace by the hide-firefox-prewarm window rule below, so
+	-- it never visibly appears at login.
+	hl.exec_cmd("firefox --new-window about:blank")
 	hl.exec_cmd("pywalfox start")
 	-- Wireplumber restores the last volume on its own; force it back to 0 on login.
 	hl.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%")
@@ -173,6 +180,21 @@ hl.window_rule({
 	match = {
 		class = "^kitty-dropterm.*$",
 	},
+	no_anim = true,
+})
+
+-- Hide the Firefox pre-warm window (see the firefox exec_cmd above) on its
+-- own special workspace so it never visibly appears. about:blank's window
+-- title is always exactly "Mozilla Firefox" with no page-title prefix -
+-- distinctive enough to target without a custom --class flag, which
+-- Firefox doesn't support.
+hl.window_rule({
+	name = "hide-firefox-prewarm",
+	match = {
+		class = "^firefox$",
+		title = "^Mozilla Firefox$",
+	},
+	workspace = "special:firefox-prewarm silent",
 	no_anim = true,
 })
 
