@@ -52,6 +52,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("mako")
 	hl.exec_cmd("swayosd-server")
+	hl.exec_cmd("kdeconnectd")
 	hl.exec_cmd("pypr")
 	hl.exec_cmd("restore-wallpaper")
 	-- Pre-warm Firefox so Super+F opens a window on an already-running

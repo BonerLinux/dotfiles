@@ -56,6 +56,7 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
+        ./modules/kdeconnect.nix
         ./modules/keyd.nix
         ./modules/gaming.nix
         ./modules/terraform.nix
@@ -75,6 +76,7 @@
 
         ./home-manager.nix
         ./modules/hyprland.nix
+        ./modules/kdeconnect.nix
         ./modules/keyd.nix
         ./modules/secrets.nix
       ];
