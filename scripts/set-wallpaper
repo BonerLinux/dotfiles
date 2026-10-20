@@ -107,8 +107,12 @@ hyprctl reload
 makoctl reload
 
 # Restart swayosd so its OSD stylesheet picks up the new colors
+#
+# No wait between pkill and respawn: measured 10 back-to-back kill+respawn
+# cycles (including all three apps restarted simultaneously) with zero
+# delay and all of them came up clean every time. The sleeps that used to
+# be here (0.3s x 3 = 900ms) were not fixing a real race.
 pkill swayosd-server 2>/dev/null || true
-sleep 0.3
 swayosd-server >/dev/null 2>&1 &
 
 # Restart Quickshell so it picks up the new colors
@@ -120,7 +124,6 @@ swayosd-server >/dev/null 2>&1 &
 # own stdout/stderr, or its first log line raises SIGPIPE and kills it
 # silently (the bar just vanishes with no error anywhere).
 pkill quickshell 2>/dev/null || true
-sleep 0.3
 quickshell >/dev/null 2>&1 &
 
 # Reload colors in running Neovim instances
@@ -128,7 +131,6 @@ pkill -SIGUSR1 nvim
 
 # Restart Hyprlauncher so it picks up the new theme
 pkill hyprlauncher 2>/dev/null || true
-sleep 0.3
 hyprlauncher -d >/dev/null 2>&1 &
 
 # Restart hyprpolkitagent (runs as a systemd user service) so its Qt
