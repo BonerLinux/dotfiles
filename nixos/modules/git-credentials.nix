@@ -14,4 +14,9 @@
     file = ../secrets/git-credentials-bonerlinux.age;
     owner = username;
   };
+
+  age.secrets.git-credentials-weave-music = {
+    file = ../secrets/git-credentials-weave-music.age;
+    owner = username;
+  };
 }

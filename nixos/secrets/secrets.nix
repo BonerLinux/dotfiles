@@ -30,6 +30,7 @@ in
   "git-credentials-rileyboughner.age".publicKeys = gitHosts;
   "git-credentials-boughnerengineering.age".publicKeys = gitHosts;
   "git-credentials-bonerlinux.age".publicKeys = gitHosts;
+  "git-credentials-weave-music.age".publicKeys = gitHosts;
 
   # One SSH identity per machine for logging into `server` -- each host only
   # decrypts its own key, so compromising one laptop doesnt leak the others.
