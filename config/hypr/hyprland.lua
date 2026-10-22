@@ -517,11 +517,12 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl prev"), { locked = true })
 
--- Caps Lock indicator (swayosd only displays state; the OS handles the actual toggle)
--- Firing on release (not press) matches swayosd's own recommendation: the
--- lock-key toggle may not be applied yet at press time, so a press-triggered
--- bind can read stale state, which was showing caps lock as always "on".
-hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true, release = true })
+-- Caps Lock indicator (swayosd only displays state; the OS handles the actual toggle).
+-- A lock key has its modifier active when its release event is processed, so
+-- Hyprland must match CAPS as well as Caps_Lock.  keyd swaps Escape and Caps
+-- Lock at the evdev layer; therefore this is triggered by the physical Escape
+-- key, which is exactly the key that now toggles Caps Lock.
+hl.bind("CAPS + Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { locked = true, release = true })
 
 -- Airplane mode: F10 toggles Wi-Fi and Bluetooth together
 hl.bind("F10", hl.dsp.exec_cmd("quickshell ipc call airplane toggle"), { locked = true })
