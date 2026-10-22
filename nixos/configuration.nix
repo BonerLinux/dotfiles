@@ -56,6 +56,7 @@
 	    stow
       prismlauncher
       claude-code
+      codex
 	  ];
 
 	  # -- nix-ld --

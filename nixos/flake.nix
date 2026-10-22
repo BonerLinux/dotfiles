@@ -79,6 +79,7 @@
         ./modules/kdeconnect.nix
         ./modules/keyd.nix
         ./modules/secrets.nix
+        ./modules/gaming.nix
       ];
     };
 

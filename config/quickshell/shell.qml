@@ -87,6 +87,7 @@ property string fontFamily: "JetBrainsMono Nerd Font"
     property bool hasTasksData: false
     property int tasksOverdueCount: 0
     property int tasksDueTodayCount: 0
+    property bool dotfilesHaveUnstagedChanges: false
 
     // Display state
     // Wi-Fi scroll mode: 0 = network name, 1 = IP address, 2 = up/down speed
@@ -506,6 +507,37 @@ property string fontFamily: "JetBrainsMono Nerd Font"
 
         onTriggered: {
             root.nowMs = Date.now()
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // Dotfiles Git status
+    // ─────────────────────────────────────────────
+
+    Process {
+        id: dotfilesStatusProcess
+
+        command: [
+            "sh",
+            "-c",
+            "if git -C \"$HOME/.dotfiles\" diff --quiet --ignore-submodules --; then echo clean; else echo unstaged; fi"
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.dotfilesHaveUnstagedChanges = text.trim() === "unstaged"
+            }
+        }
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            if (!dotfilesStatusProcess.running) dotfilesStatusProcess.running = true
         }
     }
 
@@ -2438,6 +2470,22 @@ property string fontFamily: "JetBrainsMono Nerd Font"
             anchors.rightMargin: 10
 
             spacing: 8
+
+            // ─────────────────────────────────────
+            // Dotfiles unstaged changes
+            // ─────────────────────────────────────
+
+            Text {
+                visible: root.dotfilesHaveUnstagedChanges
+                text: "󰊢 Unstaged"
+                color: root.colRed
+
+                font {
+                    family: root.fontFamily
+                    pixelSize: root.fontSize
+                    bold: true
+                }
+            }
 
             // ─────────────────────────────────────
             // Todoist (overdue + due today)
