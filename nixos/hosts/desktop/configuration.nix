@@ -22,19 +22,5 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINP7sYNqVuwl1zj+4uNFoGBNIxnoO62SoZwyDOnpwhw3 server-to-desktop"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAYXZVHkzZCIf2S6emEP+ugjur/0pIme7JY4Kd15BNLr muse-hatch"
   ];
-  # Allow passwordless poweroff/reboot for rileyboughner so remote SSH
-  # (e.g. Muse) can shut this machine down without interactive auth.
-  security.sudo.extraRules = [
-    {
-      users = [ "rileyboughner" ];
-      commands = [
-        { command = "/run/current-system/sw/bin/systemctl poweroff"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/systemctl reboot"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/poweroff"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/reboot"; options = [ "NOPASSWD" ]; }
-      ];
-    }
-  ];
-
-
 }
+
