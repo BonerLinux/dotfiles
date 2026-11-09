@@ -170,6 +170,7 @@ cmd_vm() {
 
     case "$name" in
         cyber-defence) port=5930 ;;
+        windows-11)    port=5931 ;;
         *)
             echo "Unknown VM: $name" >&2
             echo >&2

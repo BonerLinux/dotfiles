@@ -36,6 +36,8 @@ in
   home.stateVersion = "26.05";
   home.username = username;
   home.homeDirectory = "/home/${username}";
+  # ~/Classes -> the Classes folder in the Obsidian vault (NFS-mounted at ~/.vault)
+  home.file."Classes".source = config.lib.file.mkOutOfStoreSymlink "/home/${username}/.vault/Classes";
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [

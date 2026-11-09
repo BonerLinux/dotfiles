@@ -43,6 +43,7 @@ in
       credential."https://github.com/rileyboughner".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-rileyboughner";
       credential."https://github.com/boughnerengineering".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-boughnerengineering";
       credential."https://github.com/BonerLinux".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-bonerlinux";
+      credential."https://github.com/weave-music".helper = "!${gitCredentialAgenix} /run/agenix/git-credentials-weave-music";
     };
   };
 
