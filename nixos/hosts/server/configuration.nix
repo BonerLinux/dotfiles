@@ -11,7 +11,8 @@
       ../../modules/samba-server.nix
       ../../modules/tank-backup.nix
       ../../modules/quickemu.nix
-      ../../modules/vm-cyber-defence.nix
+      # ../../modules/vm-cyber-defence.nix  # temporarily disabled to free RAM for windows-11 install
+      ../../modules/vm-windows-11.nix
     ];
 
   networking.hostName = "server";
@@ -24,7 +25,7 @@
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
   # Open necessary ports (already correct)
-  networking.firewall.allowedTCPPorts = [ 80 443 5930 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 5930 5931 ];
   networking.firewall.allowedUDPPorts = [ 51820 ];
 
   # Add NAT and forwarding rules for WireGuard
