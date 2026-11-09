@@ -18,9 +18,20 @@
   networking.hostName = "server";
   # Data volume: 2-disk BTRFS RAID ("tank"). Never declared here, so the
   # 2026-11-09 crash left it unmounted and every service broke (530s).
+  # nofail: a failed mount must not drop the boot into emergency mode.
+  # mount-timeout=5min: after an unclean shutdown, open_ctree on this 11T
+  # volume can take longer than systemd's default mount timeout, which
+  # previously killed the mount mid-recovery and caused the emergency boot.
   fileSystems."/mnt/tank" = {
     device = "/dev/disk/by-label/tank";
     fsType = "btrfs";
+    options = [ "nofail" "x-systemd.mount-timeout=5min" ];
+  };
+
+  fileSystems."/mnt/backup" = {
+    device = "/dev/disk/by-label/backup";
+    fsType = "btrfs";
+    options = [ "nofail" ];
   };
 
   # Use the systemd-boot EFI boot loader.
