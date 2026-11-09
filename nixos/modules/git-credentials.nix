@@ -19,4 +19,8 @@
     file = ../secrets/git-credentials-weave-music.age;
     owner = username;
   };
+  age.secrets.git-credentials-platform = {
+    file = ../secrets/git-credentials-platform.age;
+    owner = username;
+  };
 }
