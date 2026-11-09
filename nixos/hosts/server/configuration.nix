@@ -16,6 +16,12 @@
     ];
 
   networking.hostName = "server";
+  # Data volume: 2-disk BTRFS RAID ("tank"). Never declared here, so the
+  # 2026-11-09 crash left it unmounted and every service broke (530s).
+  fileSystems."/mnt/tank" = {
+    device = "/dev/disk/by-label/tank";
+    fsType = "btrfs";
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
